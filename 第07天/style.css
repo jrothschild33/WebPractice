@@ -26,6 +26,7 @@ a {
      *zoom:1;
   }   
  
+/* --------------------- 1.头部区域 ------------------------- */
 .header {
     height: 42px;
     /* background-color: pink; */
@@ -89,7 +90,7 @@ a {
     font-size: 14px;
     color: #666;
 }
-/* banner区域 */
+/* --------------------- 2.Banner ------------------------- */
 .banner {
     height: 421px;
     background-color: #1c036c;
@@ -161,7 +162,7 @@ a {
     font-size: 16px;
     font-weight: 700;
 }
-/* 精品推荐模块 */
+/* --------------------- 3.精品推荐模块 ------------------------- */
 .goods {
     height: 60px;
     background-color: #fff;
@@ -178,13 +179,13 @@ a {
 }
 .goods ul {
     float: left;
-    margin-left: 30px;
+    margin-left: 40px;
 }
 .goods ul li {
     float: left;
 }
 .goods ul li a {
-    padding: 0 30px;
+    padding: 0 40px;
     font-size: 16px;
     color: #050505;
     border-left: 1px solid #ccc;
@@ -195,6 +196,7 @@ a {
     font-size: 14px;
     color: #00a4ff;
 }
+/* --------------------- 4.box核心内容区域 ------------------------- */
 .box {
     margin-top: 30px;
 }
@@ -227,6 +229,7 @@ a {
    
 }
 .box-bd ul li img {
+    /* 图片宽度设为100%，不会超出盒子 */
     width: 100%;
 }
 .box-bd ul li h4 {
@@ -243,7 +246,7 @@ a {
 .box-bd .info span {
     color: #ff7c2d;
 }
-/* footer 模块 */
+/* --------------------- 5.Footer模块 ------------------------- */
 .footer {
     height: 415px;
     background-color: #fff;

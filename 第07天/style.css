@@ -90,6 +90,10 @@ a {
     font-size: 14px;
     color: #666;
 }
+.user img{
+    /* 让头像和用户名垂直居中对齐 */
+    vertical-align: middle;
+}
 /* --------------------- 2.Banner ------------------------- */
 .banner {
     height: 421px;

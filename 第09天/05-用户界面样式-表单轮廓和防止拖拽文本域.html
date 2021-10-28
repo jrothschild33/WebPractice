@@ -6,12 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>用户界面样式-表单轮廓和防止拖拽文本域</title>
     <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
         input, textarea {
             /* 取消表单轮廓 */
+            /* float: left; */
+            display: block;
+            width: 400px;
             outline: none;
         }
         textarea {
             /* 防止拖拽文本域 */
+            margin-top: 5px;
+            width: 400px;
             resize: none;
         }
     </style>
@@ -20,7 +29,7 @@
     <!-- 1. 取消表单轮廓 -->
     <input type="text">
     <!-- 2. 防止拖拽文本域 -->
-    <textarea name="" id="" cols="30" rows="10"></textarea>
+    <textarea name="" id="" cols="30" rows="10">Jason</textarea>
 
     
 </body>

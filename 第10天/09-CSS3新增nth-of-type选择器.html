@@ -24,6 +24,7 @@
         }
          /* nth-of-type 会把指定元素的盒子排列序号 */
         /* 执行的时候首先看  div指定的元素  之后回去看 :nth-of-type(1) 第几个孩子 */
+        /* 权重计算：2个元素选择器+1个结构伪类选择器，1+1+10=12 */
         section div:nth-of-type(1) {
             background-color: blue;
         }

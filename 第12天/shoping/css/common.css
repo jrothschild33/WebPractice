@@ -3,9 +3,9 @@
     font-family: 'icomoon';
     src:  url('../fonts/icomoon.eot?tomleg');
     src:  url('../fonts/icomoon.eot?tomleg#iefix') format('embedded-opentype'),
-      url('../fonts/icomoon.ttf?tomleg') format('truetype'),
-      url('../fonts/icomoon.woff?tomleg') format('woff'),
-      url('../fonts/icomoon.svg?tomleg#icomoon') format('svg');
+          url('../fonts/icomoon.ttf?tomleg') format('truetype'),
+          url('../fonts/icomoon.woff?tomleg') format('woff'),
+          url('../fonts/icomoon.svg?tomleg#icomoon') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: block;

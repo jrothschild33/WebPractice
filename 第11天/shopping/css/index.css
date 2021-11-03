@@ -17,7 +17,7 @@
 }
 .news {
     height: 165px;
-   border: 1px solid #e4e4e4;
+    border: 1px solid #e4e4e4;
 }
 .news-hd {
     height: 33px;
@@ -57,6 +57,7 @@
     width: 252px;
 }
 .lifeservice ul li {
+    position: relative;
     float: left;
     width: 63px;
     height: 71px;
@@ -70,7 +71,47 @@
     height: 28px;
     background-color: pink;
     margin-top: 12px;
-    background: url(../images/icons.png) no-repeat -19px -15px;
+    background: url(../images/icons.png) no-repeat -15px -15px;
+}
+.lifeservice ul li:nth-child(2) i {
+    background: url(../images/icons.png) no-repeat -79px -15px;
+}
+.lifeservice ul li:nth-child(3) i {
+    background: url(../images/icons.png) no-repeat -141px -15px;
+}
+.lifeservice ul li:nth-child(4) i {
+    background: url(../images/icons.png) no-repeat -206px -15px;
+}
+.lifeservice ul li:nth-child(5) i {
+    background: url(../images/icons.png) no-repeat -16px -88px;
+}
+.lifeservice ul li:nth-child(6) i {
+    background: url(../images/icons.png) no-repeat -80px -88px;
+}
+.lifeservice ul li:nth-child(7) i {
+    background: url(../images/icons.png) no-repeat -143px -88px;
+}
+.lifeservice ul li:nth-child(8) i {
+    background: url(../images/icons.png) no-repeat -206px -88px;
+}
+.lifeservice ul li:nth-child(9) i {
+    background: url(../images/icons.png) no-repeat -17px -158px;
+}
+.lifeservice ul li:nth-child(10) i {
+    background: url(../images/icons.png) no-repeat -79px -158px;
+}
+.lifeservice ul li:nth-child(11) i {
+    background: url(../images/icons.png) no-repeat -142px -154px;
+}
+.lifeservice ul li:nth-child(12) i {
+    background: url(../images/icons.png) no-repeat -206px -158px;
+}
+.lifeservice ul li em {
+    position: absolute;
+    width: 14px;
+    height: 17px;
+    top: -2px;
+    right: -1px;
 }
 .bargain {
     margin-top: 5px;
@@ -114,7 +155,7 @@
     height: 30px;
     border-bottom: 2px solid #c81623;
 }
-.box_hd  h3 {
+.box_hd h3 {
     float: left;
     font-size: 18px;
     color: #c81623;

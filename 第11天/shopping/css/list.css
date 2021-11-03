@@ -29,14 +29,13 @@
 .sk_con ul li {
     float: left;
 }
-.sk_con  ul li a {
+.sk_con ul li a {
     display: block;
     line-height: 49px;
     padding: 0 20px;
     font-size: 14px;
-   
 }
-.sk_con  ul li:last-child a::after {
+.sk_con ul li:last-child a::after {
     content: '\e91e';
     font-family: 'icomoon';
 }
@@ -46,6 +45,7 @@
     margin-right: 13px;
     width: 290px;
     height: 460px;
+    /* 注意：如果做鼠标移动显示边框效果，必须先添加透明边框，不然图片会漂移 */
     border: 1px solid transparent;
 }
 .sk_bd ul li:nth-child(4n) {

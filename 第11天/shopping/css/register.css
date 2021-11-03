@@ -32,7 +32,6 @@ header {
 }
 .reg_form {
     width: 600px;
-
     margin: 50px auto 0;
 }
 .reg_form ul li {
@@ -47,6 +46,9 @@ header {
     width: 242px;
     height: 37px;
     border: 1px solid #ccc;
+}
+.reg_form ul li span {
+    margin-left: 10px;
 }
 .error {
     color: #c81523;
@@ -79,7 +81,6 @@ header {
 .zhong {
     background-color: #40b83f;
 }
-
 .qiang {
     background-color: #f79100;
 }

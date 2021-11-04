@@ -15,9 +15,13 @@
         }
         
         div:hover {
-            /* transform: rotate(180deg) translate(150px, 50px); */
+            /* 以下两种效果完全不同 */
+            
+            /* transform: translate(150px, 50px) rotate(180deg);
+            transform: rotate(180deg) translate(150px, 50px); */
+
             /* 我们同时有位移和其他属性，我们需要把位移放到最前面 */
-            transform: translate(150px, 50px) rotate(180deg) scale(1.2);
+            transform: translate(1200px, 0px) rotate(180deg) scale(1.2);
         }
     </style>
 </head>

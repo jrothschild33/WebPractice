@@ -13,6 +13,7 @@
             width: 200px;
             height: 200px;
             background-color: pink;
+            margin-top: 30px;
             /* x就是x轴上移动位置 y 就是y轴上移动位置 中间用逗号分隔*/
             /* transform: translate(x, y); */
             /* transform: translate(100px, 100px); */
@@ -23,9 +24,12 @@
             /* transform: translate(0, 100px); */
             /* transform: translateY(100px); */
         }
-        
         div:first-child {
-            transform: translate(30px, 30px);
+            transition: all 0.5s;
+        }
+        div:first-child:hover {
+            transform: translate(0, -10px);
+            background-color: rebeccapurple;
         }
         
         div:last-child {

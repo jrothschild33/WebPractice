@@ -1,146 +1,265 @@
-a {
-  text-decoration: none;
-}
-html {
-  font-size: 50px;
-}
-@media screen and (min-width: 320px) {
-  html {
-    font-size: 21.33333333px;
-  }
-}
-@media screen and (min-width: 360px) {
-  html {
-    font-size: 24px;
-  }
-}
-@media screen and (min-width: 375px) {
-  html {
-    font-size: 25px;
-  }
-}
-@media screen and (min-width: 384px) {
-  html {
-    font-size: 25.6px;
-  }
-}
-@media screen and (min-width: 400px) {
-  html {
-    font-size: 26.66666667px;
-  }
-}
-@media screen and (min-width: 414px) {
-  html {
-    font-size: 27.6px;
-  }
-}
-@media screen and (min-width: 424px) {
-  html {
-    font-size: 28.26666667px;
-  }
-}
-@media screen and (min-width: 480px) {
-  html {
-    font-size: 32px;
-  }
-}
-@media screen and (min-width: 540px) {
-  html {
-    font-size: 36px;
-  }
-}
-@media screen and (min-width: 720px) {
-  html {
-    font-size: 48px;
-  }
-}
-@media screen and (min-width: 750px) {
-  html {
-    font-size: 50px;
-  }
-}
 body {
-  min-width: 320px;
-  width: 15rem;
-  margin: 0 auto;
-  line-height:  1.5;
-  font-family:  Arial,Helvetica;
-  background:  #F2F2F2;
+    width: 100%;
+    min-width: 320px;
+    max-width: 640px;
+    margin: 0 auto;
+    font-size: 14px;
+    font-family: -apple-system, Helvetica, sans-serif;
+    color: #666;
+    line-height: 1.5;
 }
-.search-content {
-  display: flex;
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 15rem;
-  height: 1.76rem;
-  background-color: #FFC001;
+
+
+/*点击高亮我们需要清除清除  设置为transparent 完成透明*/
+
+* {
+    -webkit-tap-highlight-color: transparent;
 }
-.search-content .classify {
-  width: 0.88rem;
-  height: 1.4rem;
-  margin: 0.22rem 0.5rem 0.14rem 0.48rem;
-  background: url(../images/classify.png) no-repeat;
-  background-size: 0.88rem 1.4rem;
+
+
+/*在移动端浏览器默认的外观在iOS上加上这个属性才能给按钮和输入框自定义样式*/
+
+input {
+    -webkit-appearance: none;
 }
-.search-content .search {
-  flex: 1;
+
+
+/*禁用长按页面时的弹出菜单*/
+
+img,
+a {
+    -webkit-touch-callout: none;
 }
-.search-content .search input {
-  outline: none;
-  width: 100%;
-  border: 0;
-  height: 1.32rem;
-  border-radius: 0.66rem;
-  background-color: #FFF2CC;
-  margin-top: 0.24rem;
-  font-size: 0.5rem;
-  padding-left: 1.1rem;
-  color: #757575;
+
+a {
+    color: #666;
+    text-decoration: none;
 }
-.search-content .login {
-  width: 1.5rem;
-  height: 1.4rem;
-  line-height: 1.4rem;
-  margin: 0.2rem;
-  font-size: 0.5rem;
-  text-align: center;
-  color: #fff;
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
-.banner {
-  width: 15rem;
-  height: 7.36rem;
+
+img {
+    /* 去除图片的顶端缝隙 */
+    vertical-align: middle;
 }
-.banner img {
-  width: 100%;
-  height: 100%;
+
+div {
+    /* css3 盒子模型 */
+    box-sizing: border-box;
 }
-.ad {
-  display: flex;
+
+.clearfix:after {
+    content: "";
+    display: block;
+    line-height: 0;
+    visibility: hidden;
+    height: 0;
+    clear: both;
 }
-.ad a {
-  flex: 1;
+
+.app {
+    height: 45px;
 }
-.ad a img {
-  width: 100%;
+
+.app ul li {
+    float: left;
+    height: 45px;
+    line-height: 45px;
+    background-color: #333333;
+    text-align: center;
+    color: #fff;
 }
+
+.app ul li:nth-child(1) {
+    width: 8%;
+}
+
+.app ul li:nth-child(1) img {
+    width: 10px;
+}
+
+.app ul li:nth-child(2) {
+    width: 10%;
+}
+
+.app ul li:nth-child(2) img {
+    width: 30px;
+    vertical-align: middle;
+}
+
+.app ul li:nth-child(3) {
+    width: 57%;
+}
+
+.app ul li:nth-child(4) {
+    width: 25%;
+    background-color: #F63515;
+}
+
+
+/* 搜索 */
+
+.search-wrap {
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+    height: 44px;
+    min-width: 320px;
+    max-width: 640px;
+}
+
+.search-btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 44px;
+}
+
+.search-btn::before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 18px;
+    background: url(../images/s-btn.png) no-repeat;
+    background-size: 20px 18px;
+    margin: 14px 0 0 15px;
+}
+
+.search-login {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    height: 44px;
+    color: #fff;
+    line-height: 44px;
+}
+
+.search {
+    position: relative;
+    height: 30px;
+    background-color: #fff;
+    margin: 0 50px;
+    border-radius: 15px;
+    margin-top: 7px;
+}
+
+.jd-icon {
+    width: 20px;
+    height: 15px;
+    position: absolute;
+    top: 8px;
+    left: 13px;
+    background: url(../images/jd.png) no-repeat;
+    background-size: 20px 15px;
+}
+
+.jd-icon::after {
+    content: "";
+    position: absolute;
+    right: -8px;
+    top: 0;
+    display: block;
+    width: 1px;
+    height: 15px;
+    background-color: #ccc;
+}
+
+.sou {
+    position: absolute;
+    top: 8px;
+    left: 50px;
+    width: 18px;
+    height: 15px;
+    background: url(../images/jd-sprites.png) no-repeat -81px 0;
+    background-size: 200px auto;
+}
+
+.slider img {
+    width: 100%;
+}
+
+
+/* 品牌日 */
+
+.brand {
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+}
+
+.brand div {
+    float: left;
+    width: 33.33%;
+}
+
+.brand div img {
+    width: 100%;
+}
+
+
+/* nav */
+
 nav {
-  width: 15rem;
+    padding-top: 5px;
 }
+
 nav a {
-  float: left;
-  width: 3rem;
-  height: 2.8rem;
-  text-align: center;
+    float: left;
+    width: 20%;
+    text-align: center;
 }
+
 nav a img {
-  display: block;
-  width: 1.64rem;
-  height: 1.64rem;
-  margin: 0.2rem auto 0;
+    width: 40px;
+    margin: 10px 0;
 }
+
 nav a span {
-  font-size: 0.5rem;
-  color: #333;
+    display: block;
 }
+
+
+/* news */
+
+.news {
+    margin-top: 20px;
+}
+
+.news img {
+    width: 100%;
+}
+
+.news a {
+    float: left;
+    /* 后面加了边框效果，调整为CSS3盒子模型，不然一行放不下 */
+    box-sizing: border-box;
+}
+
+.news a:nth-child(1) {
+    width: 50%;
+}
+
+
+/* .news a:nth-child(2),
+.news a:nth-child(3),
+{
+    width: 25%;
+} */
+
+
+/* n+2 就是从从2个往后面选 */
+
+.news a:nth-child(n+2) {
+    width: 25%;
+    border-left: 1px solid #ccc;
+}
+
+
+/* .news a:nth-child(3) {
+    width: 25%;
+} */

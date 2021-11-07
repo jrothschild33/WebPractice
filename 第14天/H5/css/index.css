@@ -54,6 +54,7 @@ div {
     flex: 1;
     font-size: 12px;
     color: #666;
+    background-color: #fff;
     margin: 7px 10px;
     padding-left: 25px;
     border-radius: 5px;
@@ -224,6 +225,7 @@ nav {
     margin: 0 4px;
     flex-wrap: wrap;
     padding: 5px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
 }
 
 .subnav-entry li {
@@ -281,6 +283,7 @@ nav {
 .more {
     position: absolute;
     right: 5px;
+    /* 这里因为sales-box添加了margin: 4px，所以父元素sales-hd被挤下来了，top: 0px看起来像居中对齐了 */
     top: 0px;
     background: -webkit-linear-gradient(left, #FF506C, #FF6BC6);
     border-radius: 15px;

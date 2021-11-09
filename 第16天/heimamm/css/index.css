@@ -88,13 +88,12 @@ a {
   text-align: center;
   font-size: 18px;
   background: #fff;
-  /* Center slide text vertically */
-  flex-direction: column;
-  /* Center slide text vertically */
+  /* 垂直居中幻灯片 */
   display: -webkit-box;
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  flex-direction: column;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   -webkit-justify-content: center;

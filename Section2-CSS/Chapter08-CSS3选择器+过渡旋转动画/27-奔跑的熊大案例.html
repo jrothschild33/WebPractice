@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>奔跑的大熊</title>
+    <style>
+        body {
+            background-color: #ccc;
+        }
+
+        .box {
+            position: relative;
+            margin-top: 150px;
+            height: 350px;
+            width: 100%;
+        }
+        .am {
+            position: absolute;
+            width: 100%;
+        }
+        .bg2_big {
+            height: 350px;
+            opacity:0.6;
+            background: url(media/bg2.png) repeat;
+            background-size: auto 100%;
+            animation: bg2_move 500s linear infinite;
+        }
+
+        .bg2 {
+            top: 70px;
+            height: 250px;
+            background: url(media/bg2.png) repeat;
+            background-size: auto 100%;
+            animation: bg2_move 200s linear infinite;
+        }
+
+        @keyframes bg2_move{
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: -3840px 0;
+            }
+        }
+        .bg1 {
+            top:130px;
+            height: 200px;
+            background: url(media/bg1.png) repeat;
+            background-size: auto 100%;
+            animation: bg1_move 60s linear infinite;
+        }
+
+        @keyframes bg1_move{
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: -3840px 0;
+            }
+        }
+
+        .bear {
+            top: 200px;
+            width: 200px;
+            height: 100px;
+            background: url(media/bear.png) no-repeat;
+            /* 我们元素可以添加多个动画， 用逗号分隔 */
+            animation: bear .4s steps(8) infinite, move 2s forwards;
+        }
+        
+        @keyframes bear {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: -1600px 0;
+            }
+        }
+        
+        @keyframes move {
+            0% {
+                left: 0;
+            }
+            100% {
+                left: 50%;
+                /* margin-left: -100px; */
+                transform: translateX(-50%);
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="am bg2_big"></div>
+        <div class="am bg2"></div>
+        <div class="am bg1"></div>
+        <div class="am bear"></div>
+    </div>
+</body>
+
+</html>

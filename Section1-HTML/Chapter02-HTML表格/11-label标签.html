@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>label标签</title>
+</head>
+<body>
+    <form action="xxx.php" method="get">
+        <!-- label用于绑定一个表单元素，当点击label中的文本时，浏览器就会自动将光标转移到对应的表单元素上 -->
+        <!-- label中的for和表单元素中的id必须一一对应 -->
+        <label for="text"> 用户名:</label> <input type="text" id="text" value="请输入用户名">
+        <br />
+        <input type="radio" id="male" name="sex" value="male" checked="checked"> <label for="male">男</label>
+        <input type="radio" id="female" name="sex" value="female"> <label for="female">女</label>
+        <br />
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>

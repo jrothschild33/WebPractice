@@ -83,6 +83,7 @@ header {
 }
 
 .nav a::before {
+    /* 这里调整的是字体图标，让它们居中对齐 */
     vertical-align: middle;
     padding-right: 5px;
 }
@@ -195,6 +196,8 @@ header {
 .hot span {
     border-radius: 0;
     margin-bottom: 20px;
+    height: 25px;
+    padding-top: 2px;
 }
 
 .hot p {

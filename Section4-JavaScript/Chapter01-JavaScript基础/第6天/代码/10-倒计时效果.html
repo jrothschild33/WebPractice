@@ -13,7 +13,7 @@
         // 3.把剩余时间总的毫秒数转换为天、时、分、秒 （时间戳转换为时分秒）
         // 转换公式如下： 
         //  d = parseInt(总秒数/ 60/60 /24);    //  计算天数
-        //  h = parseInt(总秒数/ 60/60 %24)   //   计算小时
+        //  h = parseInt(总秒数/ 60/60 %24);   //   计算小时
         //  m = parseInt(总秒数 /60 %60 );     //   计算分数
         //  s = parseInt(总秒数%60);            //   计算当前秒数
         function countDown(time) {
@@ -30,7 +30,7 @@
             s = s < 10 ? '0' + s : s;
             return d + '天' + h + '时' + m + '分' + s + '秒';
         }
-        console.log(countDown('2019-5-1 18:00:00'));
+        console.log(countDown('2021-12-24 18:00:00'));
         var date = new Date();
         console.log(date);
     </script>

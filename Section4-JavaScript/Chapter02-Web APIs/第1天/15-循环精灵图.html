@@ -53,7 +53,7 @@
         // 1. 获取元素 所有的小li 
         var lis = document.querySelectorAll('li');
         for (var i = 0; i < lis.length; i++) {
-            // 让索引号 乘以 44 就是每个li 的背景y坐标  index就是我们的y坐标
+            // 让索引号 乘以 44 就是每个li 的背景y坐标  index就是我们的y坐标  x坐标都为0
             var index = i * 44;
             lis[i].style.backgroundPosition = '0 -' + index + 'px';
         }

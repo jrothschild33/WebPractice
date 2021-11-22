@@ -22,8 +22,10 @@
         ul.addEventListener('click', function(e) {
             // alert('知否知否，点我应有弹框在手！');
             // e.target 这个可以得到我们点击的对象
+            for (var i = 0; i < ul.children.length; i++) {
+                ul.children[i].style.backgroundColor = null;
+            }
             e.target.style.backgroundColor = 'pink';
-
 
         })
     </script>

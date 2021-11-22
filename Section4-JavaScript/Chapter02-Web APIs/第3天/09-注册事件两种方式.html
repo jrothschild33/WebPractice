@@ -31,9 +31,21 @@
                 alert(33);
             })
             // 3. attachEvent ie9以前的版本支持
-        btns[2].attachEvent('onclick', function() {
-            alert(11);
-        })
+            // btns[2].attachEvent('onclick', function() {
+            //     alert(11);
+            // })
+            // 兼容性处理函数：先处理大多数浏览器，最后处理少数的
+            /* function addEventListener(element, eventName, fn) {
+                // 判断当前浏览器是否支持 addEventListener 方法
+                if (element.addEventListener) {
+                    element.addEventListener(eventName, fn); // 第三个参数默认是false
+                } else if (element.attachEvent) {
+                    element.attachEvent('on' + eventName, fn);
+                } else {
+                    // 相当于 element.onclick = fn;
+                    element['on' + eventName] = fn;
+                }
+            } */
     </script>
 </body>
 

@@ -9,17 +9,21 @@
 </head>
 
 <body>
+    <button>复制</button>
     <ul>
-        <li>1111</li>
-        <li>2</li>
-        <li>3</li>
+        <li>Jack</li>
+        <li>Emliy</li>
+        <li>Alice</li>
     </ul>
     <script>
         var ul = document.querySelector('ul');
+        var btn = document.querySelector('button');
         // 1. node.cloneNode(); 括号为空或者里面是false 浅拷贝 只复制标签不复制里面的内容
         // 2. node.cloneNode(true); 括号为true 深拷贝 复制标签复制里面的内容
-        var lili = ul.children[0].cloneNode(true);
-        ul.appendChild(lili);
+        btn.onclick = function() {
+            var lili = ul.children[0].cloneNode(true);
+            ul.appendChild(lili);
+        }
     </script>
 </body>
 

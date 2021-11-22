@@ -40,7 +40,7 @@
 </head>
 
 <body>
-    <textarea name="" id=""></textarea>
+    <textarea name="" id="">请输入您的留言...</textarea>
     <button>发布</button>
     <ul>
 
@@ -51,6 +51,9 @@
         var text = document.querySelector('textarea');
         var ul = document.querySelector('ul');
         // 2. 注册事件
+        text.onclick = function() {
+            text.value = '';
+        }
         btn.onclick = function() {
             if (text.value == '') {
                 alert('您没有输入内容');
@@ -64,6 +67,7 @@
                 // (2) 添加元素
                 // ul.appendChild(li);
                 ul.insertBefore(li, ul.children[0]);
+                text.value = '';
             }
         }
     </script>

@@ -4,7 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>效率测试</title>
-
+    <style>
+        .mystyle {
+            width: 100px;
+            height: 2px;
+            border: 1px solid red;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,9 +23,10 @@
 
         for (var i = 0; i < 1000; i++) {
             var div = document.createElement('div');
-            div.style.width = '100px';
-            div.style.height = '2px';
-            div.style.border = '1px solid red';
+            // div.style.width = '100px';
+            // div.style.height = '2px';
+            // div.style.border = '1px solid red';
+            div.className = 'mystyle';
             document.body.appendChild(div);
         }
         var d2 = +new Date();

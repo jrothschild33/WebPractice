@@ -18,34 +18,32 @@
 
         function fn() {
             console.log(this);
-
         }
         window.fn();
+
         window.setTimeout(function() {
             console.log(this);
-
         }, 1000);
         // 2. 方法调用中谁调用this指向谁
         var o = {
             sayHi: function() {
                 console.log(this); // this指向的是 o 这个对象
-
             }
         }
         o.sayHi();
+
         var btn = document.querySelector('button');
         // btn.onclick = function() {
         //     console.log(this); // this指向的是btn这个按钮对象
-
         // }
-        btn.addEventListener('click', function() {
-                console.log(this); // this指向的是btn这个按钮对象
 
-            })
-            // 3. 构造函数中this指向构造函数的实例
+        btn.addEventListener('click', function() {
+            console.log(this); // this指向的是btn这个按钮对象
+        })
+
+        // 3. 构造函数中this指向构造函数的实例
         function Fun() {
             console.log(this); // this 指向的是fun 实例对象
-
         }
         var fun = new Fun();
     </script>

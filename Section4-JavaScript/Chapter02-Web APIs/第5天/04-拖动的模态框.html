@@ -33,6 +33,11 @@
             margin: 0px;
         }
         
+        a {
+            text-decoration: none;
+            color: #000000;
+        }
+        
         .login {
             display: none;
             width: 512px;
@@ -58,45 +63,20 @@
             cursor: move;
         }
         
+        .login-title span {
+            position: absolute;
+            font-size: 12px;
+            right: -20px;
+            top: -30px;
+            background: #ffffff;
+            border: #ebebeb solid 1px;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+        }
+        
         .login-input-content {
             margin-top: 20px;
-        }
-        
-        .login-button {
-            width: 50%;
-            margin: 30px auto 0px auto;
-            line-height: 40px;
-            font-size: 14px;
-            border: #ebebeb 1px solid;
-            text-align: center;
-        }
-        
-        .login-bg {
-            display: none;
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            top: 0px;
-            left: 0px;
-            background: rgba(0, 0, 0, .3);
-        }
-        
-        a {
-            text-decoration: none;
-            color: #000000;
-        }
-        
-        .login-button a {
-            display: block;
-        }
-        
-        .login-input input.list-input {
-            float: left;
-            line-height: 35px;
-            height: 35px;
-            width: 350px;
-            border: #ebebeb 1px solid;
-            text-indent: 5px;
         }
         
         .login-input {
@@ -114,16 +94,36 @@
             font-size: 14px;
         }
         
-        .login-title span {
-            position: absolute;
-            font-size: 12px;
-            right: -20px;
-            top: -30px;
-            background: #ffffff;
-            border: #ebebeb solid 1px;
-            width: 40px;
-            height: 40px;
-            border-radius: 20px;
+        .login-input input.list-input {
+            float: left;
+            line-height: 35px;
+            height: 35px;
+            width: 350px;
+            border: #ebebeb 1px solid;
+            text-indent: 5px;
+        }
+        
+        .login-button {
+            width: 50%;
+            margin: 30px auto 0px auto;
+            line-height: 40px;
+            font-size: 14px;
+            border: #ebebeb 1px solid;
+            text-align: center;
+        }
+        
+        .login-button a {
+            display: block;
+        }
+        
+        .login-bg {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            background: rgba(0, 0, 0, .3);
         }
     </style>
 </head>

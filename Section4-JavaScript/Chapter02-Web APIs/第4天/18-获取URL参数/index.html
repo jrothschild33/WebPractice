@@ -19,8 +19,8 @@
         var arr = params.split('=');
         console.log(arr); // ["uname", "ANDY"]
         var div = document.querySelector('div');
-        // 3.把数据写入div中
-        div.innerHTML = arr[1] + '欢迎您';
+        // 3.把数据写入div中，decodeURIComponent可以显示中文
+        div.innerHTML = decodeURIComponent(arr[1]) + '欢迎您';
     </script>
 </body>
 

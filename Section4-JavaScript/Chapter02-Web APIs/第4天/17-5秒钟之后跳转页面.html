@@ -19,15 +19,16 @@
             location.href = 'http://www.itcast.cn';
         })
         var timer = 5;
-        setInterval(function() {
+        var count_down = function() {
             if (timer == 0) {
                 location.href = 'http://www.itcast.cn';
             } else {
                 div.innerHTML = '您将在' + timer + '秒钟之后跳转到首页';
                 timer--;
             }
-
-        }, 1000);
+        }
+        count_down();
+        setInterval(count_down, 1000);
     </script>
 </body>
 

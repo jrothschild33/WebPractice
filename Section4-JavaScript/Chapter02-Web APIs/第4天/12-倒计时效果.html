@@ -7,12 +7,18 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+        
         div {
             margin: 200px;
         }
         
         span {
-            display: inline-block;
+            display: block;
+            float: left;
             width: 40px;
             height: 40px;
             background-color: #333;
@@ -21,21 +27,29 @@
             text-align: center;
             line-height: 40px;
         }
+        
+        span:nth-child(2n) {
+            color: #000;
+            background-color: #fff;
+        }
     </style>
 </head>
 
 <body>
     <div>
         <span class="hour">1</span>
+        <span>时</span>
         <span class="minute">2</span>
+        <span>分</span>
         <span class="second">3</span>
+        <span>秒</span>
     </div>
     <script>
         // 1. 获取元素 
         var hour = document.querySelector('.hour'); // 小时的黑色盒子
         var minute = document.querySelector('.minute'); // 分钟的黑色盒子
         var second = document.querySelector('.second'); // 秒数的黑色盒子
-        var inputTime = +new Date('2019-5-1 18:00:00'); // 返回的是用户输入时间总的毫秒数
+        var inputTime = +new Date('2021-11-30 18:00:00'); // 返回的是用户输入时间总的毫秒数
         countDown(); // 我们先调用一次这个函数，防止第一次刷新页面有空白 
         // 2. 开启定时器
         setInterval(countDown, 1000);

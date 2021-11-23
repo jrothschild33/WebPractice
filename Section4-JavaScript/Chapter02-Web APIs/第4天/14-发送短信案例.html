@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    手机号码： <input type="number"> <button>发送</button>
+    手机号码： <input type="tel"> <button>发送</button>
     <script>
         // 按钮点击之后，会禁用 disabled 为true 
         // 同时按钮里面的内容会变化， 注意 button 里面的内容通过 innerHTML修改
@@ -26,6 +26,7 @@
                     clearInterval(timer);
                     btn.disabled = false;
                     btn.innerHTML = '发送';
+                    time = 3;
                 } else {
                     btn.innerHTML = '还剩下' + time + '秒';
                     time--;

@@ -45,9 +45,9 @@
                 if (obj.offsetLeft >= target) {
                     // 停止动画 本质是停止定时器
                     clearInterval(obj.timer);
+                } else {
+                    obj.style.left = obj.offsetLeft + 1 + 'px';
                 }
-                obj.style.left = obj.offsetLeft + 1 + 'px';
-
             }, 30);
         }
 

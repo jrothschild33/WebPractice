@@ -15,7 +15,7 @@
             document.addEventListener('DOMContentLoaded', setBodyFontSize)
         }
     }
-    setBodyFontSize();
+    setBodyFontSize()
 
     // set 1rem = viewWidth / 10    设置我们html 元素的文字大小
     function setRemUnit() {

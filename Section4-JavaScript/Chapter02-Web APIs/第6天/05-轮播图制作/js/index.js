@@ -73,6 +73,7 @@ window.addEventListener('load', function() {
                 num = 0;
             }
             num++;
+            // 之所以会调到第二张图，是因为num=0后，又进行了num++，此时num=1
             animate(ul, -num * focusWidth, function() {
                 flag = true; // 打开节流阀
             });

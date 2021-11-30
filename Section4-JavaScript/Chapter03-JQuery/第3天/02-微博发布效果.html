@@ -65,6 +65,7 @@
             // })
             // on可以给动态创建的元素绑定事件
             $("ul").on("click", "a", function() {
+                // this是a, a的parent是li
                 $(this).parent().slideUp(function() {
                     $(this).remove();
                 });

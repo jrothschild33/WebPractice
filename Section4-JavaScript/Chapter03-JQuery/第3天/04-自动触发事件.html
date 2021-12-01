@@ -25,12 +25,12 @@
             // $("div").click();会触发元素的默认行为
             // 2. 元素.trigger("事件")
             // $("div").trigger("click");会触发元素的默认行为
-            $("input").trigger("focus");
             // 3. 元素.triggerHandler("事件") 就是不会触发元素的默认行为
             $("div").triggerHandler("click");
             $("input").on("focus", function() {
                 $(this).val("你好吗");
             });
+            // $("input").trigger("focus");
             // $("input").triggerHandler("focus");
 
         });

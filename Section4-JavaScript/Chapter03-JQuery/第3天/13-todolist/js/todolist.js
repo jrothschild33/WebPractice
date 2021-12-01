@@ -34,7 +34,11 @@ $(function() {
         // 保存到本地存储
         saveDate(data);
         // 重新渲染页面
-        load();
+        // load();
+
+        // 自己后加的：用fadeOut效果淡出
+        $(this).parent('li').fadeOut();
+
     });
     // 4. toDoList 正在进行和已完成选项操作
     $("ol, ul").on("click", "input", function() {
@@ -53,6 +57,7 @@ $(function() {
         // 重新渲染页面
         load();
     });
+
     // 读取本地存储的数据 
     function getDate() {
         var data = localStorage.getItem("todolist");
@@ -86,11 +91,8 @@ $(function() {
                 $("ol").prepend("<li><input type='checkbox' > <p>" + n.title + "</p> <a href='javascript:;' id=" + i + " ></a></li>");
                 todoCount++;
             }
-
         });
         $("#todocount").text(todoCount);
         $("#donecount").text(doneCount);
-
     }
-
 })

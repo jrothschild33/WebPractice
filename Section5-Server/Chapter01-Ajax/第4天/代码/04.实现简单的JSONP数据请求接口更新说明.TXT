@@ -1,0 +1,7 @@
+实现简单的JSONP数据请求接口更新说明：
+原接口：http://ajax.frontend.itheima.net:3006/api/jsonp?callback=abc&name=ls&age=30
+新接口：http://www.liulongbin.top:3006/api/jsonp?callback=abc&name=ls&age=30
+
+特殊说明：
+如果后期大家在使用以http://ajax.frontend.itheima.net:3006开头的接口不好用的话大家可以试着将其替换成http://www.liulongbin.top:3006，如果再有问题可联系当前导师
+

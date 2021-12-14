@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script src=".\lib\jquery.js"></script>
+    </head>
+    <body>
+        <form id="form1">
+            <input type="text" name="username" />
+            <input type="password" name="password" />
+            <button type="submit">提交</button>
+        </form>
+        <script>
+            // 写法1
+            /* $(function () {
+                $('#form1').submit(function (e) {
+                    e.preventDefault();
+                    var data = $(this).serialize();
+                    console.log(data);
+                });
+            }); */
+            // 写法2
+            $(function () {
+                $('#form1').on('submit', function (e) {
+                    e.preventDefault();
+                    var data = $('#form1').serialize();
+                    console.log(data);
+                });
+            });
+        </script>
+    </body>
+</html>

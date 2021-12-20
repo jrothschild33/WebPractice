@@ -8,10 +8,7 @@
         <link rel="stylesheet" href="../assets/lib/bootstrap.css" />
         <link rel="stylesheet" href="../assets/lib/main.css" />
         <script src="../assets/lib/jquery.js"></script>
-        <script
-            type="text/javascript"
-            src="../assets/lib/echarts.min.js"
-        ></script>
+        <script type="text/javascript" src="../assets/lib/echarts.min.js"></script>
     </head>
 
     <body>
@@ -242,9 +239,7 @@
             };
             oPie.setOption(oPieopt);
 
-            var oColumn = this.echarts.init(
-                document.getElementById('column_show')
-            );
+            var oColumn = this.echarts.init(document.getElementById('column_show'));
             var oColumnopt = {
                 title: {
                     text: '文章访问量',

@@ -12,13 +12,7 @@
         <div class="layui-card">
             <div class="layui-card-header">
                 <span>文章类别管理</span>
-                <button
-                    type="button"
-                    class="layui-btn layui-btn-normal layui-btn-sm"
-                    id="btnAddCate"
-                >
-                    添加类别
-                </button>
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="btnAddCate">添加类别</button>
             </div>
             <div class="layui-card-body">
                 <table class="layui-table">
@@ -46,20 +40,8 @@
                 <td>{{$value.name}}</td>
                 <td>{{$value.alias}}</td>
                 <td>
-                    <button
-                        type="button"
-                        class="layui-btn layui-btn-xs btn-edit"
-                        data-id="{{$value.Id}}"
-                    >
-                        编辑
-                    </button>
-                    <button
-                        type="button"
-                        class="layui-btn layui-btn-danger layui-btn-xs btn-delete"
-                        data-id="{{$value.Id}}"
-                    >
-                        删除
-                    </button>
+                    <button type="button" class="layui-btn layui-btn-xs btn-edit" data-id="{{$value.Id}}">编辑</button>
+                    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs btn-delete" data-id="{{$value.Id}}">删除</button>
                 </td>
             </tr>
             {{/each}}
@@ -71,46 +53,19 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">分类名称</label>
                     <div class="layui-input-block">
-                        <input
-                            type="text"
-                            name="name"
-                            required
-                            lay-verify="required"
-                            placeholder="请输入分类名称"
-                            autocomplete="off"
-                            class="layui-input"
-                        />
+                        <input type="text" name="name" required lay-verify="required" placeholder="请输入分类名称" autocomplete="off" class="layui-input" />
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">分类别名</label>
                     <div class="layui-input-block">
-                        <input
-                            type="text"
-                            name="alias"
-                            required
-                            lay-verify="required"
-                            placeholder="请输入分类别名"
-                            autocomplete="off"
-                            class="layui-input"
-                        />
+                        <input type="text" name="alias" required lay-verify="required" placeholder="请输入分类别名" autocomplete="off" class="layui-input" />
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button
-                            class="layui-btn"
-                            lay-submit
-                            lay-filter="formDemo"
-                        >
-                            确认添加
-                        </button>
-                        <button
-                            type="reset"
-                            class="layui-btn layui-btn-primary"
-                        >
-                            重置
-                        </button>
+                        <button class="layui-btn" lay-submit lay-filter="formDemo">确认添加</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
             </form>
@@ -124,47 +79,24 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">分类名称</label>
                     <div class="layui-input-block">
-                        <input
-                            type="text"
-                            name="name"
-                            required
-                            lay-verify="required"
-                            placeholder="请输入分类名称"
-                            autocomplete="off"
-                            class="layui-input"
-                        />
+                        <input type="text" name="name" required lay-verify="required" placeholder="请输入分类名称" autocomplete="off" class="layui-input" />
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">分类别名</label>
                     <div class="layui-input-block">
-                        <input
-                            type="text"
-                            name="alias"
-                            required
-                            lay-verify="required"
-                            placeholder="请输入分类别名"
-                            autocomplete="off"
-                            class="layui-input"
-                        />
+                        <input type="text" name="alias" required lay-verify="required" placeholder="请输入分类别名" autocomplete="off" class="layui-input" />
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button
-                            class="layui-btn"
-                            lay-submit
-                            lay-filter="formDemo"
-                        >
-                            确认修改
-                        </button>
+                        <button class="layui-btn" lay-submit lay-filter="formDemo">确认修改</button>
                     </div>
                 </div>
             </form>
         </script>
 
         <!-- 导入 layui 的js -->
-        <script src="../assets/lib/layui/layui.js"></script>
         <script src="../assets/lib/layui/layui.all.js"></script>
         <!-- 导入 jQuery -->
         <script src="../assets/lib/jquery.js"></script>

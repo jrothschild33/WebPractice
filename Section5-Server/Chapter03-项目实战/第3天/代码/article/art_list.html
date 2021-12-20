@@ -25,13 +25,7 @@
                         </select>
                     </div>
                     <div class="layui-form-item layui-inline">
-                        <button
-                            class="layui-btn"
-                            lay-submit
-                            lay-filter="formDemo"
-                        >
-                            筛选
-                        </button>
+                        <button class="layui-btn" lay-submit lay-filter="formDemo">筛选</button>
                     </div>
                 </form>
                 <!-- 列表区域 -->
@@ -68,16 +62,8 @@
                 <td>{{$value.pub_date|dataFormat}}</td>
                 <td>{{$value.state}}</td>
                 <td>
-                    <button type="button" class="layui-btn layui-btn-xs">
-                        编辑
-                    </button>
-                    <button
-                        type="button"
-                        class="layui-btn layui-btn-danger layui-btn-xs btn-delete"
-                        data-id="{{$value.Id}}"
-                    >
-                        删除
-                    </button>
+                    <button type="button" class="layui-btn layui-btn-xs">编辑</button>
+                    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs btn-delete" data-id="{{$value.Id}}">删除</button>
                 </td>
             </tr>
             {{/each}}
@@ -92,7 +78,6 @@
         </script>
 
         <!-- 导入第三方的 JS 插件 -->
-        <script src="../assets/lib/layui/layui.js"></script>
         <script src="../assets/lib/layui/layui.all.js"></script>
         <script src="../assets/lib/jquery.js"></script>
         <script src="../assets/js/baseAPI.js"></script>

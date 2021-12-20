@@ -19,25 +19,14 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">文章标题</label>
                         <div class="layui-input-block">
-                            <input
-                                type="text"
-                                name="title"
-                                required
-                                lay-verify="required"
-                                placeholder="请输入标题"
-                                autocomplete="off"
-                                class="layui-input"
-                            />
+                            <input type="text" name="title" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" />
                         </div>
                     </div>
                     <!-- 第二行 -->
                     <div class="layui-form-item">
                         <label class="layui-form-label">文章类别</label>
                         <div class="layui-input-block">
-                            <select
-                                name="cate_id"
-                                lay-verify="required"
-                            ></select>
+                            <select name="cate_id" lay-verify="required"></select>
                         </div>
                     </div>
                     <!-- 第三行 -->
@@ -58,31 +47,16 @@
                         <div class="layui-input-block cover-box">
                             <!-- 左侧裁剪区域 -->
                             <div class="cover-left">
-                                <img
-                                    id="image"
-                                    src="/assets/images/sample2.jpg"
-                                    alt=""
-                                />
+                                <img id="image" src="/assets/images/sample2.jpg" alt="" />
                             </div>
                             <!-- 右侧预览区域和选择封面区域 -->
                             <div class="cover-right">
                                 <!-- 预览的区域 -->
                                 <div class="img-preview"></div>
                                 <!-- 选择封面按钮 -->
-                                <button
-                                    type="button"
-                                    class="layui-btn layui-btn-danger"
-                                    id="btnChooseImage"
-                                >
-                                    选择封面
-                                </button>
+                                <button type="button" class="layui-btn layui-btn-danger" id="btnChooseImage">选择封面</button>
                                 <!-- 隐藏的文件选择框 -->
-                                <input
-                                    type="file"
-                                    id="coverFile"
-                                    style="display: none"
-                                    accept="image/png,image/jpeg,image/gif"
-                                />
+                                <input type="file" id="coverFile" style="display: none" accept="image/png,image/jpeg,image/gif" />
                             </div>
                         </div>
                     </div>
@@ -90,13 +64,7 @@
                     <div class="layui-form-item">
                         <div class="layui-input-block">
                             <button class="layui-btn" lay-submit>发布</button>
-                            <button
-                                class="layui-btn layui-btn-primary"
-                                lay-submit
-                                id="btnSave2"
-                            >
-                                存为草稿
-                            </button>
+                            <button class="layui-btn layui-btn-primary" lay-submit id="btnSave2">存为草稿</button>
                         </div>
                     </div>
                 </form>
@@ -112,7 +80,6 @@
         </script>
 
         <!-- 导入第三方的 JS 插件 -->
-        <script src="../assets/lib/layui/layui.js"></script>
         <script src="../assets/lib/layui/layui.all.js"></script>
         <script src="../assets/lib/jquery.js"></script>
         <script src="../assets/js/baseAPI.js"></script>

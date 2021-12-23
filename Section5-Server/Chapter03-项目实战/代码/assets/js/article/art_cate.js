@@ -57,6 +57,7 @@ $(function () {
             content: $('#dialog-edit').html(),
         })
 
+        // 获取按钮中的data-id属性（已通过模板引擎渲染赋值）
         var id = $(this).attr('data-id')
         // 发起请求获取对应分类的数据
         $.ajax({

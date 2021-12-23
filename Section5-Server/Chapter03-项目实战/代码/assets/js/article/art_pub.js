@@ -74,6 +74,9 @@ $(function () {
         var fd = new FormData($(this)[0])
         // 3. 将文章的发布状态，存到 fd 中
         fd.append('state', art_state)
+        // fd.forEach(function (v, k) {
+        //     console.log(k, v)
+        // })
         // 4. 将封面裁剪过后的图片，输出为一个文件对象
         $image
             .cropper('getCroppedCanvas', {
@@ -107,7 +110,7 @@ $(function () {
                 }
                 layer.msg('发布文章成功！')
                 // 发布文章成功后，跳转到文章列表页面
-                location.href = '/article/art_list.html'
+                location.href = 'art_list.html'
             },
         })
     }

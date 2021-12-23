@@ -97,20 +97,14 @@ $(function () {
             limits: [2, 3, 5, 10],
             // 分页发生切换的时候，触发 jump 回调
             // 触发 jump 回调的方式有两种：
-            // 1. 点击页码的时候，会触发 jump 回调
-            // 2. 只要调用了 laypage.render() 方法，就会触发 jump 回调
+            // 1. 点击页码时、切换每页显示条目时（first=undefined）
+            // 2. 调用 laypage.render() 方法（first=true）
             jump: function (obj, first) {
-                // 可以通过 first 的值，来判断是通过哪种方式，触发的 jump 回调
-                // 如果 first 的值为 true，证明是方式2触发的
-                // 否则就是方式1触发的
-                console.log(first)
-                console.log(obj.curr)
                 // 把最新的页码值，赋值到 q 这个查询参数对象中
                 q.pagenum = obj.curr
                 // 把最新的条目数，赋值到 q 这个查询参数对象的 pagesize 属性中
                 q.pagesize = obj.limit
-                // 根据最新的 q 获取对应的数据列表，并渲染表格
-                // initTable()
+                // 只有通过方式1：点击页码时，才重新渲染表格
                 if (!first) {
                     initTable()
                 }
@@ -138,7 +132,6 @@ $(function () {
                     // 当数据删除完成后，需要判断当前这一页中，是否还有剩余的数据
                     // 如果没有剩余的数据了,则让页码值 -1 之后,
                     // 再重新调用 initTable 方法
-                    // 4
                     if (len === 1) {
                         // 如果 len 的值等于1，证明删除完毕之后，页面上就没有任何数据了
                         // 页码值最小必须是 1
@@ -150,5 +143,10 @@ $(function () {
 
             layer.close(index)
         })
+    })
+
+    // 通过代理的形式，为编辑按钮绑定点击事件处理函数
+    $('tbody').on('click', '.btn-edit', function () {
+        location.href = 'art_pub.html'
     })
 })

@@ -109,6 +109,8 @@ $(function () {
                     return layer.msg('发布文章失败！')
                 }
                 layer.msg('发布文章成功！')
+                // 切换侧边栏选中效果
+                window.parent.setNavSelected('#article-list', '#article-pub')
                 // 发布文章成功后，跳转到文章列表页面
                 location.href = 'art_list.html'
             },

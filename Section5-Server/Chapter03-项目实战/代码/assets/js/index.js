@@ -65,3 +65,9 @@ function renderAvatar(user) {
         $('.text-avatar').html(first).show()
     }
 }
+
+// 切换侧边栏
+function setNavSelected(origin, current) {
+    $(origin).addClass('layui-this')
+    $(current).removeClass('layui-this')
+}

@@ -140,13 +140,7 @@ $(function () {
                     initTable()
                 },
             })
-
             layer.close(index)
         })
-    })
-
-    // 通过代理的形式，为编辑按钮绑定点击事件处理函数
-    $('tbody').on('click', '.btn-edit', function () {
-        location.href = 'art_pub.html'
     })
 })

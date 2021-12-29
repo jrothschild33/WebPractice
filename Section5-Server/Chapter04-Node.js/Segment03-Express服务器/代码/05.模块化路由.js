@@ -1,8 +1,6 @@
 const express = require('express')
 const app = express()
 
-// app.use('/files', express.static('./files'))
-
 // 1. 导入路由模块
 const router = require('./04.router')
 // 2. 注册路由模块

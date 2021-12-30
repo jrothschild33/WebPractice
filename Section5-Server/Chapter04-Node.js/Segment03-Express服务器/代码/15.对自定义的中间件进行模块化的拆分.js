@@ -9,10 +9,10 @@ const customBodyParser = require('./14.custom-body-parser')
 app.use(customBodyParser)
 
 app.post('/user', (req, res) => {
-  res.send(req.body)
+    res.send(req.body)
 })
 
 // 调用 app.listen 方法，指定端口号并启动web服务器
 app.listen(80, function () {
-  console.log('Express server running at http://127.0.0.1')
+    console.log('Express server running at http://127.0.0.1')
 })

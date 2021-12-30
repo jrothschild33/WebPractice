@@ -5,7 +5,7 @@ const app = express()
 app.use(express.static('clock'))
 
 // 可以选择挂载文件夹前缀
-app.use('/files', express.static('files'))
+app.use('/api', express.static('files'))
 
 app.listen(80, () => {
     console.log('express server running at http://127.0.0.1')

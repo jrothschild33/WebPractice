@@ -2,10 +2,10 @@
 const mysql = require('mysql')
 // 2. 建立与 MySQL 数据库的连接关系
 const db = mysql.createPool({
-  host: '127.0.0.1', // 数据库的 IP 地址
-  user: 'root', // 登录数据库的账号
-  password: 'admin123', // 登录数据库的密码
-  database: 'my_db_01', // 指定要操作哪个数据库
+    host: '127.0.0.1', // 数据库的 IP 地址
+    user: 'root', // 登录数据库的账号
+    password: 'admin123', // 登录数据库的密码
+    database: 'my_db_01', // 指定要操作哪个数据库
 })
 
 // 测试 mysql 模块能否正常工作
@@ -92,8 +92,8 @@ db.query(sqlStr, 5, (err, results) => {
 // 标记删除
 const sqlStr = 'update users set status=? where id=?'
 db.query(sqlStr, [1, 6], (err, results) => {
-  if (err) return console.log(err.message)
-  if (results.affectedRows === 1) {
-    console.log('标记删除成功')
-  }
+    if (err) return console.log(err.message)
+    if (results.affectedRows === 1) {
+        console.log('标记删除成功')
+    }
 })

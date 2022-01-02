@@ -5,7 +5,7 @@ const app = express()
 
 // TODO_01：安装并导入 JWT 相关的两个包，分别是 jsonwebtoken 和 express-jwt
 const jwt = require('jsonwebtoken')
-const expressJWT = require('express-jwt')
+const expressJWT = require('express-jwt/lib')
 
 // 允许跨域资源共享
 const cors = require('cors')

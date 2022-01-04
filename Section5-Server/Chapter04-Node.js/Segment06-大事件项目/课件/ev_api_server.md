@@ -143,7 +143,7 @@ module.exports = router
 ### 2.1 新建 ev_users 表
 
 1. 在 `my_db_01` 数据库中，新建 `ev_users` 表如下：
-   ![ev_users表结构](./images/1.jpg)
+   ![ev_users表结构](ev_users.png)
 
 ### 2.2 安装并配置 mysql 模块
 

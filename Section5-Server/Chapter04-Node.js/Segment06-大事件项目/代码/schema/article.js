@@ -8,10 +8,10 @@ const state = joi.string().valid('已发布', '草稿').required()
 
 // 验证规则对象 - 发布文章
 exports.add_article_schema = {
-  body: {
-    title,
-    cate_id,
-    content,
-    state,
-  },
+    body: {
+        title,
+        cate_id,
+        content,
+        state,
+    },
 }

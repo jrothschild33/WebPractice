@@ -946,11 +946,11 @@ db.query(sql, [req.body.avatar, req.user.id], (err, results) => {
 
 #### 4.1.1 创建表结构
 
-![文章分类表结构](./images/2.jpg)
+![文章分类表结构](ev_article_cate_1.jpg)
 
 #### 4.1.2 新增两条初始数据
 
-![文章分类表结构](./images/3.jpg)
+![文章分类表结构](ev_article_cate_2.jpg)
 
 ### 4.2 获取文章分类列表
 
@@ -1416,7 +1416,7 @@ db.query(sql, [req.body, req.body.Id], (err, results) => {
 
 ### 5.1 新建 ev_articles 表
 
-![ev_articles表结构](./images/4.jpg)
+![ev_articles表结构](ev_articles.jpg)
 
 ### 5.2 发布新文章
 

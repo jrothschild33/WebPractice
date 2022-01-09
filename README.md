@@ -40,7 +40,7 @@
 - Chapter04-大事件项目
 
 ## Web Frame
-![Vue](https://cn.vuejs.org/images/logo.svg)
+
 ### Section 1 Vue
 - Chapter01-vue_basic
 - Chapter02-vue_test

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>事件修饰符</title>
+    <!-- 引入Vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+    <style>
+      * {
+        margin-top: 20px;
+      }
+      .demo1 {
+        height: 50px;
+        background-color: skyblue;
+      }
+      .box1 {
+        padding: 5px;
+        background-color: skyblue;
+      }
+      .box2 {
+        padding: 5px;
+        background-color: orange;
+      }
+      .list {
+        width: 200px;
+        height: 200px;
+        background-color: peru;
+        overflow: auto;
+      }
+      li {
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 
+				Vue中的事件修饰符：
+						1.prevent：阻止默认事件（常用）；
+						2.stop：阻止事件冒泡（常用）；
+						3.once：事件只触发一次（常用）；
+						4.capture：使用事件的捕获模式；
+						5.self：只有event.target是当前操作的元素时才触发事件；
+						6.passive：事件的默认行为立即执行，无需等待事件回调执行完毕；
+		-->
+    <!-- 准备好一个容器-->
+    <div id="root">
+      <h2>欢迎来到{{name}}学习</h2>
+      <!-- 阻止默认事件（常用） -->
+      <a href="http://www.atguigu.com" @click.prevent="showInfo">点我提示信息</a>
+
+      <!-- 阻止事件冒泡（常用） -->
+      <div class="demo1" @click="showInfo">
+        <button @click.stop="showInfo">点我提示信息</button>
+        <!-- 修饰符可以连续写 -->
+        <a href="http://www.atguigu.com" @click.prevent.stop="showInfo">点我提示信息</a>
+      </div>
+
+      <!-- 事件只触发一次（常用） -->
+      <!-- 效果：只有第一次点击按钮时才会触发，随后再点击就不会再触发了 -->
+      <button @click.once="showInfo">点我提示信息</button>
+
+      <!-- 使用事件的捕获模式 -->
+      <div class="box1" @click.capture="showMsg(1)">
+        div1
+        <div class="box2" @click="showMsg(2)">div2</div>
+      </div>
+
+      <!-- 只有event.target是当前操作的元素时才触发事件； -->
+      <!-- 效果：与阻止冒泡stop相同 -->
+      <div class="demo1" @click.self="showInfo">
+        <button @click="showInfo">点我提示信息</button>
+      </div>
+
+      <!-- 事件的默认行为立即执行，无需等待事件回调执行完毕； -->
+      <!-- 事件：scroll：滚动条，鼠标和键盘都可以操作；wheel：只有鼠标滚轮才能操作 -->
+      <!-- 效果：如果不加passive，会等待demo函数计算完毕后，滚动条才会移动，加上passive可以不用等demo计算完，滚动条便可以移动 -->
+      <!-- 注意：也并非所有动作都收到passive的影响，scroll不加passive也一样优先被滚动 -->
+      <ul @wheel.passive="demo" class="list">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+      </ul>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+
+    new Vue({
+      el: '#root',
+      data: {
+        name: '尚硅谷',
+      },
+      methods: {
+        showInfo(e) {
+          alert('同学你好！')
+          // console.log(e.target)
+        },
+        showMsg(msg) {
+          console.log(msg)
+        },
+        demo() {
+          for (let i = 0; i < 100000; i++) {
+            console.log('#')
+          }
+          console.log('累坏了')
+        },
+      },
+    })
+  </script>
+</html>

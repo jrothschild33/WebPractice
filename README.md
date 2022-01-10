@@ -2,9 +2,33 @@
 * Author: Jason Zhou
 * Desc: A personal repo for Web-tech practicing
 * Date: 2021.10.20 - now
+<div style="display: flex; height: 150px; justify-content: center;">
+  <div style="flex: 1">
+    <img src="src/HTML.jpg" style="width: auto; height: auto; max-width: 80%; max-height: 80%; padding: 20px" />
+  </div>
+  <div style="flex: 1">
+    <img src="src/CSS.jpg" style="width: auto; height: auto; max-width: 80%; max-height: 80%; padding: 20px" />
+  </div>
+  <div style="flex: 1">
+    <img src="src/JS.jpg" style="width: auto; height: auto; max-width: 80%; max-height: 80%; padding: 20px" />
+  </div>
+  <div style="display: flex; flex-direction: column; justify-content: center; flex: 1.5">
+    <div style="position: relative; width: 100%; flex: 3">
+      <img src="src/nodejs.jpg" style="width: auto; height: auto; max-width: 80%; max-height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" />
+    </div>
+    <div style="position: relative; width: 100%; flex: 1">
+      <img src="src/axios.svg" style="width: auto; height: auto; max-width: 60%; max-height: 60%; position: absolute; top: 20%; left: 50%; transform: translate(-50%, -50%)" />
+    </div>
+  </div>
+  <div style="flex: 1">
+    <img src="src/vue.jpg" style="width: auto; height: auto; max-width: 80%; max-height: 80%; padding: 20px" />
+  </div>
+  <div style="flex: 1">
+    <img src="src/react.png" style="width: auto; height: auto; max-width: 80%; max-height: 80%; padding: 20px" />
+  </div>
+</div>
 
 ## Web Basic
-![HTML](https://dobsondev.com/wp-content/uploads/2017/05/html-featured-image.jpg)
 
 ### Section 1 HTML
 - Chapter01-HTML标签

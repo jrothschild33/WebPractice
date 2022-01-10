@@ -38,11 +38,14 @@
 				},
 				computed:{
 					filPerons(){
+						// 注意：这里的逻辑是先筛选，后排序，必须对筛选后的结果进行排序，所以不能直接返回结果，而要把筛选后结果暂存在arr里
 						const arr = this.persons.filter((p)=>{
 							return p.name.indexOf(this.keyWord) !== -1
 						})
 						//判断一下是否需要排序
 						if(this.sortType){
+							// 参考资料：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#sort_stability
+							// p1, p2 代表：firstItem, secondItem
 							arr.sort((p1,p2)=>{
 								return this.sortType === 1 ? p2.age-p1.age : p1.age-p2.age
 							})

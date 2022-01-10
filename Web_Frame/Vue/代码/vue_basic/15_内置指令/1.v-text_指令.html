@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<title>v-text指令</title>
-		<!-- 引入Vue -->
-		<script type="text/javascript" src="../js/vue.js"></script>
-	</head>
-	<body>
-		<!-- 
+  <head>
+    <meta charset="UTF-8" />
+    <title>v-text指令</title>
+    <!-- 引入Vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <!-- 
 				我们学过的指令：
 						v-bind	: 单向绑定解析表达式, 可简写为 :xxx
 						v-model	: 双向数据绑定
@@ -20,23 +20,23 @@
 						1.作用：向其所在的节点中渲染文本内容。
 						2.与插值语法的区别：v-text会替换掉节点中的内容，{{xx}}则不会。
 		-->
-		<!-- 准备好一个容器-->
-		<div id="root">
-			<div>你好，{{name}}</div>
-			<div v-text="name"></div>
-			<div v-text="str"></div>
-		</div>
-	</body>
+    <!-- 准备好一个容器-->
+    <div id="root">
+      <div>你好，{{name}}</div>
+      <div v-text="name">我被替换了</div>
+      <div v-text="str"></div>
+    </div>
+  </body>
 
-	<script type="text/javascript">
-		Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
-		
-		new Vue({
-			el:'#root',
-			data:{
-				name:'尚硅谷',
-				str:'<h3>你好啊！</h3>'
-			}
-		})
-	</script>
+  <script type="text/javascript">
+    Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+
+    new Vue({
+      el: '#root',
+      data: {
+        name: '尚硅谷',
+        str: '<h3>你好啊！</h3>', // 这里<h3>不会被当成html标签解析，而是直接显示出来
+      },
+    })
+  </script>
 </html>

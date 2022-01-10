@@ -35,8 +35,9 @@
 						// this.persons[0].name = '马老师' //奏效
 						// this.persons[0].age = 50 //奏效
 						// this.persons[0].sex = '男' //奏效
-						// this.persons[0] = {id:'001',name:'马老师',age:50,sex:'男'} //不奏效
-						this.persons.splice(0,1,{id:'001',name:'马老师',age:50,sex:'男'})
+						this.persons[0] = {id:'001',name:'马老师',age:50,sex:'男'} //不奏效，只修改了DOM，但Vue不渲染页面，原因在下一小节讲解
+						// 参考信息：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
+						// this.persons.splice(0,1,{id:'001',name:'马老师',age:50,sex:'男'})	//奏效
 					}
 				}
 			}) 

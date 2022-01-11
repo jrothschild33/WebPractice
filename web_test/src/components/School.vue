@@ -12,14 +12,14 @@ export default {
   data() {
     return {
       name: '尚硅谷',
-      address: '北京昌平'
+      address: '北京昌平',
     }
   },
   methods: {
     showName() {
       alert(this.name)
-    }
-  }
+    },
+  },
 }
 </script>
 

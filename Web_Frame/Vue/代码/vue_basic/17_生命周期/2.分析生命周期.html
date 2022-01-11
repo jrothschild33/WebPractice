@@ -1,74 +1,87 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<title>分析生命周期</title>
-		<!-- 引入Vue -->
-		<script type="text/javascript" src="../js/vue.js"></script>
-	</head>
-	<body>
-		<!-- 准备好一个容器-->
-		<div id="root" :x="n">
-			<h2 v-text="n"></h2>
-			<h2>当前的n值是：{{n}}</h2>
-			<button @click="add">点我n+1</button>
-			<button @click="bye">点我销毁vm</button>
-		</div>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>分析生命周期</title>
+    <!-- 引入Vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <!-- 准备好一个容器-->
+    <div id="root" :x="n">
+      <!-- 这里面的内容也可以用template生成，但是会忽略上面的div中的所有属性，改成template里写的属性 -->
+      <h2 v-text="n"></h2>
+      <h2>当前的n值是：{{n}}</h2>
+      <button @click="add">点我n+1</button>
+      <button @click="bye">点我销毁vm</button>
+      <hr />
+      <img src="../../../课件/02_原理图/生命周期.png" height="1000px" />
+    </div>
+  </body>
 
-	<script type="text/javascript">
-		Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+  <script type="text/javascript">
+    Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
 
-		new Vue({
-			el:'#root',
-			// template:`
-			// 	<div>
-			// 		<h2>当前的n值是：{{n}}</h2>
-			// 		<button @click="add">点我n+1</button>
-			// 	</div>
-			// `,
-			data:{
-				n:1
-			},
-			methods: {
-				add(){
-					console.log('add')
-					this.n++
-				},
-				bye(){
-					console.log('bye')
-					this.$destroy()
-				}
-			},
-			watch:{
-				n(){
-					console.log('n变了')
-				}
-			},
-			beforeCreate() {
-				console.log('beforeCreate')
-			},
-			created() {
-				console.log('created')
-			},
-			beforeMount() {
-				console.log('beforeMount')
-			},
-			mounted() {
-				console.log('mounted')
-			},
-			beforeUpdate() {
-				console.log('beforeUpdate')
-			},
-			updated() {
-				console.log('updated')
-			},
-			beforeDestroy() {
-				console.log('beforeDestroy')
-			},
-			destroyed() {
-				console.log('destroyed')
-			},
-		})
-	</script>
+    new Vue({
+      el: '#root',
+      // template: `
+      // 	<div id="root" :x="n">
+      // 		<h2>当前的n值是：{{n}}</h2>
+      // 		<button @click="add">点我n+1</button>
+      // 		<button @click="bye">点我销毁vm</button>
+      // 	</div>
+      // `,
+      data: {
+        n: 1,
+      },
+      methods: {
+        add() {
+          console.log('add')
+          this.n++
+        },
+        bye() {
+          console.log('bye')
+          this.$destroy()
+        },
+      },
+      watch: {
+        n() {
+          console.log('n变了')
+        },
+      },
+      // 创建流程 -------------------------------
+      beforeCreate() {
+        console.log('beforeCreate')
+      },
+      created() {
+        console.log('created')
+      },
+      // 挂载流程 -------------------------------
+      beforeMount() {
+        console.log('beforeMount')
+        // console.log(this) // 指向Vue
+        // debugger // 打断点，需要打开控制台后刷新才能卡断点
+      },
+      mounted() {
+        // 等价写法：vm.$mount('#root')
+        console.log('mounted', this.$el instanceof HTMLElement) // 判断此时是不是真是的DOM元素
+      },
+      // 更新流程 -------------------------------
+      beforeUpdate() {
+        console.log('beforeUpdate')
+      },
+      updated() {
+        console.log('updated')
+      },
+      // 销毁流程 -------------------------------
+      beforeDestroy() {
+        console.log('beforeDestroy')
+        // 在这里不要调用methods中的方法了
+      },
+      destroyed() {
+        // 等价写法：vm.$destroy()
+        console.log('destroyed')
+      },
+    })
+  </script>
 </html>

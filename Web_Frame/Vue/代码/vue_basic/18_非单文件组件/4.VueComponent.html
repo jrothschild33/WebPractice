@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<title>VueComponent</title>
-		<script type="text/javascript" src="../js/vue.js"></script>
-	</head>
-	<body>
-		<!-- 
+  <head>
+    <meta charset="UTF-8" />
+    <title>VueComponent</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <!-- 
 			关于VueComponent：
 						1.school组件本质是一个名为VueComponent的构造函数，且不是程序员定义的，是Vue.extend生成的。
 
@@ -24,67 +24,66 @@
 						5.VueComponent的实例对象，以后简称vc（也可称之为：组件实例对象）。
 							Vue的实例对象，以后简称vm。
 		-->
-		<!-- 准备好一个容器-->
-		<div id="root">
-			<school></school>
-			<hello></hello>
-		</div>
-	</body>
+    <!-- 准备好一个容器-->
+    <div id="root">
+      <school></school>
+      <hello></hello>
+    </div>
+  </body>
 
-	<script type="text/javascript">
-		Vue.config.productionTip = false
-		
-		//定义school组件
-		const school = Vue.extend({
-			name:'school',
-			template:`
+  <script type="text/javascript">
+    Vue.config.productionTip = false
+
+    //定义school组件
+    const school = Vue.extend({
+      name: 'school',
+      template: `
 				<div>
 					<h2>学校名称：{{name}}</h2>	
 					<h2>学校地址：{{address}}</h2>	
 					<button @click="showName">点我提示学校名</button>
 				</div>
 			`,
-			data(){
-				return {
-					name:'尚硅谷',
-					address:'北京'
-				}
-			},
-			methods: {
-				showName(){
-					console.log('showName',this)
-				}
-			},
-		})
+      data() {
+        return {
+          name: '尚硅谷',
+          address: '北京',
+        }
+      },
+      methods: {
+        showName() {
+          console.log('showName', this) // this指向VueComponent实例对象
+        },
+      },
+    })
 
-		const test = Vue.extend({
-			template:`<span>atguigu</span>`
-		})
+    const test = Vue.extend({
+      template: `<span>atguigu</span>`,
+    })
 
-		//定义hello组件
-		const hello = Vue.extend({
-			template:`
+    //定义hello组件
+    const hello = Vue.extend({
+      template: `
 				<div>
 					<h2>{{msg}}</h2>
 					<test></test>	
 				</div>
 			`,
-			data(){
-				return {
-					msg:'你好啊！'
-				}
-			},
-			components:{test}
-		})
+      data() {
+        return {
+          msg: '你好啊！',
+        }
+      },
+      components: { test },
+    })
 
+    // console.log('@',school)
+    // console.log('#',hello)
 
-		// console.log('@',school)
-		// console.log('#',hello)
-
-		//创建vm
-		const vm = new Vue({
-			el:'#root',
-			components:{school,hello}
-		})
-	</script>
+    //创建vm
+    const vm = new Vue({
+      el: '#root',
+      components: { school, hello },
+    })
+  </script>
 </html>

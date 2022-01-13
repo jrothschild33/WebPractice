@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div>
     <img src="./assets/logo.png" alt="logo" />
     <School></School>

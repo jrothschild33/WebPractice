@@ -1,23 +1,24 @@
 <template>
-	<div>
-		<h1 class="title">你好啊</h1>
-		<School/>
-		<Student/>
-	</div>
+  <div>
+    <h1 class="title">你好啊</h1>
+    <School />
+    <Student />
+  </div>
 </template>
 
 <script>
-	import Student from './components/Student'
-	import School from './components/School'
+import Student from './components/Student'
+import School from './components/School'
 
-	export default {
-		name:'App',
-		components:{School,Student}
-	}
+export default {
+  name: 'App',
+  components: { School, Student }
+}
 </script>
 
+// 注意：App的style不要加scope，会导致样式冲突
 <style scoped>
-	.title{
-		color: red;
-	}
+.title {
+  color: red;
+}
 </style>

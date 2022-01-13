@@ -71,19 +71,23 @@
       },
       // 自定义指令
       directives: {
-        //big函数何时会被调用？1.指令与元素成功绑定时（一上来）。2.指令所在的模板被重新解析时。
+        // big函数何时会被调用？1.指令与元素成功绑定时（一上来）。2.指令所在的模板被重新解析时。
 
+        // 函数式
         // 案例：kebab-case命名方式
         /* 'big-number'(element,binding){
 					// console.log('big')
 					element.innerText = binding.value * 10
 				}, */
 
+        // element：是真实的DOM元素
+        // binding：是一个对象，内部包含很多属性，最重要的是value，代表自定义方法绑定的值（此例中是n）
         big(element, binding) {
           console.log('big', this) //注意此处的this是window
           element.innerText = binding.value * 10
         },
 
+        // 对象式
         fbind: {
           //指令与元素成功绑定时（一上来）
           bind(element, binding) {

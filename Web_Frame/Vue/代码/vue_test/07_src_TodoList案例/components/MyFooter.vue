@@ -23,7 +23,9 @@ export default {
     },
     //已完成数
     doneTotal() {
-      //此处使用reduce方法做条件统计
+      // 此处使用reduce方法做条件统计（有几条数据调用几次）
+      // pre：每次调用的初始值都是上次的返回值
+      // current：每条数据
       /* const x = this.todos.reduce((pre,current)=>{
 					console.log('@',pre,current)
 					return pre + (current.done ? 1 : 0)

@@ -2,6 +2,7 @@
   <div id="root">
     <div class="todo-container">
       <div class="todo-wrap">
+        <!-- 传参：addTodo(在MyHeader中配置props)，传入函数addTodo -->
         <MyHeader :addTodo="addTodo" />
         <MyList :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo" />
         <MyFooter :todos="todos" :checkAllTodo="checkAllTodo" :clearAllTodo="clearAllTodo" />
@@ -43,6 +44,7 @@ export default {
     },
     //删除一个todo
     deleteTodo(id) {
+      // 这里filter不会改变原数组，只是返回新数组，虽然都叫todos，但是已经不一样了，只要保证id不出问题，不会改变原todos
       this.todos = this.todos.filter(todo => todo.id !== id)
     },
     //全选or取消全选

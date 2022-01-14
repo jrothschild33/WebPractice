@@ -5,6 +5,7 @@
 </template>
 
 <script>
+// nanoid是用于生成唯一id的第三方库，使用npm i nanoid安装后导入使用
 import { nanoid } from 'nanoid'
 export default {
   name: 'MyHeader',
@@ -17,6 +18,11 @@ export default {
     }
   },
   methods: {
+    // js原生事件方法获取输入框的值：e.target
+    /* add(e){
+      console.log(e.target.value)
+    }, */
+
     add() {
       //校验数据
       if (!this.title.trim()) return alert('输入不能为空')

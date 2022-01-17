@@ -1,4 +1,5 @@
 <template>
+  <!-- 这里v-show控制的是diplay，如果total为0，则不展示footer计数栏 -->
   <div class="todo-footer" v-show="total">
     <label>
       <!-- <input type="checkbox" :checked="isAll" @change="checkAll"/> -->
@@ -33,13 +34,14 @@ export default {
       //简写
       return this.todos.reduce((pre, todo) => pre + (todo.done ? 1 : 0), 0)
     },
-    //控制全选框
+    // 注意：这里isAll计算属性是由total、doneTotal这两个计算属性动态计算得来的（允许套娃）
+    //控制全选框（bool类型）
     isAll: {
-      //全选框是否勾选
+      //全选框是否勾选（如果没有待完成事件时，取消勾选）
       get() {
         return this.doneTotal === this.total && this.total > 0
       },
-      //isAll被修改时set被调用
+      //isAll被修改时set被调用（即checkbox选项框被点击时）
       set(value) {
         this.checkAllTodo(value)
       }

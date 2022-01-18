@@ -1,34 +1,17 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/>-->
-    <School></School>
-    <Student></Student>
+  <!-- 注意：由于index.html中已有<div id="app">，所以要避免重名 -->
+  <div class="container">
+    <Search />
+    <List />
   </div>
+  <!-- 注意：本项目用到了bootstrap，需要放在public/css/bootstrap.css，然后再index.html中引入 -->
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
-import School from './components/School'
-import Student from './components/Student'
-
+import Search from './components/Search'
+import List from './components/List'
 export default {
   name: 'App',
-  components: {
-    // HelloWorld,
-    School,
-    Student,
-  },
+  components: { Search, List }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

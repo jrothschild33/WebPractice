@@ -21,7 +21,10 @@ export default {
     /* this.$bus.$on('hello',(data)=>{
 				console.log('我是School组件，收到了数据',data)
 			}) */
+
+    // 每次pubsub时会生成不同的id，根据id号才能取消订阅，所以要挂到this上
     this.pubId = pubsub.subscribe('hello', (msgName, data) => {
+      // 注意：如果是箭头函数，this指向vc；如果是正常函数，this是undefined
       console.log(this)
       // 参数：msgName：消息名称；data：数据
       console.log('有人发布了hello消息，hello消息的回调执行了', msgName, data)

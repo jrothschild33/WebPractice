@@ -28,7 +28,7 @@ new Vue({
   // },
   // 这个h代表的就是createElement
   render: (h) => h(App),
-  // render:q=> q('h1','你好啊')
+  // render: q => q('h1','你好啊')
 
   // template:`<h1>你好啊</h1>`,
   // components:{App},

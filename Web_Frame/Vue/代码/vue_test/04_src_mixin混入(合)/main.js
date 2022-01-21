@@ -5,6 +5,7 @@ import App from './App.vue'
 import { hunhe, hunhe2 } from './mixin'
 //关闭Vue的生产提示
 Vue.config.productionTip = false
+
 // 全局混合，所有vm、vc身上都有了
 Vue.mixin(hunhe)
 Vue.mixin(hunhe2)

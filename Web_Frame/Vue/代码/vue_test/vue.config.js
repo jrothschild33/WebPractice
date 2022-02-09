@@ -21,7 +21,7 @@ module.exports = {
         target: 'http://localhost:5000',
         pathRewrite: { '^/atguigu': '' }, // 重写路径，不然后端服务器路径错误
         // ws: true, //用于支持websocket
-        // changeOrigin: true //用于控制请求头中的host值，如果为false(默认)则如实回答，如果是ture则谎称与服务器同源
+        // changeOrigin: true //用于控制请求头中的host值，如果为false则如实回答，如果是ture(默认)则谎称与服务器同源
       },
       '/demo': {
         target: 'http://localhost:5001',

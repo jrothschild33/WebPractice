@@ -22,15 +22,16 @@ export default {
   data() {
     return {
       info: {
-        isFirst: true,
-        isLoading: false,
-        errMsg: '',
+        isFirst: true, //是否初次展示
+        isLoading: false, //是否加载中
+        errMsg: '', //错误信息
         users: []
       }
     }
   },
   mounted() {
     this.$bus.$on('updateListData', dataObj => {
+      // {...obj1,...obj2,......}：ES6语法，可以展开对象，如果属性重名，以后面的为主
       this.info = { ...this.info, ...dataObj }
     })
   }

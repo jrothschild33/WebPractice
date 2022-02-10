@@ -12,7 +12,8 @@
     "core-js": "^3.6.5",
     "nanoid": "^3.2.0",
     "pubsub-js": "^1.9.4",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-resource": "^1.5.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

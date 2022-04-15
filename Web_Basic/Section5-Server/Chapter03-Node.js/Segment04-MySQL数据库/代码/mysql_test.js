@@ -2,10 +2,10 @@
 const mysql = require('mysql')
 // 2. 建立与 MySQL 数据库的连接关系
 const db = mysql.createPool({
-    host: 'rm-uf6zwfhyv8lykn8874o.mysql.rds.aliyuncs.com', // 数据库的 IP 地址
-    user: 'jason', // 登录数据库的账号
-    password: 'Jrothschild2016!!', // 登录数据库的密码
-    database: 'superkdj', // 指定要操作哪个数据库
+  host: 'rm-uf6zwfhyv8lykn8874o.mysql.rds.aliyuncs.com', // 数据库的 IP 地址
+  user: 'jason', // 登录数据库的账号
+  password: 'Jrothschild2016!!', // 登录数据库的密码
+  database: 'superkdj', // 指定要操作哪个数据库
 })
 
 // 测试 mysql 模块能否正常工作
@@ -19,11 +19,11 @@ const db = mysql.createPool({
 // 查询 users 表中所有的数据
 const sqlStr = 'select * from se_raw'
 db.query(sqlStr, (err, results) => {
-    // 查询数据失败
-    if (err) return console.log(err.message)
-    // 查询数据成功
-    // 注意：如果执行的是 select 查询语句，则执行的结果是数组
-    console.log(results[0])
+  // 查询数据失败
+  if (err) return console.log(err.message)
+  // 查询数据成功
+  // 注意：如果执行的是 select 查询语句，则执行的结果是数组
+  console.log(results[0])
 })
 
 // 向 users 表中，新增一条数据，其中 username 的值为 Spider-Man，password 的值为 pcc123

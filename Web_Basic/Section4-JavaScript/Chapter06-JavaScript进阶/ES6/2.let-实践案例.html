@@ -28,12 +28,18 @@
       let items = document.getElementsByClassName('item')
 
       //遍历并绑定事件
+      for (var i = 0; i < items.length; i++) {
+        items[i].onclick = function () {
+          //修改当前元素的背景颜色
+          //var只能用这一种方法：this
+          this.style.background = 'pink'
+        }
+      }
+
       for (let i = 0; i < items.length; i++) {
         items[i].onclick = function () {
           //修改当前元素的背景颜色
-          //   var只能用这一种方法：this
-          // this.style.background = 'pink';
-          //   let可以用这两种方法：this、items[i]
+          //let可以用这两种方法：this、items[i]
           items[i].style.background = 'pink'
         }
       }

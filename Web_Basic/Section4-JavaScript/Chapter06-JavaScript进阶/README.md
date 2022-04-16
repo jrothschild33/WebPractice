@@ -1,4 +1,4 @@
-# JavaScript高阶教程
+# [JavaScript高阶教程](https://www.bilibili.com/video/BV1uK411H7on)
 
 ## 第一章 ES介绍
 
@@ -629,4 +629,55 @@ const school = {
    * `Symbol.toStringTag`：在该对象上面调用 toString 方法时，返回该方法的返回值
    
    * `Symbol.unscopables`：该对象指定了使用 with 关键字时，哪些属性会被 with环境排除
+
+------
+
+### 迭代器
+
+1. 定义：遍历器（Iterator）就是一种机制。它是一种接口，为各种不同的数据结构提供统一的访问机制。任何数据结构只要部署 Iterator 接口，就可以完成遍历操作。
+
+2. ES6 创造了一种新的遍历命令`for...of`循环，Iterator 接口主要供`for...of`消费
+
+3. 原生具备 iterator 接口的数据(可用`for of`遍历)
+
+   * Array
+   * Arguments
+   * Set
+   * Map
+   * String
+   * TypedArray
+   * NodeList
+
+   ```js
+   //声明一个数组
+   const xiyou = ['唐僧', '孙悟空', '猪八戒', '沙僧']
+   // 使用 for...of 遍历数组
+   for (let v of xiyou) {
+     console.log(v)
+   }
+   ```
+
+4. 工作原理:
+
+   * 创建一个指针对象，指向当前数据结构的起始位置
+   * 第一次调用对象的 `next` 方法，指针自动指向数据结构的第一个成员
+   * 接下来不断调用 `next` 方法，指针一直往后移动，直到指向最后一个成员
+   * 每调用 `next` 方法返回一个包含 `value` 和 `done` 属性的对象
+
+   ```js
+   //声明一个数组
+   const xiyou = ['唐僧', '孙悟空', '猪八戒', '沙僧']
+   
+   // 创建迭代器
+   let iterator = xiyou[Symbol.iterator]()
+   
+   //调用对象的next方法
+   console.log(iterator.next()) //{value: '唐僧', done: false}
+   console.log(iterator.next()) //{value: '孙悟空', done: false}
+   console.log(iterator.next()) //{value: '猪八戒', done: false}
+   console.log(iterator.next()) //{value: '沙僧', done: false}
+   console.log(iterator.next()) //{value: undefined, done: true}
+   ```
+
+5. 需要自定义遍历数据的时候，要想到迭代器
 

@@ -14,6 +14,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# npm files
+yarn.lock
+package.json
+
+
 # Editor directories and files
 .idea
 .vscode

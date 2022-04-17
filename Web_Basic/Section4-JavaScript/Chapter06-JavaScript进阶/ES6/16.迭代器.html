@@ -10,8 +10,13 @@
       //声明一个数组
       const xiyou = ['唐僧', '孙悟空', '猪八戒', '沙僧']
 
-      // 使用 for...of 遍历数组
+      // 使用 for...of 遍历数组：键值
       for (let v of xiyou) {
+        console.log(v)
+      }
+
+      // 【对比】使用 for...of 遍历数组：键名
+      for (let v in xiyou) {
         console.log(v)
       }
 

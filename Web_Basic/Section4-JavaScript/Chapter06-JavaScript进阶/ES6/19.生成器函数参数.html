@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>生成器函数参数</title>
+  </head>
+  <body>
+    <script>
+      function* gen(arg) {
+        console.log(arg) // AAA
+        let one = yield 111 // {value: 111, done: false}，这里的one，承接next中传入的参数 BBB
+
+        console.log(one) // BBB
+        let two = yield 222 // {value: 222, done: false}，这里的one，承接next中传入的参数 CCC
+
+        console.log(two) // CCC
+        let three = yield 333 // {value: 333, done: false}，这里的one，承接next中传入的参数 DDD
+
+        console.log(three) // DDD
+        // {value: undefined, done: true}
+      }
+
+      //执行获取迭代器对象
+      let iterator = gen('AAA')
+      console.log(iterator.next())
+
+      //next方法可以传入实参
+      console.log(iterator.next('BBB'))
+      console.log(iterator.next('CCC'))
+      console.log(iterator.next('DDD'))
+    </script>
+  </body>
+</html>

@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.teach = teach;
 //分别暴露
-var school = exports.school = '尚硅谷';
+var school = exports.school = '尚硅谷m1';
 
 function teach() {
-    console.log("我们可以教给你开发技能");
+  console.log('我们可以教给你开发技能');
 }

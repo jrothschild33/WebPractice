@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Map</title>
+  </head>
+  <body>
+    <script>
+      //声明 Map
+      let m = new Map()
+
+      //set：增加一个新元素，返回当前 Map
+      m.set('name', '尚硅谷')
+      m.set('change', function () {
+        console.log('我们可以改变你!!')
+      })
+      let key = {
+        school: 'ATGUIGU',
+      }
+      m.set(key, ['北京', '上海', '深圳'])
+
+      //size：返回 Map 的元素个数
+      console.log(m.size)
+
+      //delete：删除，指定键名
+      m.delete('name')
+
+      //get：返回键名对象的键值
+      console.log(m.get('change'))
+      console.log(m.get(key))
+
+      //clear：清空集合，返回 undefine
+      m.clear()
+
+      //for of：遍历，返回数组，第一个元素为键，第二个元素为值
+      for (let v of m) {
+        console.log(v)
+      }
+
+      console.log(m)
+    </script>
+  </body>
+</html>

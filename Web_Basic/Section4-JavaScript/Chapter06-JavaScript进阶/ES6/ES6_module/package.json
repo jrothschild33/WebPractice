@@ -1,5 +1,5 @@
 {
-  "name": "ES6_module",
+  "name": "es6_module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,9 +12,9 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "browserify": "^16.5.1"
+    "browserify": "^17.0.0"
   },
   "dependencies": {
-    "jquery": "^3.5.1"
+    "jquery": "^3.6.0"
   }
 }

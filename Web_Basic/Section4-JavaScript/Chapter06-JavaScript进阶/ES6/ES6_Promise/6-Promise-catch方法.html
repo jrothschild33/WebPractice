@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>catch方法</title>
+  </head>
+  <body>
+    <script>
+      const p = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          reject('出错啦!')
+        }, 1000)
+      })
+
+      // 使用then方法，需要写value、reason两个回调
+      /* p.then(
+        function (value) {
+          console.log(value)
+        },
+        function (reason) {
+          console.error(reason)
+        }
+      ) */
+
+      // 使用catch方法，直接写reason一个回调即可
+      p.catch(function (reason) {
+        // 用 warn、error 均可
+        console.warn(reason)
+        // console.error(reason)
+      })
+    </script>
+  </body>
+</html>

@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <!-- 
-        1. 安装工具 npm i babel-cli babel-preset-env browserify(webpack) -D
+        1. 安装工具 npm i babel-cli babel-preset-env browserify -D
+           注意：真正项目开发会使用 webpack 代替 browserify
+
         2. 编译 npx babel src/js -d dist/js --presets=babel-preset-env
+           语法：npx babel 需要编译的代码目录 编译后代码存放目录 --presets=babel-preset-env
+
         3. 打包 npx browserify dist/js/app.js -o dist/bundle.js
+           语法：npx browserify 入口文件目录app.js -o 打包文件目录bundle.js
      -->
-     <script src="dist/bundle.js"></script>
-</body>
+    <script src="dist/bundle.js"></script>
+  </body>
 </html>

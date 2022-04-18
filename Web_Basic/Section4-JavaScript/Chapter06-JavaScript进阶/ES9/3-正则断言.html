@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>正则扩展-反向断言</title>
-</head>
-<body>
+  </head>
+  <body>
     <script>
-        //声明字符串
-        let str = 'JS5211314你知道么555啦啦啦';
-        //正向断言
-        const reg = /\d+(?=啦)/;
-        const result = reg.exec(str);
+      //声明字符串，需求：提取“你知道么”和“啦啦啦”之间的数字
+      let str = 'JS5211314你知道么555啦啦啦'
+      //正向断言
+      const reg = /\d+(?=啦)/
+      const result = reg.exec(str)
+      console.log(result)
 
-        //反向断言
-        const reg = /(?<=么)\d+/;
-        const result = reg.exec(str);
-        console.log(result);
+      //反向断言
+      const reg2 = /(?<=么)\d+/
+      const result2 = reg2.exec(str)
+      console.log(result2)
     </script>
-</body>
+  </body>
 </html>

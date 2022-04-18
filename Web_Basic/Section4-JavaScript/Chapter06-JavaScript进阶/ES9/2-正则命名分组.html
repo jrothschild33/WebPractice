@@ -1,38 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>正则扩展-命名捕获分组</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        //声明一个字符串
-        // let str = '<a href="http://www.atguigu.com">尚硅谷</a>';
+      //声明一个字符串
+      let str = '<a href="http://www.atguigu.com">尚硅谷</a>'
 
-        // //提取 url 与 『标签文本』
-        // const reg = /<a href="(.*)">(.*)<\/a>/;
+      /* //提取 url 与 『标签文本』
+      const reg = /<a href="(.*)">(.*)<\/a>/
+      //执行
+      const result = reg.exec(str)
+      //返回结果：数组：[整个正则匹配结果,第一个小括号匹配结果，第二个小括号匹配结果]
+      console.log(result)
+      console.log(result[1])
+      console.log(result[2]) */
 
-        // //执行
-        // const result = reg.exec(str);
-
-        // console.log(result);
-        // // console.log(result[1]);
-        // // console.log(result[2]);
-
-        
-        let str = '<a href="http://www.atguigu.com">尚硅谷</a>';
-        //分组命名
-        const reg = /<a href="(?<url>.*)">(?<text>.*)<\/a>/;
-
-        const result = reg.exec(str);
-
-        console.log(result.groups.url);
-
-        console.log(result.groups.text);
+      //分组命名
+      const reg = /<a href="(?<url>.*)">(?<text>.*)<\/a>/
+      // 返回结果，与传统方法相同，但多了一个groups属性，里面有url、text属性
+      // 优势：如果正则发生变化，也无需通过改变小括号内index来获取结果
+      const result = reg.exec(str)
+      console.log(result.groups.url)
+      console.log(result.groups.text)
     </script>
-</body>
-
+  </body>
 </html>

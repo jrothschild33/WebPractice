@@ -481,7 +481,7 @@ const school = {
      const divArr = [...divs]
      ```
    
-   * 展开对象：`let newObj = {...obj1, ...obj2, ...obj3}`
+   * 展开对象（ES9新特性）：`let newObj = {...obj1, ...obj2, ...obj3}`
    
      ```js
      let skillOne = {
@@ -1514,7 +1514,7 @@ s.price = 'free'
 
 ### 数值扩展
 
-1. Number.EPSILON：是 JavaScript 表示的最小精度，EPSILON 属性的值接近于 2.2204460492503130808472633361816E-16*
+1. Number.EPSILON：是 JavaScript 表示的最小精度，EPSILON 属性的值接近于 2.2204460492503130808472633361816E-16
 
 ```js
 function equal(a, b) {
@@ -1821,5 +1821,386 @@ console.log(Math.pow(2, 10))
 
 ## 第四章 ES8新特性
 
-#### async与await
+### async与await
+
+1. 作用：async 和 await 两种语法结合可以让异步代码像同步代码一样
+
+2. async函数：返回值为 promise 对象，其结果由 async 函数执行的返回值决定
+
+   ```js
+   // return一个字符串
+   // 返回结果：promise 对象，PromiseState:'fulfilled'，PromiseResult:'尚硅谷'
+   async function fn() {
+     return '尚硅谷'
+   }
+   const result = fn()
+   console.log(result)
+   ```
+
+   ```js
+   // 只要函数return的结果不是一个 Promise 类型的对象, 返回的结果就是成功 Promise 对象
+   // 返回结果：promise 对象，PromiseState:'fulfilled'，PromiseResult:undefined
+   async function fn() {
+     return
+   }
+   const result = fn()
+   console.log(result)
+   ```
+
+   ```js
+   // 抛出错误, 返回的结果是一个失败的 Promise
+   // 返回结果：promise 对象，PromiseState:'rejected'，PromiseResult:Error: 出错啦!...
+   async function fn() {
+     throw new Error('出错啦!')
+   }
+   const result = fn()
+   console.log(result)
+   ```
+
+   ```js
+   // return的结果如果是一个Promise对象，返回对象与该Promise对象保持一致
+   // resolve返回：promise 对象，PromiseState:'fulfilled'，PromiseResult:"成功的数据"
+   // reject返回：promise 对象，PromiseState:'rejected'，PromiseResult:"失败的错误"
+   async function fn() {
+     return new Promise((resolve, reject) => {
+       resolve('成功的数据')
+       // reject("失败的错误");
+     })
+   }
+   const result = fn()
+   
+   // 如果想直接返回promise值（value或reason），可以用then
+   result.then(
+     (value) => {
+       console.log(value)
+     },
+     (reason) => {
+       console.warn(reason)
+     }
+   )
+   ```
+
+3. await：必须写在 async 函数中
+
+* 右侧的表达式一般为 promise 对象，返回的是 promise 成功的值 value
+
+* 如果 promise 失败了, 就会抛出异常, 需要通过 `try...catch` 捕获处理
+
+  ```js
+  // 创建 promise 对象
+  const p = new Promise((resolve, reject) => {
+    // resolve("用户数据");
+    reject('失败啦!')
+  })
+  // await 要放在 async 函数中
+  async function main() {
+    try {
+      let result = await p
+      console.log(result)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  // 调用函数
+  main()
+  ```
+
+4. 案例：`async`与`await`结合读取文件
+
+   ```js
+   // 引入 fs 模块
+   const fs = require('fs')
+   
+   // 读取『为学』
+   function readWeiXue() {
+     return new Promise((resolve, reject) => {
+       fs.readFile('./resources/为学.md', (err, data) => {
+         //如果失败
+         if (err) reject(err)
+         //如果成功
+         resolve(data)
+       })
+     })
+   }
+   // 读取『插秧诗』
+   function readChaYangShi() {
+     return new Promise((resolve, reject) => {
+       fs.readFile('./resources/插秧诗.md', (err, data) => {
+         //如果失败
+         if (err) reject(err)
+         //如果成功
+         resolve(data)
+       })
+     })
+   }
+   // 读取『观书有感』
+   function readGuanShu() {
+     return new Promise((resolve, reject) => {
+       fs.readFile('./resources/观书有感.md', (err, data) => {
+         //如果失败
+         if (err) reject(err)
+         //如果成功
+         resolve(data)
+       })
+     })
+   }
+   
+   // 声明一个 async 函数
+   async function main() {
+     //获取为学内容
+     let weixue = await readWeiXue()
+     //获取插秧诗内容
+     let chayang = await readChaYangShi()
+     // 获取观书有感
+     let guanshu = await readGuanShu()
+   
+     console.log(weixue.toString())
+     console.log(chayang.toString())
+     console.log(guanshu.toString())
+   }
+   
+   // 调用函数
+   main()
+   ```
+
+5. 案例：`async`和`await`封装Ajax请求
+
+   ```js
+   // 发送 AJAX 请求, 返回的结果是 Promise 对象
+   function sendAJAX(url) {
+     return new Promise((resolve, reject) => {
+       // 1. 创建对象
+       const x = new XMLHttpRequest()
+       // 2. 初始化
+       x.open('GET', url)
+       // 3. 发送
+       x.send()
+       // 4. 事件绑定
+       x.onreadystatechange = function () {
+         if (x.readyState === 4) {
+           if (x.status >= 200 && x.status < 300) {
+             // 如果成功
+             resolve(x.response)
+           } else {
+             // 如果失败
+             reject(x.status)
+           }
+         }
+       }
+     })
+   }
+   ```
+
+   ```js
+   // 方法1：使用Promise then方法
+   sendAJAX('https://api.apiopen.top/getJoke').then(
+     (value) => {
+       console.log(value)
+     },
+     (reason) => {}
+   )
+   ```
+
+   ```js
+   // 方法2：使用async 与 await
+   async function main() {
+     // 发送 AJAX 请求
+     let result = await sendAJAX('https://api.apiopen.top/getJoke')
+     console.log(result)
+     // 再次测试
+     let news = await sendAJAX('https://api.apiopen.top/getWangYiNews')
+     console.log(news)
+   }
+   // 调用函数
+   main()
+   ```
+
+### 对象方法扩展
+
+1. `Object.keys()`：返回一个给定对象的所有可枚举属性键的数组
+
+   `Object.values()`：返回一个给定对象的所有可枚举属性值的数组
+
+   ```js
+   const school = {
+     name: '尚硅谷',
+     cities: ['北京', '上海', '深圳'],
+     xueke: ['前端', 'Java', '大数据', '运维'],
+   }
+   //获取对象所有的键
+   console.log(Object.keys(school))
+   //获取对象所有的值
+   console.log(Object.values(school))
+   ```
+
+2. `Object.entries()`：返回一个给定对象自身可遍历属性`[key,value]`的数组
+
+   ```js
+   const school = {
+     name: '尚硅谷',
+     cities: ['北京', '上海', '深圳'],
+     xueke: ['前端', 'Java', '大数据', '运维'],
+   }
+   //entries
+   console.log(Object.entries(school))
+   //可以利用entries创建 Map
+   const m = new Map(Object.entries(school))
+   console.log(m.get('cities'))
+   ```
+
+3. `Object.getOwnPropertyDescriptors()`：返回指定对象所有自身属性的描述对象（writable、configurable、enumerable）
+
+   ```js
+   const obj = Object.create(null, {
+     name: {
+       //设置值
+       value: '尚硅谷',
+       //属性特性
+       writable: true,
+       configurable: true,
+       enumerable: true,
+     },
+   })
+   // 对象属性的描述对象
+   console.log(Object.getOwnPropertyDescriptors(school))
+   ```
+
+------
+
+## 第五章 ES9新特性
+
+### spread 扩展运算符
+
+> Rest参数与spread扩展运算符在ES6中已经引入，不过ES6中只针对于数组，在ES9中为对象提供了像数组一样的rest参数和扩展运算符。
+
+```js
+// rest参数
+function connect({ host, port, ...user }) {
+  console.log(host)
+  console.log(port)
+  console.log(user)
+}
+// username、password、type都会存到user对象中
+connect({
+  host: '127.0.0.1',
+  port: 3306,
+  username: 'root',
+  password: 'root',
+  type: 'master',
+})
+```
+
+```js
+// spread扩展运算符：对象合并
+const skillOne = {
+  q: '天音波',
+}
+const skillTwo = {
+  w: '金钟罩',
+}
+const skillThree = {
+  e: '天雷破',
+}
+const skillFour = {
+  r: '猛龙摆尾',
+}
+const mangseng = { ...skillOne, ...skillTwo, ...skillThree, ...skillFour }
+console.log(mangseng)
+```
+
+------
+
+### 正则表达式扩展
+
+#### 命名捕获组
+
+> ES9允许命名捕获组使用符号`?<name>`,这样获取捕获结果可读性更强，无需通过改变index来获取结果。
+
+```js
+// 传统方法
+// 声明一个字符串
+let str = '<a href="http://www.atguigu.com">尚硅谷</a>'
+// 提取 url 与 『标签文本』
+const reg = /<a href="(.*)">(.*)<\/a>/
+// 执行
+const result = reg.exec(str)
+// 返回结果：数组：[整个正则匹配结果,第一个小括号匹配结果,第二个小括号匹配结果,...]
+console.log(result)
+console.log(result[1])
+console.log(result[2])
+```
+
+```js
+// ES9新特性：分组命名
+// 声明一个字符串
+let str = '<a href="http://www.atguigu.com">尚硅谷</a>'
+//分组命名
+const reg = /<a href="(?<url>.*)">(?<text>.*)<\/a>/
+// 返回结果，与传统方法相同，但多了一个groups属性，里面有url、text属性
+// 优势：如果正则发生变化，也无需通过改变小括号内index来获取结果
+const result = reg.exec(str)
+console.log(result.groups.url)
+console.log(result.groups.text)
+```
+
+#### 反向断言
+
+> ES9支持反向断言，通过对匹配结果前面的内容进行判断，对匹配进行筛选。
+
+```js
+//需求：提取“你知道么”和“啦啦啦”之间的数字
+let str = 'JS5211314你知道么555啦啦啦'
+
+//正向断言
+const reg = /\d+(?=啦)/
+const result = reg.exec(str)
+
+//反向断言
+const reg2 = /(?<=么)\d+/
+const result2 = reg2.exec(str)
+console.log(result2)
+```
+
+#### dotAll模式
+
+> 正则表达式中 dot（`.`）匹配除回车外的任意单个字符，标记`s`改变这种行为，允许行终止符出现。
+
+```js
+// 传统方法
+// 需求：分别把电影名和日期提取出来，存入数组
+let str = `
+  <ul>
+      <li>
+          <a>肖生克的救赎</a>
+          <p>上映日期: 1994-09-10</p>
+      </li>
+      <li>
+          <a>阿甘正传</a>
+          <p>上映日期: 1994-07-06</p>
+      </li>
+  </ul>`
+// 声明正则
+const reg = /<li>\s+<a>(.*?)<\/a>\s+<p>(.*?)<\/p>/
+//执行匹配
+const result = reg.exec(str)
+console.log(result)
+```
+
+```js
+// ES9新方法：dotAll模式
+// 声明正则
+const reg = /<li>.*?<a>(.*?)<\/a>.*?<p>(.*?)<\/p>/gs
+// 执行匹配
+let result
+let data = []
+while ((result = reg.exec(str))) {
+  data.push({ title: result[1], time: result[2] })
+}
+//输出结果
+console.log(data)
+```
+
+------
+
+## 第六章 ES10新特性
 

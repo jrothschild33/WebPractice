@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>正则扩展-dotAll模式</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        //dot  .  元字符  除换行符以外的任意单个字符
-        let str = `
+      // dot(.)元字符：匹配除换行符以外的任意单个字符
+      // 需求：分别把电影名和日期提取出来，存入数组
+      let str = `
         <ul>
             <li>
                 <a>肖生克的救赎</a>
@@ -20,22 +20,24 @@
                 <a>阿甘正传</a>
                 <p>上映日期: 1994-07-06</p>
             </li>
-        </ul>`;
-        //声明正则
-        // const reg = /<li>\s+<a>(.*?)<\/a>\s+<p>(.*?)<\/p>/;
-        const reg = /<li>.*?<a>(.*?)<\/a>.*?<p>(.*?)<\/p>/gs;
-        //执行匹配
-        // const result = reg.exec(str);
-        let result;
-        let data = [];
-        while(result = reg.exec(str)){
-            data.push({title: result[1], time: result[2]});
-        }
-        //输出结果
-        console.log(data);
+        </ul>`
 
+      /* // 声明正则
+      const reg = /<li>\s+<a>(.*?)<\/a>\s+<p>(.*?)<\/p>/
+      //执行匹配
+      const result = reg.exec(str)
+      console.log(result) */
 
+      // ES9新方法：dotAll模式
+      const reg = /<li>.*?<a>(.*?)<\/a>.*?<p>(.*?)<\/p>/gs
+      let result
+      let data = []
+      while ((result = reg.exec(str))) {
+        data.push({ title: result[1], time: result[2] })
+      }
+
+      //输出结果
+      console.log(data)
     </script>
-</body>
-
+  </body>
 </html>

@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>私有属性</title>
-</head>
-<body>
+  </head>
+  <body>
     <script>
-        class Person{
-            //公有属性
-            name;
-            //私有属性
-            #age;
-            #weight;
-            //构造方法
-            constructor(name, age, weight){
-                this.name = name;
-                this.#age = age;
-                this.#weight = weight;
-            }
-
-            intro(){
-                console.log(this.name);
-                console.log(this.#age);
-                console.log(this.#weight);
-            }
+      class Person {
+        //公有属性（写不写都行）
+        name
+        //私有属性（需要在外部先声明）
+        #age
+        #weight
+        //构造方法
+        constructor(name, age, weight) {
+          this.name = name
+          this.#age = age
+          this.#weight = weight
         }
+        // 如果要访问私有属性，需要在类内部定义函数
+        intro() {
+          console.log(this.name)
+          console.log(this.#age)
+          console.log(this.#weight)
+        }
+      }
+      //实例化
+      const girl = new Person('晓红', 18, '45kg')
 
-        //实例化
-        const girl = new Person('晓红', 18, '45kg');
+      // console.log(girl.name)
+      // console.log(girl.#age)    // 无法这样直接访问
+      // console.log(girl.#weight) // 无法这样直接访问
 
-        // console.log(girl.name);
-        // console.log(girl.#age);
-        // console.log(girl.#weight);
-
-        girl.intro();
+      // 这样可以访问私有属性
+      girl.intro()
     </script>
-</body>
+  </body>
 </html>

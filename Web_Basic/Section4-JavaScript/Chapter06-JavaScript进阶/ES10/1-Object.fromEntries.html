@@ -7,18 +7,18 @@
   </head>
   <body>
     <script>
-      //二维数组
-      // const result = Object.fromEntries([
-      //     ['name','尚硅谷'],
-      //     ['xueke', 'Java,大数据,前端,云计算']
-      // ]);
+      // 二维数组：返回结果：{name: '尚硅谷', xueke: 'Java,大数据,前端,云计算'}
+      const result = Object.fromEntries([
+        ['name', '尚硅谷'],
+        ['xueke', 'Java,大数据,前端,云计算'],
+      ])
 
-      //Map
-      // const m = new Map();
-      // m.set('name','ATGUIGU');
-      // const result = Object.fromEntries(m);
+      // Map：返回结果：{name: 'ATGUIGU'}
+      const m = new Map()
+      m.set('name', 'ATGUIGU')
+      const result2 = Object.fromEntries(m)
 
-      //Object.entries ES8
+      // 对比Object.entries：反向操作，将对象转为二维数组，返回：['name', '尚硅谷']
       const arr = Object.entries({
         name: '尚硅谷',
       })

@@ -2204,3 +2204,280 @@ console.log(data)
 
 ## 第六章 ES10新特性
 
+### Object.fromEntries
+
+> ES10新特性，用来创建对象，但参数比较特殊，接收一个二维数组或Map。
+
+```js
+// 二维数组：返回结果：{name: '尚硅谷', xueke: 'Java,大数据,前端,云计算'}
+const result = Object.fromEntries([
+  ['name', '尚硅谷'],
+  ['xueke', 'Java,大数据,前端,云计算'],
+])
+
+// Map：返回结果：{name: 'ATGUIGU'}
+const m = new Map()
+m.set('name', 'ATGUIGU')
+const result2 = Object.fromEntries(m)
+
+// 对比Object.entries：反向操作，将对象转为二维数组，返回：['name', '尚硅谷']
+const arr = Object.entries({
+  name: '尚硅谷',
+})
+console.log(arr)
+```
+
+------
+
+### trimStart与trimEnd
+
+> trimStart用于删除字符串左侧的空格，trimEnd用于删除字符串右侧的空格。
+
+```js
+// trim
+let str = '   iloveyou   '
+console.log(str.trimStart())  // 'iloveyou   '
+console.log(str.trimEnd())    // '   iloveyou'
+```
+
+------
+
+### Array.prototype.flat与flatMap
+
+> array.flat(arg)：用于将多维数组转化为低位数组，可选参数arg为“深度”，输入数字选择展开层级，默认1层。
+>
+> array.flatMap(function(){...})：相当于Map和flat的结合，可以把Map返回的多维数组降维，深度为1层。
+
+```js
+//flat：将多维数组转化为低位数组
+const arr = [1, 2, 3, 4, [5, 6]]
+console.log(arr.flat())
+
+const arr2 = [1, 2, 3, 4, [5, 6, [7, 8, 9]]]
+console.log(arr2.flat())
+console.log(arr2.flat(2))
+```
+
+```js
+// flatMap：相当于Map和flat的结合
+const arr3 = [1, 2, 3, 4]
+// 直接用map返回的是多维数组
+const result = arr3.map((item) => [item * 10])
+console.log(result)
+// flatMap可以把多维数组降维
+const result2 = arr3.flatMap((item) => [item * 10])
+console.log(result2)
+```
+
+------
+
+### Symbol.prototype.description
+
+> Symbol的description属性，用于获取Symbol的字符串描述。
+
+```js
+let s = Symbol('尚硅谷')
+console.log(s.description) // '尚硅谷'
+```
+
+------
+
+## 第七章 ES11新特性
+
+### 类的私有属性
+
+> 私有属性是不能被直接访问的属性，在属性名前添加井号`#`即可。需要在外部先单独声明，如果要访问，需要在类内部定义访问函数。
+
+```js
+class Person {
+  //公有属性（写不写都行）
+  name
+  //私有属性（需要在外部先声明）
+  #age
+  #weight
+  //构造方法
+  constructor(name, age, weight) {
+    this.name = name
+    this.#age = age
+    this.#weight = weight
+  }
+  // 如果要访问私有属性，需要在类内部定义函数
+  intro() {
+    console.log(this.name)
+    console.log(this.#age)
+    console.log(this.#weight)
+  }
+}
+//实例化
+const girl = new Person('晓红', 18, '45kg')
+
+// console.log(girl.name)
+// console.log(girl.#age)    // 无法这样直接访问
+// console.log(girl.#weight) // 无法这样直接访问
+
+// 这样可以访问私有属性
+girl.intro()
+```
+
+------
+
+### Promise.allSettled
+
+> * Promise.allSettled：输入一个由promise组成的数组，返回promise对象，PromiseState始终为"fulfilled"，PromiseResult为数组，其成员为原始数组中promise的返回对象，包含states、value或reason。
+>
+> * Promise.all：与allSettled基本一致，但是只要有一个promise返回的是失败结果，PromiseState就是"rejected"，PromiseResult为错误返回值。
+
+```js
+//声明两个promise对象
+const p1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('商品数据 - 1')
+  }, 1000)
+})
+const p2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    // resolve('商品数据 - 2')
+    reject('出错啦!')
+  }, 1000)
+})
+
+//调用 allSettled 方法
+const result = Promise.allSettled([p1, p2])
+console.log(result)
+
+//调用 all 方法
+const res = Promise.all([p1, p2])
+console.log(res)
+```
+
+------
+
+### String.prototype.matchAll
+
+> matchAll用来得到正则表达式批量匹配的结果。
+
+```js
+let str = `<ul>
+      <li>
+          <a>肖生克的救赎</a>
+          <p>上映日期: 1994-09-10</p>
+      </li>
+      <li>
+          <a>阿甘正传</a>
+          <p>上映日期: 1994-07-06</p>
+      </li>
+  </ul>`
+//声明正则
+const reg = /<li>.*?<a>(.*?)<\/a>.*?<p>(.*?)<\/p>/gs
+//调用方法
+const result = str.matchAll(reg)
+
+// 方法1：for of遍历
+/* for (let v of result) {
+  console.log(v)
+} */
+
+// 方法2：扩展字符串展开
+const arr = [...result]
+console.log(arr)
+```
+
+------
+
+### 可选链操作符
+
+> 形式为问号+点（`?.`），用于简化判断深层级对象中的属性和方法。
+
+```js
+function main(config) {
+  // 需求：判断用户是否传入config，是否传入config.db，是否传入config.db.host
+    
+  // 旧方法：如果不判断直接调用dbHost，用户未传入的情况下，会报错
+  // const dbHost = config && config.db && config.db.host
+  
+  // 新方法
+  const dbHost = config?.db?.host
+  console.log(dbHost)
+  
+  const cacheUser = config?.cache?.username
+  console.log(cacheUser)    // undefined
+}
+main({
+  db: {
+    host: '192.168.1.100',
+    username: 'root',
+  }
+})
+```
+
+------
+
+### 动态import导入
+
+> ES6导入是静态的，需要全部导入，不能实现懒加载（按需加载）。ES11可以用动态import导入，按需加载。语法：`import('xxx.js').then((module)=>{module.xxx()})`，then后面返回的是promise对象，对应的就是导入的模块，可以调用其属性和方法。
+
+```js
+// 模块：hello.js
+export function hello() {
+  alert('Hello')
+}
+```
+
+```js
+// 入口文件：app.js
+const btn = document.getElementById('btn')
+
+btn.onclick = function () {
+  import('./hello.js').then((module) => {
+    module.hello()
+  })
+}
+```
+
+```js
+// html页面
+<button id="btn">点击</button>
+<script src="./js/app.js" type="module"></script>
+```
+
+------
+
+### BigInt
+
+> BigInt大整数，用于进行更大的数值运算。语法：整数后加`n`。
+
+```js
+//大整数
+let n = 521n
+console.log(n, typeof n) // 521n, 'bigint'
+
+//函数
+let m = 123
+console.log(BigInt(m))  // 123n
+console.log(BigInt(12)) // 12n
+// console.log(BigInt(1.2)) // 报错：1.2是小数，无法转换为大整数
+
+//大数值运算
+let max = Number.MAX_SAFE_INTEGER  // 最大安全整数
+console.log(max)      // 9007199254740991
+console.log(max + 1)  // 9007199254740992
+console.log(max + 2)  // 9007199254740992（不能进一步相加了）
+
+// BigInt不能直接和普通整数运算，需要转换为BigInt才行
+console.log(BigInt(max))              // 9007199254740991n
+console.log(BigInt(max) + BigInt(1))  // 9007199254740992n
+console.log(BigInt(max) + BigInt(2))  // 9007199254740993n
+```
+
+------
+
+### globalThis
+
+> 无论执行环境是什么（浏览器、nodejs等），始终指向全局对象。
+
+```js
+console.log(globalThis)
+// 浏览器结果：Window
+// nodejs结果：Object [global] {...}
+```
+

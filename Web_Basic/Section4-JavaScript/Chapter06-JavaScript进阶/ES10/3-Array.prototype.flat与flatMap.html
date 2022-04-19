@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>flat 与 flatMap</title>
-</head>
-<body>
+  </head>
+  <body>
     <script>
-        //flat 平
-        //将多维数组转化为低位数组
-        // const arr = [1,2,3,4,[5,6]];
-        // const arr = [1,2,3,4,[5,6,[7,8,9]]];
-        //参数为深度 是一个数字
-        // console.log(arr.flat(2));  
+      //flat：将多维数组转化为低位数组
+      /* const arr = [1, 2, 3, 4, [5, 6]]
+      console.log(arr.flat())
+      const arr2 = [1, 2, 3, 4, [5, 6, [7, 8, 9]]]
+      console.log(arr2.flat())
+      //参数为深度 是一个数字
+      console.log(arr2.flat(2)) */
 
-        //flatMap
-        const arr = [1,2,3,4];
-        const result = arr.flatMap(item => [item * 10]);
-        console.log(result);
+      // flatMap：相当于Map和flat的结合，深度为1层
+      const arr3 = [1, 2, 3, 4]
+      // 直接用map返回的是多维数组
+      const result = arr3.map((item) => [item * 10])
+      console.log(result)
+      // flatMap可以把多维数组降维
+      const result2 = arr3.flatMap((item) => [item * 10])
+      console.log(result2)
     </script>
-</body>
+  </body>
 </html>

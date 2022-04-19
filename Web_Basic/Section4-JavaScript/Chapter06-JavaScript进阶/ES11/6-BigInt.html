@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BigInt</title>
-</head>
-<body>
+  </head>
+  <body>
     <script>
-        //大整形
-        // let n = 521n;
-        // console.log(n, typeof(n));
+      //大整数
+      let n = 521n
+      console.log(n, typeof n) // 521n, 'bigint'
 
-        //函数
-        // let n = 123;
-        // console.log(BigInt(n));
-        // console.log(BigInt(1.2));
+      //函数
+      let m = 123
+      console.log(BigInt(m)) // 123n
+      console.log(BigInt(12)) // 12n
+      // console.log(BigInt(1.2)) // 报错：1.2是小数，无法转换为大整数
 
-        //大数值运算
-        let max = Number.MAX_SAFE_INTEGER;
-        console.log(max);
-        console.log(max + 1);
-        console.log(max + 2);
+      //大数值运算
+      let max = Number.MAX_SAFE_INTEGER // 最大安全整数
+      console.log(max) // 9007199254740991
+      console.log(max + 1) // 9007199254740992
+      console.log(max + 2) // 9007199254740992（不能进一步相加了）
 
-        console.log(BigInt(max))
-        console.log(BigInt(max) + BigInt(1))
-        console.log(BigInt(max) + BigInt(2))
+      // BigInt不能直接和普通整数运算，需要转换为BigInt才行
+      console.log(BigInt(max)) // 9007199254740991n
+      console.log(BigInt(max) + BigInt(1)) // 9007199254740992n
+      console.log(BigInt(max) + BigInt(2)) // 9007199254740993n
     </script>
-</body>
+  </body>
 </html>

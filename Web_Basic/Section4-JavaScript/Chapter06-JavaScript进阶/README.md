@@ -1686,7 +1686,7 @@ export default {
 
 * 通用导入：调用属性和方法时，需要用 m1.xxx、m2.xxx、m3.default.xxx
 
-```js
+```html
 <script type="module">
     import * as m1 from './src/js/m1.js'
     import * as m2 from './src/js/m2.js'
@@ -1696,7 +1696,7 @@ export default {
 
 * 解构赋值导入：可以直接调用导入的属性和方法
 
-```js
+```html
 <script type="module">
     import { school, teach } from './src/js/m1.js'
     import { school as guigu, findJob } from './src/js/m2.js'
@@ -1706,7 +1706,7 @@ export default {
 
 * 简便形式：针对默认暴露，可以直接用 m3.xxx 调用default默认暴露的属性和方法
 
-```js
+```html
 <script type="module">
     import m3 from './src/js/m3.js'
     console.log(m3)
@@ -1718,7 +1718,7 @@ export default {
 * 如果把需要导入的模块全部写在html下的script中，会显得很长，可以把需要导入的部分单独写成独立js入口文件，统一导入
 * 缺点：兼容性问题，目前只有chrome等浏览器支持，并非所有浏览器都支持此方法
 
-```js
+```html
 // index.html
 <script src="./src/js/app.js" type="module"></script>
 ```

@@ -1,10 +1,9 @@
-/**
- * resource  1.html  2.html 3.html 文件内容
- */
+// resource  1.html  2.html 3.html 文件内容
 
-const fs = require('fs');
-const util = require('util');
-const mineReadFile = util.promisify(fs.readFile);
+const fs = require('fs')
+const util = require('util')
+// util.promisify可以返回一个promise对象，免去封装过程
+const mineReadFile = util.promisify(fs.readFile)
 
 //回调函数的方式
 // fs.readFile('./resource/1.html', (err, data1) => {
@@ -19,16 +18,16 @@ const mineReadFile = util.promisify(fs.readFile);
 // });
 
 //async 与 await
-async function main(){
-    try{
-        //读取第一个文件的内容
-        let data1 = await mineReadFile('./resource/1x.html');
-        let data2 = await mineReadFile('./resource/2.html');
-        let data3 = await mineReadFile('./resource/3.html');
-        console.log(data1 + data2 + data3);
-    }catch(e){
-        console.log(e.code);
-    }
+async function main() {
+  try {
+    //读取第一个文件的内容
+    let data1 = await mineReadFile('./resource/1x.html')
+    let data2 = await mineReadFile('./resource/2.html')
+    let data3 = await mineReadFile('./resource/3.html')
+    console.log(data1 + data2 + data3)
+  } catch (e) {
+    console.log(e.code)
+  }
 }
 
-main();
+main()

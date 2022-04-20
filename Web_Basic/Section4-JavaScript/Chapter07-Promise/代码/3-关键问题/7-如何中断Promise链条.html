@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Promise关键问题 - 中断 Promise 链条</title>
-</head>
-<body>
+  </head>
+  <body>
     <script>
-        let p = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve('OK');
-            }, 1000);
-        });
+      let p = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve('OK')
+        }, 1000)
+      })
 
-        p.then(value => {
-            console.log(111);
-            //有且只有一个方式
-            return new Promise(() => {});
-        }).then(value => {
-            console.log(222);
-        }).then(value => {
-            console.log(333);
-        }).catch(reason => {
-            console.warn(reason);
-        });
+      p.then((value) => {
+        console.log(111)
+        // 有且只有一个方式中断 Promise 链
+        return new Promise(() => {})
+      })
+        .then((value) => {
+          console.log(222)
+        })
+        .then((value) => {
+          console.log(333)
+        })
+        .catch((reason) => {
+          console.warn(reason)
+        })
     </script>
-</body>
+  </body>
 </html>

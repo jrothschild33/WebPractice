@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>await</title>
-</head>
-<body>
+  </head>
+  <body>
     <script>
-        async function main(){
-            let p = new Promise((resolve, reject) => {
-                // resolve('OK');
-                reject('Error');
-            })
-            //1. 右侧为promise的情况
-            // let res = await p;
-            //2. 右侧为其他类型的数据
-            // let res2 = await 20;
-            //3. 如果promise是失败的状态
-            try{
-                let res3 = await p;
-            }catch(e){
-                console.log(e);
-            }
-        }
+      async function main() {
+        let p = new Promise((resolve, reject) => {
+          // resolve('OK')
+          reject('Error')
+        })
 
-        main();
+        //1. 右侧为promise的情况：返回promise成功的值：'OK'
+        let res = await p
+        console.log(res)
+
+        //2. 右侧为其他类型的数据：20
+        let res2 = await 20
+        console.log(res2)
+
+        //3. 如果promise是失败的状态：res、res2、res3都不会执行，直接执行catch部分
+        try {
+          let res3 = await p
+          console.log(res3)
+        } catch (e) {
+          console.log(e)
+        }
+      }
+
+      main()
     </script>
-</body>
+  </body>
 </html>

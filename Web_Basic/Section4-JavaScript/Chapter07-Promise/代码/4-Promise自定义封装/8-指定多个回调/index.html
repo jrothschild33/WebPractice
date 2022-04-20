@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promise-封装 | 8 - 指定多个回调 </title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promise-封装 | 8 - 指定多个回调</title>
     <script src="./promise.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <script>
-        //实例化对象
-        let p = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                // resolve('OK');
-                reject('No');
-            }, 1000);
-        });
+      //实例化对象
+      let p = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // resolve('OK');
+          reject('No')
+        }, 1000)
+      })
 
-        p.then(value => {
-            console.log(value);
-        }, reason=>{
-            console.warn(reason);
-        });
+      // onResolved/onRejected一般是在p.then((value)=>{},(reason)=>{})中定义的函数
+      p.then(
+        (value) => {
+          console.log(value)
+        },
+        (reason) => {
+          console.warn(reason)
+        }
+      )
 
-        p.then(value => {
-            alert(value);
-        }, reason=>{
-            alert(reason);
-        });
+      p.then(
+        (value) => {
+          alert(value)
+        },
+        (reason) => {
+          alert(reason)
+        }
+      )
 
-        console.log(p);
-
-
+      console.log(p)
     </script>
-</body>
+  </body>
 </html>

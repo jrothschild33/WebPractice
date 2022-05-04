@@ -280,6 +280,22 @@
 2. 堆：一般由程序员分配释放，若程序员不释放，由垃圾回收机制回收，复杂数据类型存放到堆中
 3. 过程：首先在栈里面存放地址，十六进制表示，然后这个地址指向堆里面的数据
 
+```js
+// 复杂数据类型传参
+function Person(name) {
+  this.name = name
+}
+function f1(x) {
+  console.log(x.name) // 刘德华
+  x.name = '张学友'
+  console.log(x.name) // 张学友
+}
+var p = new Person('刘德华')
+console.log(p.name) // 刘德华
+f1(p)
+console.log(p.name) // 张学友
+```
+
 ------
 
 ### 2.3 运算符
@@ -354,6 +370,23 @@
 #### 2.3.5 逻辑运算符
 
 1. 基础符号：与（`&&`）、或（`||`）、非（`!`）
+
+   ```js
+   // 编写一个函数，带一个参数n，在页面上输出1～n（n>1）之间所有能同时被3和5整除的偶数，并要求每行只输出6个
+   function fn(n) {
+     var count = 0
+     for (var i = 1; i <= n; i++) {
+       if (i % 3 == 0 && i % 5 == 0 && i % 2 == 0) {
+         document.write(i + ' ')
+         count++
+         if (count % 6 == 0) {
+           document.write('<br />')
+         }
+       }
+     }
+   }
+   fn(1000)
+   ```
 
 2. 短路运算：当有多个表达式（值）时，左边的表达式可以确定结果时，就不在继续运算右边的表达式的值
 
@@ -670,3 +703,3475 @@ for (var i = 1; i <= 5; i++) {
 1. `instanceof`：检测对象 instanceof Array
 2. `.isArray`：Array.isArray(检测对象)
 
+#### 2.5.3 数组长度
+
+1. 显示长度：`arr.length`
+2. 修改长度：`arr.length=X`，新增的元素未赋值前为undefined
+
+```js
+// 数组求和、平均值
+var arr = [2, 6, 1, 7, 4]
+var sum = 0
+var average = 0
+for (var i = 0; i < arr.length; i++) {
+  sum += arr[i] // 我们加的是数组元素 arr[i] 不是计数器 i
+}
+average = sum / arr.length
+console.log(sum, average) // 想要输出多个变量，用逗号分隔即可
+
+// 数组求最大值
+var arr = [2, 6, 1, 77, 52, 25, 7, 99]
+var max = arr[0]
+for (var i = 1; i < arr.length; i++) {
+  if (arr[i] > max) {
+    max = arr[i]
+  }
+}
+console.log('该数组里面的最大值是：' + max)
+```
+
+#### 2.5.4 新增元素
+
+1. 直接赋值：`arr[i]=X`
+
+2. `arr.push(...)`：在数组末尾添加一个或多个元素
+
+   1）返回结果：新数组长度
+
+   2）直接修改原数组
+
+3. `arr.unshift(...)`：在数组前面添加一个或多个元素
+
+   1）返回结果：新数组长度
+
+   2）直接修改原数组
+
+#### 2.5.5 删除元素
+
+1. `arr.pop()`：删除数组的最后一个元素
+
+   1）返回结果：被删除的元素
+
+   2）直接修改原数组
+
+2. `arr.shift()`：删除数组的第一个元素
+
+   1）返回结果：被删除的元素
+
+   2）直接修改原数组
+
+#### 2.5.6 修改元素
+
+1. 直接修改：`arr[i]=X`
+
+2. `arr.splice(开始位置，删除元素数量，插入元素...)`
+
+   1）返回值：由被删除的元素组成的一个数组；只删除了一个元素，返回只包含一个元素的数组；如果没有删除元素，则返回空数组
+
+   2）直接修改原数组
+
+   ```js
+   // 从索引 2 的位置开始删除 0 个元素，插入“drum”
+   arr.splice(2, 0, "drum")
+   // 从索引 3 的位置开始删除 1 个元素
+   arr.splice(3, 1)
+   // 从索引 2 的位置开始删除所有元素
+   arr.splice(2)
+   ```
+
+#### 2.5.7 数组排序
+
+1. `arr.reverse()`：颠倒数组元素顺序
+
+   ```js
+   // 普通方法翻转数组
+   var arr = ['red', 'green', 'blue', 'pink', 'purple', 'hotpink']
+   var newArr = []
+   for (var i = arr.length - 1; i >= 0; i--) {
+     newArr[newArr.length] = arr[i]
+   }
+   console.log(newArr)
+   
+   // reverse方法
+   console.log(arr.reverse())
+   ```
+
+2. `arr.sort()`：对数组元素排序
+
+   1）直接使用：升序排列，但是遇到位数不同的数字，先看个位数、十位数、...进行排序
+
+   2）升序排列：`arr.sort(function(a, b) {return a - b;}`
+
+   3）降序排列：`arr.sort(function(a, b) {return b - a;}`
+
+   ```js
+   // 重新随机排序得到一个新数组
+   var arr = ['鹿晗', '王俊凯', '蔡徐坤', '彭于晏', '周杰伦', '刘德华', '赵本山']
+   arr.sort(function () {
+     // Math.random 结果是：0-1之间的数字，减去0.5，这样的最后的结果是不准确的（丢失精度问题）
+     return Math.random() - 0.5
+   })
+   document.write(arr)
+   ```
+
+3. 冒泡排序
+
+   1）原理：一次比较两个元素，如果他们的顺序错误就把他们交换过来，一直循环比较并交换，直到没有元素需要交换为止
+
+   2）外层循环：次数=arr.length -1
+
+   3）内层循环：次数=arr.length - i - 1
+
+   4）内部交换：借助临时变量，交换元素数值
+
+   ```js
+   var arr = [4, 1, 2, 3, 5]
+   for (var i = 0; i <= arr.length - 1; i++) {
+     // 外层循环管趟数
+     for (var j = 0; j <= arr.length - i - 1; j++) {
+       // 里面的循环管 每一趟的交换次数
+       // 内部交换2个变量的值 前一个和后面一个数组元素相比较
+       if (arr[j] < arr[j + 1]) {
+         var temp = arr[j]
+         arr[j] = arr[j + 1]
+         arr[j + 1] = temp
+       }
+     }
+   }
+   ```
+
+#### 2.5.8 数组索引
+
+1. `arr.indexOf(...)`：从前开始查找，返回第一个满足条件的索引号，如果没有该元素，返回-1
+2. `arr.lastIndexOf(...)`：从后开始查找，返回第一个满足条件的索引号，如果没有该元素，返回-1
+
+#### 2.5.9 数组截取
+
+1. `arr.slice(开始位置, 结束位置)`：返回被截取的新数组
+
+#### 2.5.10 转字符串
+
+1. 普通方法：遍历数组+字符串拼接
+
+   ```js
+   var arr = ['red', 'green', 'blue', 'pink']
+   var str = ''
+   var sep = '*'
+   for (var i = 0; i < arr.length; i++) {
+     str += arr[i] + sep
+   }
+   console.log(str)
+   ```
+
+2. `arr.toString()`：默认用逗号分隔
+
+   ```js
+   var arr = [1, 2, 3]
+   console.log(arr.toString()) // 1,2,3
+   ```
+
+3. `arr.join(分隔符)`：自定义分隔符
+
+   ```js
+   var arr1 = ['green', 'blue', 'pink']
+   console.log(arr1.join()) // green,blue,pink
+   console.log(arr1.join('-')) // green-blue-pink
+   console.log(arr1.join('&')) // green&blue&pink
+   ```
+
+#### 2.5.11 数组拼接
+
+1. `arr1.concat(arr2,arr3,...)`：返回一个新数组，不影响原数组，
+
+#### 2.5.12 数组遍历
+
+1. 普通索引方法：
+
+   ```js
+   var arr = ['red', 'green', 'blue']
+   for (var i = 0; i < arr.length; i++) {
+     console.log(arr[i])
+     document.write(arr[i], ',')
+   }
+   ```
+
+2. `arr.forEach(function(value[,index][,array]){})`
+
+   ```js
+   var arr = [1, 2, 3]
+   var sum = 0
+   arr.forEach(function (value, index, array) {
+     console.log('每个数组元素' + value)
+     console.log('每个数组元素的索引号' + index)
+     console.log('数组本身' + array)
+     sum += value
+   })
+   ```
+
+   ```js
+   // 动态生成表格
+   setDate(data)
+   function setDate(mydata) {
+     // 先清空原来tbody 里面的数据
+     tbody.innerHTML = ''
+     mydata.forEach(function (value) {
+       var tr = document.createElement('tr')
+       tr.innerHTML = '<td>' + value.id + '</td><td>' + value.pname + '</td><td>' + value.price + '</td>'
+       tbody.appendChild(tr)
+     })
+   }
+   var data = [
+     {
+       id: 1,
+       pname: '小米',
+       price: 3999,
+     },
+     {
+       id: 2,
+       pname: 'oppo',
+       price: 999,
+     },
+     {
+       id: 3,
+       pname: '荣耀',
+       price: 1299,
+     },
+     {
+       id: 4,
+       pname: '华为',
+       price: 1999,
+     },
+   ]
+   ```
+
+3. `arr.reduce(function(accumulator,currentValue[,index[,array]])[,initialValue])`
+
+   1）参数：
+
+   * 累计器：accumulator
+   * 当前值：currentValue
+   * 当前索引：index
+   * 源数组：array
+
+   2）案例：
+
+   ```js
+   [0, 1, 2, 3, 4].reduce((accumulator, currentValue, currentIndex, array) => {
+     accumulator + currentValue
+   })
+   ```
+
+   ![遍历数组-reduce](D:\MyProjects\Website\Tutoring\Web_Basic\Section4-JavaScript\src\遍历数组-reduce.png)
+
+4. 案例：找出两个数组之间的补集（在currentArr但不在arr中的元素）
+
+   ```js
+   // 方法一：
+   function arrMath(arr, currentArr) {
+     var flag = false // 表示在arr数组中去匹配，匹配到就false，没有找到就是true
+     var newArr = new Array() //存放筛选出来的元素
+     for (var i = 0; i < arr.length; i++) {
+       for (var j = 0; j < currentArr.length; j++) {
+         if (arr[i] === currentArr[j]) {
+           flag = false
+           break //找到匹配的之后就不必继续匹配了
+         } else {
+           flag = true
+         }
+       }
+       if (flag === true) {
+         newArr[newArr.length] = arr[i]
+       }
+     }
+     return newArr
+   }
+   
+   // 方法二：
+   function arrMath(arr, currentArr) {
+     for (var i = 0; i < arr.length; i++) {
+       for (var j = 0; j < currentArr.length; j++) {
+         if (arr[i] === currentArr[j]) {
+           // 删除i位置的元素
+           arr.splice(i, 1)
+         }
+       }
+     }
+     return arr
+   }
+   ```
+
+#### 2.5.13 数组筛选
+
+1. `arr.filter(function(value[,index][,array]){})`
+
+   1）创建一个新数组，元素是通过检查指定数组中符合条件的所有元素，用于筛选数组，返回新数组
+
+   ```js
+   var arr = [12, 66, 4, 88, 3, 7]
+   var newArr = arr.filter(function (value, index) {
+     return value % 2 === 0
+   })
+   ```
+
+   2）如果数组里面装的是一个个对象，可以按对象属性值筛选，返回数组中装的元素依然是符合条件的对象
+
+   ```js
+   var newData = data.filter(function (value) {
+     return value.price >= 1000 && value.price <= 1500
+   })
+   var data = [
+     {
+       id: 1,
+       pname: '小米',
+       price: 3999,
+     },
+     {
+       id: 2,
+       pname: 'oppo',
+       price: 999,
+     },
+     {
+       id: 3,
+       pname: '荣耀',
+       price: 1299,
+     },
+     {
+       id: 4,
+       pname: '华为',
+       price: 1999,
+     },
+   ]
+   ```
+
+2. `arr.some(function(value[,index][,array]){})`
+
+   1）检测数组中的元素是否满足指定条件，查找数组中是否有满足条件的元素，返回布尔值，如果找到第一个满足条件的元素则终止循环
+
+   ```js
+   var arr = [10, 30, 4]
+   var flag = arr.some(function (value) {
+     return value < 3
+   })
+   console.log(flag)
+   
+   var arr1 = ['red', 'pink', 'blue']
+   var flag1 = arr1.some(function (value) {
+     return value == 'pink'
+   })
+   console.log(flag1)
+   ```
+
+   2）注意：如果在内部函数中写return，一定要跟true终止迭代，否则一直循环下去
+
+   3）区别：forEach、filter中的函数如果写return，不会终止迭代，而some会
+
+   ```js
+   // 查找数组中唯一对象，并返回该完整对象
+   var data = [
+     {
+       id: 1,
+       pname: '小米',
+       price: 3999,
+     },
+     {
+       id: 2,
+       pname: 'oppo',
+       price: 999,
+     },
+     {
+       id: 3,
+       pname: '荣耀',
+       price: 1299,
+     },
+     {
+       id: 4,
+       pname: '华为',
+       price: 1999,
+     },
+   ]
+   var arr = []
+   data.some(function (value) {
+     if (value.pname === 'oppo') {
+       arr.push(value)
+       return true // return 后面必须写true
+     }
+   })
+   console.log(arr)
+   ```
+
+#### 2.5.14 数组去重
+
+```js
+function unique(arr) {
+  var newArr = []
+  for (var i = 0; i < arr.length; i++) {
+    if (newArr.indexOf(arr[i]) === -1) {
+      newArr.push(arr[i])
+    }
+  }
+  return newArr
+}
+var demo = unique(['c', 'a', 'z', 'a', 'x', 'a', 'x', 'c', 'b'])
+console.log(demo)
+```
+
+------
+
+### 2.6 字符串String
+
+1. 定义：属于基本包装类型，即JS把简单数据类型包装成为了复杂数据类型，使其具有了属性和方法
+2. 不可变性：里面的值不可变，虽然看上去可以改变内容，但其实是地址变了，内存中新开了一个空间，原数据依然存在，所以不要大量拼接字符串
+
+#### 2.6.1 字符串索引
+
+1. 索引位
+
+   1）`str.indexOf('要查找的字符',[起始的位置])`，起始的位置可不填，如果未查找到结果，返回-1
+
+   ```js
+   // 统计字符串中某字符出现的次数
+   var str = 'oabcoefoxyozzopp'
+   var index = str.indexOf('o')
+   var num = 0
+   while (index !== -1) {
+     console.log(index)
+     num++
+     index = str.indexOf('o', index + 1)
+   }
+   console.log('o出现的次数是: ' + num)
+   ```
+   
+   ```js
+   // 判断一个字符（比如”a”）是否出现在另一个字符（比如”2340sadfj2affa2”）中，如果出现，并求出现了几次
+   var str = '2340sadfj2affa2'
+   var n = str.indexOf('a')
+   if (n == -1) {
+     alert('没出现')
+   } else {
+     alert('出现了')
+   }
+   var count = 0
+   var arr = str.split('')
+   for (var i = 0; i < arr.length; i++) {
+     if (arr[i] == 'a') {
+       count++
+     }
+   }
+   document.write('出现了' + count + '次')
+   ```
+   
+   2）`str.lastIndexOf('要查找的字符',[起始的位置])`，起始的位置可不填，如果未查找到结果，返回-1
+   
+   ```js
+   // 获取一个长文件路径中的文件名及其后缀
+   // 注意：字符串中的特殊字符需要使用反斜杠进行转义，比如“\”要写成“\\”，换行要写成“\n”，单引号要写成“ \’ ”，双引号要写成“ \” ”
+   var str = 'E:\\itcast\\class\\php\\js\\day2\\abc.html'
+   var gang = str.lastIndexOf('\\')
+   var dian = str.lastIndexOf('.')
+   var ming = str.substring(gang + 1, dian)
+   var houzhui = str.substr(dian + 1)
+   document.write('文件名' + ming + '后缀' + houzhui)
+   ```
+   
+   3）注意：所有字符串都包含空字符''，且位置在最前面
+   
+   ```js
+   'abc'.indexOf('') // 结果：0
+   'abc'.lastIndexOf('') // 结果：3
+   ```
+   
+2. 索引值：
+
+   1）`str.charAt(index)`：返回指定位置的字符
+
+   2）`str.charCodeAt(index)`：返回相应索引号的字符ASCII值，目的是判断用户按下了哪个键（ASCII：American Standard Code for Information Interchange，美国标准信息交换代码）
+
+   3）`str[index]`：获取指定位置处的字符，H5新增
+   
+   ```js
+   // charAt(index)：根据位置返回字符
+   var str = 'andy'
+   console.log(str.charAt(3))
+   // 遍历所有的字符
+   for (var i = 0; i < str.length; i++) {
+     console.log(str.charAt(i))
+   }
+   // charCodeAt(index)  返回相应索引号的字符ASCII值，目的：判断用户按下了那个键
+   console.log(str.charCodeAt(0)) // 97
+   // H5新增：str[index]
+   console.log(str[0]) // a
+   ```
+   
+   ```js
+   // 统计字符串中出现最多的字符和次数
+   var str = 'abcoefoxyozzopp'
+   var o = {} // 声明一个空对象，用作字典储存每个字符串对应的出现次数
+   for (var i = 0; i < str.length; i++) {
+     var chars = str.charAt(i)
+     if (o[chars]) {
+       o[chars]++
+     } else {
+       o[chars] = 1
+     }
+   }
+   
+   var max = 0
+   var ch = ''
+   for (var k in o) {
+     if (o[k] > max) {
+       max = o[k]
+       ch = k
+     }
+   }
+   console.log(max)
+   console.log(`最多的字符是${ch}，一共出现了${max}次`)
+   ```
+
+#### 2.6.2 字符串拼接
+
+1. `str.concat(str2,str3,...)`
+
+#### 2.6.3 截取字符串
+
+1. `str.substr(开始位置, 截取长度)`：如果不写截取长度，默认从开始位置一直截取到最后
+
+   ```js
+   var str1 = '改革春风吹满地'
+   console.log(str1.substr(2)) // 春风吹满地
+   console.log(str1.substr(2, 2)) // 春风
+   ```
+
+2. `str.slice(开始位置, 结束位置)`
+
+3. `str.substring(开始位置, 结束位置)`：基本与slice相同，但不接受负数
+
+#### 2.6.4 替换字符串
+
+1. `str.replace('被替换的字符','替换为的字符' )`
+
+   1）只会替换第一个字符
+
+   ```js
+   var str = 'andyandy'
+   console.log(str.replace('a', 'b'))
+   ```
+   
+   2）若要全部替换，需配合while+indexOf使用，或用正则表达式
+   
+   ```js
+   var str1 = 'abcoefoxyozzopp'
+   while (str1.indexOf('o') !== -1) {
+     str1 = str1.replace('o', '*')
+   }
+   console.log(str1)
+   ```
+
+#### 2.6.5 字符串转数组
+
+1. `str.split('字符串中的分隔符')`
+
+   ```js
+   var str2 = 'red, pink, blue'
+   console.log(str2.split(','))
+   var str3 = 'red&pink&blue'
+   console.log(str3.split('&'))
+   ```
+
+#### 2.6.6 大小写转换
+
+1. 转换大写：`str.toUpperCase()`
+2. 转为小写：`str.toLowerCase()`
+
+```js
+// 将用户输入的字符串翻转，并将首尾转换为大写，其余转为小写
+var s1 = prompt('请输入任意字符', '')
+var arr = s1.split('') //转成数组
+var newArr = arr.reverse() //翻转顺序保存给newArr=['c','b','a']
+for (var i = 0; i < newArr.length; i++) {
+  if (i == 0 || i == newArr.length - 1) {
+    newArr[i] = newArr[i].toUpperCase()
+  } else {
+    newArr[i] = newArr[i].toLowerCase()
+  }
+}
+var str = newArr.join('')
+alert(str)
+```
+
+#### 2.6.7 去除空白字符
+
+1. `str.trim()`：去除两端空白字符，不影响字符串本身，返回一个新字符串
+
+------
+
+### 2.7 函数
+
+#### 2.7.1 声明函数
+
+1. 函数关键字（命名函数）：`function 函数名(形参1,形参2,...) {函数体 return...}`，函数体换行用分号`；`隔开
+2. 函数表达式（匿名函数）：`var 变量名 = function(形参1,形参2,...) {函数体 return...}`，调用时用`变量名()`
+
+#### 2.7.2 函数参数
+
+1. 形参与实参不匹配：
+
+   1）如果实参的个数多于形参的个数，会取到形参的个数 
+
+   2）如果实参的个数小于形参的个数，多余的形参定义为undefined，最终输出的结果是 NaN
+
+   ```js
+   function getSum(num1, num2) {
+     console.log(num1 + num2)
+   }
+   // 如果实参的个数和形参的个数一致 则正常输出结果
+   getSum(1, 3)	 // 4
+   // 如果实参的个数多于形参的个数，会取到形参的个数
+   getSum(1, 2, 3)	 // 3
+   // 如果实参的个数小于形参的个数，多于的形参定义为undefined，最终的结果就是 NaN
+   getSum(1) 		 // NaN
+   ```
+
+2. arguments对象：
+
+   1）arguments存储了传递的所有实参
+
+   2）形式：伪数组 Arguments(x)
+
+   * 可用`arguments[i]`调用
+   * 有`length`属性
+   * 没有`pop()`、`push()`方法
+
+   ```js
+   // 只有函数才有 arguments对象，而且是每个函数都内置好了这个arguments
+   function fn() {
+     console.log(arguments) 		// 里面存储了所有传递过来的实参，arguments = [1,2,3]（伪数组：Arguments(3)）
+     console.log(arguments.length)
+     console.log(arguments[2])
+     // 可以按照数组的方式遍历arguments
+     for (var i = 0; i < arguments.length; i++) {
+       console.log(arguments[i])
+     }
+   }
+   fn(1, 2, 3)
+   fn(1, 2, 3, 4, 5)
+   ```
+
+    ```js
+	// 求任意个数的最大值
+   function getMax() {
+     // arguments = [1,2,3]
+     var max = arguments[0]
+     for (var i = 1; i < arguments.length; i++) {
+       if (arguments[i] > max) {
+         max = arguments[i]
+       }
+     }
+     return max
+   }
+   console.log(getMax(1, 2, 3))
+   console.log(getMax(1, 2, 3, 4, 5))
+   console.log(getMax(11, 2, 34, 444, 5, 100))
+    ```
+
+#### 2.7.3 函数返回结果
+
+1. 终止函数：函数中return后面的语句不会被执行
+
+2. return只能返回一个值，想返回多个值用数组存储
+
+3. 如果没有return，函数返回的值是undefined
+
+   ```js
+   // return 终止函数
+   function getSum(num1, num2) {
+     return num1 + num2 // return 后面的代码不会被执行
+     alert('我是不会被执行的哦！')
+   }
+   console.log(getSum(1, 2))
+   
+   // return 只能返回一个值
+   function fn(num1, num2) {
+     return num1, num2 // 返回的结果是最后一个值
+   }
+   console.log(fn(1, 2))
+   
+   // 想返回多个值用数组存储：求任意两个数的加减乘数结果
+   function getResult(num1, num2) {
+     return [num1 + num2, num1 - num2, num1 * num2, num1 / num2]
+   }
+   var re = getResult(1, 2) // 返回的是一个数组
+   console.log(re)
+   
+   // 函数如果有return，则返回的是 return 后面的值，如果函数没有 return，则返回 undefined
+   function fun1() {
+     return 666
+   }
+   console.log(fun1()) // 返回 666
+   function fun2() {}
+   console.log(fun2()) // 函数返回的结果是 undefined
+   ```
+
+------
+
+### 2.8 作用域
+
+1. 定义：变量在某个范围内起作用和效果，为了提高程序的可靠性，减少命名冲突
+
+2. 分类：
+
+   1）全局作用域：整个script标签，或者是一个单独的js文件
+
+   2）局部作用域：在函数内部就是局部作用域
+
+   3）块级作用域（ES6）：在函数内部用`let`或`const`定义变量
+
+   ```js
+   // 外面的是不能调用num的
+   if (3 < 5) {
+     let num = 10	// 如果是var，外面就可以调用了
+   }
+   console.log(num)
+   ```
+
+3. 变量作用域：
+
+   1）全局变量：全局作用域下的变量，在全局下都可以使用；只有浏览器关闭的时候才会销毁，比较占内存资源
+
+   * 如果在函数内部，没有声明直接赋值的变量也属于全局变量
+   * 没有声明即无var，直接令x=a，例：foo() {var a = 1; b = 2;}，b为全局变量
+
+   2）局部变量：在局部作用域下的变量，在函数内部的变量就是局部变量
+
+   * 函数的形参也可以看做是局部变量
+   * 当程序执行完毕就会销毁，比较节约内存资源
+
+   ```js
+   // 全局变量：在全局作用域下的变量，在全局下都可以使用
+   // 注意：如果在函数内部 没有声明直接赋值的变量也属于全局变量
+   var num = 10 // num就是一个全局变量
+   console.log(num)
+   function fn() {
+     console.log(num)
+   }
+   fn()
+   
+   // 局部变量：在局部作用域下的变量，后者在函数内部的变量就是局部变量
+   // 注意：函数的形参也可以看做是局部变量
+   function fun(aru) {
+     var num1 = 10 	// num1就是局部变量 只能在函数内部使用
+     num2 = 20
+   }
+   fun()
+   console.log(num1) 	// Uncaught ReferenceError: num1 is not defined
+   console.log(num2) 	// 20
+   ```
+
+4. 作用域链：
+
+   1）就近原则：内部函数访问外部函数的变量，采取的是链式查找的方式来决定取那个值
+
+   2）例：全局变量num=10，函数内局部变量num=20，内部函数调用num，取的是20
+   
+   ```js
+   // 案例1：结果是0
+   function f1() {
+     var num = 123
+     function f2() {
+       var num = 0
+       console.log(num) // 0
+     }
+     f2()
+   }
+   var num = 456
+   f1()
+   
+   // 案例2：结果是4、22
+   var a = 1
+   function fn1() {
+     var a = 2
+     var b = '22'
+     fn2()
+     function fn2() {
+       var a = 3
+       fn3()
+       function fn3() {
+         var a = 4
+         console.log(a) // 4
+         console.log(b) // 22
+       }
+     }
+   }
+   fn1()
+   ```
+
+------
+
+### 2.9 预解析
+
+1. 预解析
+
+   1）原理：把js里面所有的 var 和 function 提升到当前作用域的最前面
+
+   2）变量提升：把所有的变量声明提升到当前的作用域最前面，不提升赋值操作
+
+   3）函数提升：把所有的函数声明提升到当前作用域的最前面 ，不调用函数
+
+2. 代码执行：按书写顺序从上到下执行
+
+3. 案例：
+
+   1）先调用变量但后赋值，输出结果为undefined
+
+   2）先用变量名调用匿名函数后定义函数，提示报错
+
+   3）先调用命名函数但后定义函数，可以成功运行
+
+4. 经典案例：
+
+   1）var a = b = c = 9; 仅有a是局部变量，b、c都是直接赋值，为全局变量
+
+   2）想同时赋值多个变量，要用逗号隔开：var a = 9, b = 9, c =9;
+
+   ```js
+   // 原始代码（命名函数）
+   f1()
+   console.log(c)
+   console.log(b)
+   console.log(a)
+   function f1() {
+     var a = (b = c = 9)
+     console.log(a)
+     console.log(b)
+     console.log(c)
+   }
+   
+   // 预解析后
+   function f1() {
+     var a
+     a = b = c = 9
+     console.log(a) // 9
+     console.log(b) // 9
+     console.log(c) // 9
+   }
+   f1()
+   console.log(c) // 9
+   console.log(b) // 9
+   console.log(a) // undefined
+   ```
+
+------
+
+### 2.10 对象
+
+> 对象是一组无序的相关属性和方法的集合，所有事物都是对象，如字符串、数值、数组、函数等。
+
+#### 2.10.1 创建对象
+
+1. 字面量法：`var 对象名 = {key1：value1，key2：value2，key3：function(){}....}`
+
+   ```js
+   var obj = {
+     uname: '张三疯',
+     age: 18,
+     sex: '男',
+     sayHi: function () {
+       console.log('hi~')
+     },
+   }
+   ```
+
+2. new Object：
+
+   1）语法：var 对象名 = new Object()
+
+   2）对象名.属性名 = 属性
+
+   3）对象名.方法名 = function() {...}
+
+   ```js
+   var obj = new Object()
+   obj.uname = '张三疯'
+   obj.age = 18
+   obj.sex = '男'
+   obj.sayHi = function () {
+     console.log('hi~')
+   }
+   ```
+
+3. 构造函数法：如果需要重复引用同一个对象进行定义，可以利用函数的方法重复相同的代码，称为构造函数
+
+   1）构造函数名字首字母要大写
+
+   2）构造函数不需要return就可以返回结果
+
+   3）用构造函数必须使用`new`
+
+   4）属性和方法前面必须添加`this`
+
+   ```js
+   // new关键字执行过程
+   // 1. new 构造函数可以在内存中创建了一个空的对象
+   // 2. this 就会指向刚才创建的空对象
+   // 3. 执行构造函数里面的代码 给这个空对象添加属性和方法
+   // 4. 返回这个对象
+   function Star(uname, age, sex) {
+     this.name = uname
+     this.age = age
+     this.sex = sex
+     this.sing = function (sang) {
+       console.log(sang)
+     }
+   }
+   
+   // 创建新对象
+   var ldh = new Star('刘德华', 18, '男'); 
+   ```
+
+#### 2.10.2 调用对象
+
+1. 调用属性：
+
+   1）对象名.属性名：`object.attribute`
+
+   2）对象名['属性名']：`object['attribute']`
+
+2. 调用方法：对象名.方法名()：`object.method()`
+
+#### 2.10.3 遍历对象
+
+1. 传统方法：`for (var k in obj) {obj[k]}`
+
+   ```js
+   for (var k in obj) {
+     console.log(k)	  // k：属性名
+     console.log(obj[k]) // obj[k]：属性值
+   }
+   ```
+
+2. `Object.keys()`：用于获取对象自身所有的属性名
+
+   ```js
+   var obj = {
+     name: 'pink老师',
+     age: 18,
+     sex: '男',
+     fn: function () {},
+   }
+   // 先用数组储存对象属性名
+   var arr = Object.keys(obj)
+   // 用forEach遍历
+   arr.forEach(function (value) {
+     console.log(value) // 输出的value是属性名：name age sex fn
+   })
+   ```
+
+#### 2.10.4 新增/修改属性
+
+1. 传统方法：`obj.属性名=属性值`
+
+2. ES5新方法：`Object.defineProperty(obj,prop,descriptor)`
+
+   1）descriptor说明：以对象的形式书写
+
+   * value：设置属性值，默认为undefined
+   * writable: 布尔值，值是否可以重写，默认为false
+   * enumerable: 布尔值，目标属性是否可以被枚举，默认为 false，即Object.keys()是否可以遍历出该属性
+   * configurable：布尔值，目标属性是否可以被删除或是否可以再次修改特性，默认为false，如果已经设置过一次descriptor了，不允许在下面再次修改descriptor中的参数
+
+   2）对于obj初始时内部定义的属性，descriptor中后三项默认都是true
+
+   ```js
+   var obj = {
+     id: 1,
+     pname: '小米',
+     price: 1999,
+   }
+   Object.defineProperty(obj, 'address', {
+     value: '中国山东蓝翔技校xx单元',
+     // 如果只为false 不允许修改这个属性值 默认值也是false
+     writable: false,
+     // enumerable 如果值为false 则不允许遍历, 默认的值是 false
+     enumerable: false,
+     // configurable 如果为false 则不允许删除这个属性 不允许在修改第三个参数里面的特性 默认为false
+     configurable: false,
+   })
+   ```
+
+------
+
+### 2.11 内置对象
+
+> 内置对象：JS已经定义好的，直接拿来使用即可，都是首字母大写的。
+
+#### 2.11.1 Math对象
+
+1. 定义：不是构造函数，不用new实例化
+
+2. 圆周率：`Math.PI`
+
+3. 最大值：`Math.max()`
+
+4. 最小值：`Math.min()`
+
+5. 绝对值：`Math.abs()`，如果输入字符串自动转为数字
+
+6. 向下取整：`Math.floor()`，往小了取值
+
+7. 向上取整：`Math.ceil()`，往大了取值
+
+8. 四舍五入：`Math.round()`，0.5往大取，1.5变成2，-1.5变成-1
+
+9. 随机数：`Math.random()`，取值范围 [0,1)
+
+   ```js
+   // 案例：得到一个两数之间的随机数
+   function getRandomArbitrary(min, max) {
+     return Math.random() * (max - min) + min;
+   }
+   
+   // 案例：得到一个两数之间的随机整数
+   function getRandomInt(min, max) {
+     min = Math.ceil(min);
+     max = Math.floor(max);
+     return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
+   }
+   
+   // 案例：得到一个两数之间的随机整数，包括两个数在内
+   function getRandomIntInclusive(min, max) {
+     min = Math.ceil(min);
+     max = Math.floor(max);
+     return Math.floor(Math.random() * (max - min + 1)) + min; //含最大值，含最小值 
+   }
+   ```
+   
+   ```js
+   // 案例：从学员名单中不重复地选出4名学员
+   //           0       1      2         3        4        5       6
+   var arr = ['鹿晗', '王三', '彭于晏', '刘德华', '张学友', '张三丰', '乔峰']
+   // 定义函数：得到一个两数之间的随机整数
+   function getRandomInt(min, max) {
+     min = Math.ceil(min)
+     max = Math.floor(max)
+     return Math.floor(Math.random() * (max - min)) + min
+   }
+   var numArray = [] // 存放索引的数组
+   var newArray = [] // 存放筛选出来的4个学员
+   
+   // 如果真的突然出现筛选出重复的人，最多不会出现3次等
+   for (var i = 0; i < 11; i++) {
+     var num = getRandomInt(0, 6)
+     // console.log(num);
+     if (numArray.indexOf(num) == -1) {
+       // 如果在numArray空数组里面检测不到随机的num，就放到数组里面
+       numArray[numArray.length] = num
+       newArray[newArray.length] = arr[num]
+     }
+     if (numArray.length == 4) {
+       break
+     }
+   }
+   document.write(newArray)
+   document.write(numArray)
+   ```
+
+#### 2.11.2 Date对象
+
+1. 定义：是构造函数，需要new实例化
+
+2. 语法：`var date = Date(参数)`，如果没有参数，返回系统当前时间
+
+3. 参数：
+
+   1）数字型：2019,10,01，注意：数字型月份默认+1，即输入10，输出为11月
+
+   2）字符串：'2019-10-1 8:8:8'
+
+4. 格式化：`var date = new Date()`
+
+   1）获取当年：`date.getFullYear()`
+
+   2）获取当月：`date.getMonth()`，注意：返回的数值需要+1才是当前月份
+
+   3）获取当天日期：`date.getDate()`
+
+   4）获取星期几：`date.getDay()`，注意：周日返回的是0，最好用数组自定义一下，然后arr[day]
+
+   ```js
+   // 格式化日期
+   var date = new Date()
+   var year = date.getFullYear()
+   var month = date.getMonth() + 1
+   var dates = date.getDate()
+   var arr = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+   var day = date.getDay()
+   console.log('今天是：' + year + '年' + month + '月' + dates + '日 ' + arr[day])
+   ```
+
+   5）获取当前小时：`date.getHours()`，补零：`h = h < 10 ? '0' + h : h`
+
+   6）获取当前分钟：`date.getMinutes()`，补零：`m = m < 10 ? '0' + m : m`
+
+   7）获取当前秒钟：`date.getSeconds()`，补零：`s = s < 10 ? '0' + s : s`
+
+   ```js
+   // 格式化时间
+   function getTimer() {
+     var time = new Date()
+     var h = time.getHours()
+     h = h < 10 ? '0' + h : h
+     var m = time.getMinutes()
+     m = m < 10 ? '0' + m : m
+     var s = time.getSeconds()
+     s = s < 10 ? '0' + s : s
+     return h + ':' + m + ':' + s
+   }
+   console.log(getTimer())
+   ```
+
+5. 时间戳：当前距离1970年1月1日的总毫秒数
+
+   ```js
+   // 方法1
+   var date = new Date()
+   date.valueOf()
+   date.getTime()
+   // 方法2
+   var date = +new Date()
+   // 方法3
+   Date.now()
+   ```
+
+6. 案例：倒计时
+
+   1）输入的时间减去现在的时间就是剩余的时间，但是不能拿着时分秒相减，比如05分减去25分，结果会是负数的
+
+   2）用时间戳：用户输入时间总的毫秒数减去现在时间的总的毫秒数，得到的就是剩余时间的毫秒数
+
+   3）把剩余时间总的毫秒数转换为天、时、分、秒 （时间戳转换为时分秒）
+
+   * 毫秒转为秒：除1000
+   * 计算天数：parseInt(总秒数/ 60/60 /24)
+   * 计算小时：parseInt(总秒数/ 60/60 %24)
+   * 计算分钟：parseInt(总秒数 /60 %60 )
+   * 计算秒数：parseInt(总秒数%60)
+   
+   ```js
+   function countDown(time) {
+     var nowTime = +new Date() // 返回的是当前时间总的毫秒数
+     var inputTime = +new Date(time) // 返回的是用户输入时间总的毫秒数
+     var times = (inputTime - nowTime) / 1000 // times是剩余时间总的秒数
+     var d = parseInt(times / 60 / 60 / 24) // 天
+     d = d < 10 ? '0' + d : d
+     var h = parseInt((times / 60 / 60) % 24) //时
+     h = h < 10 ? '0' + h : h
+     var m = parseInt((times / 60) % 60) // 分
+     m = m < 10 ? '0' + m : m
+     var s = parseInt(times % 60) // 当前的秒
+     s = s < 10 ? '0' + s : s
+     return d + '天' + h + '时' + m + '分' + s + '秒'
+   }
+   console.log(countDown('2023-01-01 18:00:00'))
+   ```
+   
+
+------
+
+## 第3章 Web API
+
+> API：Application Progamming Interface，应用程序接口，无需关心内部构造，直接调用即可
+
+### 3.0 常用方法集锦
+
+1. `console.dir`：显示元素对象的属性和方法
+
+2. `document.write()`：如果页面文档流加载完毕，再调用这句话会导致页面重绘，例：document.write('<div>123</div>')
+
+3. `window.onload=function(){}`：页面加载完毕再执行JS的函数
+
+4. `window.parent.XXX()`：如果存在页面嵌套（如iframe），子页面可以跳到父页面js中的方法
+
+5. 阻止链接<a>跳转：`href=javascript:void(0)'`或 `href=javascript:;`
+
+6. flag开关：
+
+   ```html
+   <button id="btn">开关灯</button>
+   <script>
+     var btn = document.getElementById('btn')
+     var flag = 0
+     btn.onclick = function () {
+       if (flag == 0) {
+         document.body.style.backgroundColor = 'black'
+         flag = 1
+       } else {
+         document.body.style.backgroundColor = '#fff'
+         flag = 0
+       }
+     }
+   </script>
+   ```
+
+### 3.1 API基本概念
+
+#### 3.1.1 API简介
+
+1. Web API：浏览器提供的一套操作浏览器功能和页面元素的API，包括DOM、BOM
+2. 书写顺序：文档页面从上到下加载，所以先写HTML标签，`<script>`写到标签的最下面
+
+3. 常用命令：`console.dir`：显示元素对象的属性和方法
+
+#### 3.1.2 API重要概念
+
+##### 回调函数
+
+1. 定义：callback，即需要等待时间才去调用函数
+2. 定时器：`setTimeout()`、`setInterval()`
+3. 注册事件中的函数，如addEventListener('click',fn）中的fn
+
+##### this指向
+
+1. 指向window
+
+   1）全局作用域：`console.log(this)`
+
+   2）普通函数
+
+   ```js
+   function fn() {
+     console.log(this)
+   }
+   window.fn()
+   ```
+
+    3）计时器
+
+    ```js
+    // 注意：定时器里面的函数不能用this代替元素
+    window.setTimeout(function () {
+      console.log(this)
+    }, 1000)
+    ```
+
+2. 指向调用它的对象
+
+   1）方法调用
+
+    ```js
+    var o = {
+      sayHi: function () {
+        console.log(this) // this指向的是 o 这个对象
+      },
+    }
+    o.sayHi()
+    
+    var btn = document.querySelector('button')
+	 btn.onclick = function () {
+      console.log(this) // this指向的是btn这个按钮对象
+    }
+    btn.addEventListener('click', function () {
+      console.log(this) // this指向的是btn这个按钮对象
+    })
+    ```
+   
+   2）构造函数
+   
+    ```js
+    function Fun() {
+      console.log(this) // this 指向的是fun 实例对象
+    }
+    var fun = new Fun()
+
+##### JS执行机制
+
+1. JS是单线程：同一个时间只能做一件事，所有的任务需要排队执行，可能会造成阻塞、渲染不连贯
+
+2. 同步：前一个任务结束后再执行后一个任务，按顺序进行
+
+   同步任务：都在主线程上执行，形成一个执行栈
+
+3. 异步：同时处理多个任务，目前 JS 默认是异步的
+
+   异步任务：通过回调函数实现，放在任务队列（消息队列）中
+
+   1）普通事件：`click`、`resize`
+
+   2）资源加载：`load`、`error`
+
+   3）定时器：`setTimeout`、`setInterval`
+
+4. 执行机制：先执行执行栈中的同步任务
+
+   1）异步任务（回调函数）放到任务队列中：是先给异步进程处理，判断时间先后顺序，再放入任务队列
+
+   ```js
+   // 例：多个异步任务，有点击事件、倒计时等，如果点击先于倒计时，则先执行点击，否则先执行倒计时
+   console.log(1)
+   document.onclick = function () {
+     console.log('click')
+   }
+   console.log(2)
+   setTimeout(function () {
+     console.log(3)
+   }, 3000)
+   ```
+
+   2）一旦执行栈中的所有同步任务执行完毕，系统按次序读取任务队列中的异步任务，被读取的异步任务结束等待状态，进入执行栈执行
+
+   3）事件循环（event loop）：主线程不断重复获得任务、执行任务的机制
+
+##### 立即执行函数
+
+1. 定义：不需要调用，立刻能够自己执行的函数
+
+2. 特点：独立创建了一个作用域，里面所有的变量都是局部变量，不会有命名冲突的情况
+
+3. 语法：第一个括号定义参数，第二个括号既可以传参、也有调用的作用
+
+   1）方法1：`(function() {})()`
+
+   2）方法2：`(function(){}())`
+
+------
+
+### 3.2 DOM
+
+> 文档对象模型 (Document Object Model) 是HTML和XML文档的编程接口，它提供了对文档的结构化的表述，并定义了一种方式可以使从程序中对该结构进行访问，从而改变文档的结构、样式和内容。
+
+#### 3.2.1 DOM简介
+
+1. 文档：document，一个页面即一个文档
+2. 元素：element，页面中所有标签都是元素
+3. 节点：node，网页中所有内容都是节点，如标签、属性、文本、注释等
+4. 对象：DOM把文档、元素、节点都看做是对象
+
+------
+
+#### 3.2.2 获取元素
+
+1. `document.getElementById（id名）`：根据id获取元素
+
+   1）语法：var element = document.getElementById(id)
+
+   2）参数：id 是大小写敏感的字符串
+
+   3）返回：一个元素对象
+
+   ```html
+   // 案例：点击隐藏或显示密码
+   <div class="box">
+     <label for="">
+       <img src="images/close.png" alt="" id="eye" />
+     </label>
+     <input type="password" name="" id="pwd" />
+   </div>
+   
+   <script>
+     // 1. 获取元素
+     var eye = document.getElementById('eye')
+     var pwd = document.getElementById('pwd')
+     // 2. 注册事件
+     var flag = 0
+     eye.onclick = function () {
+       // 点击一次之后， flag 一定要变化
+       if (flag == 0) {
+         pwd.type = 'text'
+         eye.src = 'images/open.png'
+         flag = 1 // 赋值操作
+       } else {
+         pwd.type = 'password'
+         eye.src = 'images/close.png'
+         flag = 0
+       }
+     }
+   </script>
+   ```
+
+2. `document.getElementsByTagName（标签名）`：根据html标签获取元素
+
+   1）语法：var element = document.getElementsByTagName(标签名)
+
+   2）返回：带有指定标签名对象的集合，以伪数组的形式存储（HTMLCollection(n)）
+
+   3）获取父元素中的子元素
+
+   * 方法1：element.getElementsByTagName('标签名')，父元素必须是指定的单个元素
+
+     ```js
+     var ol = document.getElementsByTagName('ol')
+     console.log(ol[0].getElementsByTagName('li'))
+     ```
+
+   * 方法2：给父元素指定id，配合getElementById使用
+
+     ```js
+     var ol = document.getElementById('ol')
+     console.log(ol.getElementsByTagName('li'))
+     ```
+
+3. `document.getElementsByClassName（类名）`：根据class获取元素
+
+   1）语法：var element = document.getElementsByClassName(类名)
+
+   2）返回：带有指定类名对象的集合，以伪数组的形式存储
+
+4. `document.querySelector（选择器名）`：根据选择器名获取元素（仅返回第一个元素）
+
+   1）语法：var element = document.querySelector(选择器名)，选择器要加符号（eg: .box，#nav)
+
+   2）返回：根据指定选择器返回第一个元素对象
+
+   3）注意：如果直接写标签选择器（如：li），前面不用加符号，也是选出第一个标签元素
+
+5. `document.querySelectorAll（选择器名）`：根据选择器名获取元素（返回全部元素）
+
+   1）返回：指定选择器的所有元素对象集合（NodeList(n)）
+
+   2）可以配合使用：选中父元素中所有子元素的集合
+
+   ```js
+   document.querySelector('father').querySelectorAll('children')
+   ```
+
+   ```html
+   // 案例：循环精灵图
+   <ul>
+     <li></li>
+     <li></li>
+     <li></li>
+     <li></li>
+   </ul>
+   
+   <script>
+       var lis = document.querySelectorAll('li')
+       for (var i = 0; i < lis.length; i++) {
+         // 让索引号乘以44，就是每个li的背景y坐标，x坐标都为0
+         var index = i * 44
+         lis[i].style.backgroundPosition = '0 -' + index + 'px'
+       }
+   </script>
+   ```
+
+6. 特殊元素：
+
+   1）body元素：`document.body`
+
+   2）html元素：`document.documentElement`
+
+------
+
+#### 3.2.3 事件
+
+##### 3.2.3.1 事件介绍
+
+###### 事件三要素
+
+1. 事件源：事件被触发的对象，如按钮
+2. 事件类型：如何触发事件，如鼠标点击/经过
+3. 事件处理程序：通过一个函数赋值的方式完成
+
+###### 事件执行步骤
+
+1. 获取事件源
+
+2. 绑定事件（注册事件）
+
+3. 添加事件处理程序（函数赋值）
+
+```js
+<button id="btn">唐伯虎</button>
+
+var btn = document.getElementById('btn')
+btn.onclick = function () {
+  alert('点秋香')
+}
+```
+
+###### DOM事件流：捕获与冒泡
+
+1. 定义：事件流描述的是从页面中接收事件的顺序，事件发生时会在元素节点之间按照特定的顺序传播，传播过程称为DOM事件流
+
+2. 三阶段：
+
+   1）捕获阶段：由网景提出，由DOM最顶层节点开始，逐级向下传播到最具体的元素接收的过程
+
+   * 如果 addEventListener 第三个参数是 true，那么则处于捕获阶段
+   * 从外往里执行：document -> html -> body -> father -> son
+
+   2）目标阶段
+
+   3）冒泡阶段：由IE提出，事件开始时由最具体的元素接收，逐级向上传播到DOM最顶层节点的过程
+
+   * onclick、attachEvent只能得到冒泡阶段
+   * 如果 addEventListener 第三个参数是 false 或省略，那么则处于冒泡阶段
+   * 从里往外执行：son -> father ->body -> html -> document
+
+3. JS代码中只能执行捕获、冒泡其中之一的阶段
+
+4. 有些事件没有冒泡：onblur、onfocus、onmouseenter、onmouseleave
+
+------
+
+##### 3.2.3.2 事件对象
+
+###### 基本概念
+
+1. event 就是一个事件对象，写到侦听函数的小括号里面，当形参来看
+
+   ```js
+   div.onclick = function(event) {XXX}
+   ```
+
+2. 事件对象只有有了事件才会存在，是系统自动创建的，不需要传递参数
+
+3. 事件对象是事件的一系列相关数据的集合，如鼠标点击包含了鼠标相关信息（坐标），键盘事件包含键盘事件信息（按键）
+
+4. 事件对象可以自己命名，如 event、evt、e
+
+5. 事件对象也有兼容性问题：ie678 通过 window.event 兼容性的写法
+
+   ```js
+   e = e || window.event
+   ```
+
+###### 属性和方法
+
+1. `e.target`：返回触发事件的对象（标准）
+
+   1）e.target：返回的是触发事件的对象（元素），点击了哪个元素，就返回哪个元素
+
+   2）this：返回的是绑定事件的对象（元素），哪个元素绑定了这个点击事件，那么就返回谁
+
+   3）e.currentTarget：和this效果相同，但是不兼容IE6-8，不如直接用this
+
+2. `e.srcElement`：返回触发事件的对象（非标准，IE6-8使用）
+
+3. `e.type`：返回事件类型，如：click、mouseover，前面不带on
+
+4. `e.stopPropagation()`：阻止冒泡（标准）
+
+   ```js
+   var son = document.querySelector('.son')
+   son.addEventListener(
+     'click',
+     function (e) {
+       alert('son')
+       e.stopPropagation() // stop 停止  Propagation 传播
+       e.cancelBubble = true // 非标准 cancel 取消 bubble 泡泡
+     },
+     false
+   )
+   var father = document.querySelector('.father')
+   father.addEventListener(
+     'click',
+     function () {
+       alert('father')
+     },
+     false
+   )
+   document.addEventListener('click', function () {
+     alert('document')
+   })
+   ```
+
+5. `e.canceBubble = true`：阻止冒泡（非标准，IE6-8使用）
+
+6. 阻止默认事件：如不让链接跳转等
+
+   1）`e.preventDefault()`：标准方法
+
+   ```js
+   a.onclick = function (e) {
+     // 普通浏览器：e.preventDefault()方法
+     e.preventDefault()
+   }
+   ```
+
+   2）`e.returnValue`：非标准方法，IE6-8使用
+
+   ```js
+   a.onclick = function (e) {
+     // 低版本浏览器 ie678：returnValue 属性
+     e.returnValue
+   }
+   ```
+
+   3）`return false`：也能阻止默认行为，没有兼容性问题，但return后面的代码不执行，且只限于传统的注册方式
+
+   ```js
+   a.onclick = function (e) {
+     return false
+     alert(11) // 不会执行此行代码了
+   }
+   ```
+
+7. `e.persisted`：返回true代表页面从是缓存中取出的，返回false代表不是从缓存取出的，常与pageshow事件搭配使用
+
+------
+
+##### 3.2.3.3 注册事件
+
+1. 传统方式：
+
+   1）以on开头的事件，如：onclick
+
+   2）特点：唯一性，同一个元素同一个事件只能设置一个处理函数，最后注册的处理函数将会覆盖前面注册的处理函数
+
+2. `addEventListener()`：方法监听注册
+
+   1）语法：`eventTarget.addEventListener(type,listener,[,useCapture])`
+
+   2）参数：
+
+   * type：事件类型字符串，必须加引号，如：click, mouseover，前面无需加on
+   * listener：事件处理函数，事件发生时，会调用该监听函数
+   * userCapture：DOM事件流方向，可选，布尔值，默认false（冒泡阶段）
+
+3. `attachEvent()`：方法监听注册，IE9之前的方法
+
+   1）语法：`attachEvent(eventNameWithOn, callback)`
+
+   2）参数：
+
+   * eventNameWithOn：事件类型字符串，必须加引号，如：onclick, onmouseover，前面需要加on
+   * callback：事件处理函数，目标出发事件时调用回调函数
+
+4. 兼容性处理函数：
+
+   ```js
+   function addEventListener(element, eventName, fn) {
+     // 判断当前浏览器是否支持 addEventListener 方法
+     if (element.addEventListener) {
+       element.addEventListener(eventName, fn) // 第三个参数默认是false
+     } else if (element.attachEvent) {
+       element.attachEvent('on' + eventName, fn)
+     } else {
+       // 相当于 element.onclick = fn;
+       element['on' + eventName] = fn
+     }
+   }
+   ```
+
+------
+
+##### 3.2.3.4 删除事件
+
+1. `eventTarget.onclick = null`：传统方式，需要写到函数的末尾
+
+   ```js
+   divs[0].onclick = function () {
+     alert(11)
+     // 传统方式删除事件
+     divs[0].onclick = null
+   }
+   ```
+
+2. `removeEventListener()`：方法监听注册
+
+   1）语法：`eventTarget.removeEventListener(type,listener[,useCapture])`
+
+   2）需要移除的事件函数不能是匿名函数，否则无法移除，要把removeEventListener写到需要删除的函数末尾
+
+   ```js
+   divs[1].addEventListener('click', fn)
+   function fn() {
+     alert(22)
+     divs[1].removeEventListener('click', fn)
+   }
+   ```
+
+3. `deachEvent()`：方法监听注册，IE9之前的方法
+
+   1）语法：`deachEvent(eventNameWithOn,callback)`
+
+   2）同样写到需要删除函数事件的末尾
+
+------
+
+##### 3.2.3.5 事件委托
+
+1. 定义：不给每个子节点单独设置事件监听器，而将其设置在父节点上，利用冒泡原理影响设置每个子节点
+2. 作用：只操作一次DOM，提高程序性能
+
+```js
+// 案例：点击ul中每个li，变更背景颜色
+// 思路：给ul注册点击事件，利用e.target找到当前点击的li，事件冒泡到ul上，触发事件监听器
+ul.addEventListener('click', function (e) {
+  e.target.style.backgroundColor = 'pink'
+})
+```
+
+------
+
+##### 3.2.3.6 鼠标事件
+
+###### 事件动作
+
+1. `click`：点击左键触发：
+
+2. `dblclick`：双击左键触发
+
+3. 鼠标经过触发：
+   * `mouseover`：经过自身盒子触发，经过子盒子还会触发
+   * `mouseenter`：仅经过自身盒子触发，因为它不冒泡
+
+4. 鼠标离开触发：
+
+   * `mouseout`：经过自身盒子触发，经过子盒子还会触发
+   * `mouseleave`：仅经过自身盒子触发，因为它不冒泡
+
+5. `focus`：获得鼠标焦点触发
+
+6. `blur`：失去鼠标焦点触发
+
+7. `mousemove`：鼠标移动触发
+
+8. `mouseup`：鼠标弹起触发
+
+9. `mousedown`：鼠标按下触发
+
+10. `contextmenu`：右键菜单
+
+    ```js
+    // 例：禁用右键菜单
+    document.addEventListener('contextmenu', function (e) {
+      e.preventDefault()
+    })
+    ```
+
+11. 选中文字：`selectstart`
+
+    ```js
+    // 例：禁止选中文字
+    document.addEventListener('selectstart', function (e) {
+      e.preventDefault()
+    })
+    ```
+
+12. 双击禁止选中文字
+
+    ```js
+    window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty()
+    ```
+
+###### 事件对象：MouseEvent
+
+1. `e.clientX`：鼠标相对浏览器可视区的X坐标
+2. `e.clientY`：鼠标相对浏览器可视区的Y坐标
+3. `e.pageX`：鼠标相对于文档页面的X坐标（IE9+支持）
+4. `e.pageY`：鼠标相对于文档页面的Y坐标（IE9+支持）
+5. `e.screenX`：鼠标相对于电脑屏幕的X坐标
+6. `e.screenY`：鼠标相对于电脑屏幕的Y坐标
+
+###### 手动调用事件
+
+1. `element.click()`：点击事件
+
+------
+
+##### 3.2.3.7 键盘事件
+
+###### 事件动作
+
+* 执行顺序：keydown --> keypress --> keyup
+
+1. `onkeyup`：某个按键松开时触发，注意：在文本框中的特点：事件触发时，文字还没落入文本框，所以最好用keyup
+
+   ```js
+   // 按回车触发
+   input.onkeyup = function (e) {
+     if (e.keyCode === 13) {
+       // 执行触发后的函数
+     }
+   }
+   ```
+
+2. `onkeydown`：某个按键按下时触发
+
+3. `onkeypress`：某个按键按下时触发，但不能识别功能键，如ctrl、shift、箭头等
+
+###### 事件对象：KeyboardEvent
+
+1. `e.keyCode`：返回按键的ASCII值，其中keyup、keydown不区分大小写，keypress区分大小写
+
+   ```js
+   // 案例：按下s键，键盘定位到搜索框中
+   <input type="text" />
+   <script>
+     // 核心思路：检测用户是否按下了s键，如果按下s键，就把光标定位到搜索框里面
+     // 使用键盘事件对象里面的keyCode判断用户按下的是否是s键
+     // 搜索框获得焦点：使用js里面的focus()方法
+     var search = document.querySelector('input')
+     document.addEventListener('keyup', function (e) {
+       // console.log(e.keyCode);
+       if (e.keyCode === 83) {
+         search.focus()
+       }
+     })
+   </script>
+   ```
+
+##### 3.2.3.8 表单事件
+
+1. checkbox复选框：`change`：状态变化
+
+2. input输入框：
+
+   1）`select()`：文本框里面的文字处于选定状态
+
+   ```js
+   this.innerHTML = '<input type="text" />'
+   var input = this.children[0]
+   input.value = str
+   input.select() // 文本框里面的文字处于选定状态
+   ```
+
+   2）`onfocus`、`onblur`：获得、失去焦点
+
+   ```js
+   <!--案例：显示隐藏文本框内容-->
+   <input type="text" value="手机" />
+   <script>
+     // 1.获取元素
+     var text = document.querySelector('input')
+     // 2.注册事件 获得焦点事件 onfocus
+     text.onfocus = function () {
+       if (this.value === '手机') {
+         this.value = ''
+       }
+       // 获得焦点需要把文本框里面的文字颜色变黑
+       this.style.color = '#333'
+     }
+     // 3. 注册事件：失去焦点事件 onblur
+     text.onblur = function () {
+       if (this.value === '') {
+         this.value = '手机'
+       }
+       // 失去焦点需要把文本框里面的文字颜色变浅色
+       this.style.color = '#999'
+     }
+   </script>
+   ```
+
+3. form表单域：`reset()`：重置，清空内容
+
+   ```js
+   // JS对象转DOM对象
+   $('#formAddCmt')[0].reset()
+   ```
+
+4. 文字选择框：
+
+   1）结构：`<input type="file" accept="..." />`，accept代表可以选择的文件类型，如image/png, image/jpeg
+
+   ```html
+   <input type="file" id="file" accept="image/png,image/jpeg" />
+   ```
+
+   2）`change`：绑定change事件，意味着文件选择框被激活
+
+   3）e.target.files：文件列表
+
+   4）e.target.files[0]：单个文件
+
+   5）URL.createObjectURL(file)：文件转化为路径
+
+   ```js
+   $('#file').on('change', function (e) {
+       // 获取用户选择的文件
+       var filelist = e.target.files
+       if (filelist.length === 0) {
+           return layer.msg('请选择照片！')
+       }
+       // 1. 拿到用户选择的文件
+       var file = e.target.files[0]
+       // 2. 将文件，转化为路径
+       var imgURL = URL.createObjectURL(file)
+   }
+   ```
+
+------
+
+#### 3.2.4 元素操作
+
+##### 3.2.4.1 元素内容
+
+1. `element.innerText`：从起始位置到终止位置的内容，去除html标签、空格、换行
+
+   1）非标准，IE推出的
+
+   2）不识别html标签，如果替换内容有标签会按原型打印出来
+
+   ```js
+   // innerText不识别html标签：非标准，去除空格和换行
+   var div = document.querySelector('div')
+   div.innerText = '<strong>今天是：</strong> 2019'
+   ```
+
+2. `element.innerHTML`：从起始位置到终止位置的内容，保留html标签、空格、换行
+
+   1）W3C标准，推荐使用
+
+   2）识别html标签，可用html标签给文字添加效果
+
+   ```js
+   // innerHTML：识别html标签，W3C标准，保留空格和换行
+   var div = document.querySelector('div')
+   div.innerHTML = '<strong>今天是：</strong> 2019'
+   ```
+   
+   3）创建新元素
+   
+   * 拼接法：大量创建标签效率低下，因为字符串拼接占用内存太多
+   
+     ```js
+     var inner = document.querySelector('.inner')
+     for (var i = 0; i <= 100; i++) {
+       inner.innerHTML += '<a href="#">百度</a>'
+     }
+     ```
+   
+   * 数组法：创建空数组，用push方法添加，可以提升创建效率
+   
+     ```js
+     var inner = document.querySelector('.inner')
+     var arr = []
+     for (var i = 0; i <= 100; i++) {
+       arr.push('<a href="#">百度</a>')
+     }
+     ```
+
+##### 3.2.4.2 元素属性
+
+###### 修改表单属性
+
+1. 表单常用属性：type、value、checked、selected、disabled
+
+2. 内容：`value`，无法用innerHTML获取/修改内容，要通过value修改，例：input.value = XXX
+
+3. 禁用：`disabled`，例btn.disabled = true，点击按钮后无法再次点击，如果是通过btn.onclick定义的事件，可以用this.disabled = ture
+
+   ```html
+   <button>按钮</button>
+   <input type="text" value="输入内容" />
+   <script>
+     // 1. 获取元素
+     var btn = document.querySelector('button')
+     var input = document.querySelector('input')
+     // 2. 注册事件
+     btn.onclick = function () {
+       // input.innerHTML = '点击了' // 不能用这种方法修改，只能修改普通盒子div中的内容
+       // 表单里面的值，文字内容是通过 value 来修改的
+       input.value = '被点击了'
+       // 如果想要某个表单被禁用，不能再点击：disabled
+       this.disabled = true
+     }
+   </script>
+   ```
+
+###### 设置元素属性
+
+1. `element.属性`：通过函数/流程控制，直接对元素属性进行设置
+
+   ```html
+   <button id="ldh">刘德华</button>
+   <button id="zxy">张学友</button> <br />
+   <img src="images/ldh.jpg" alt="" title="刘德华" />
+   
+   <script>
+     // 修改元素属性：src
+     // 1. 获取元素
+     var ldh = document.getElementById('ldh')
+     var zxy = document.getElementById('zxy')
+     var img = document.querySelector('img')
+     // 2. 注册事件  处理程序
+     zxy.onclick = function () {
+       img.src = 'images/zxy.jpg'
+       img.title = '张学友思密达'
+     }
+     ldh.onclick = function () {
+       img.src = 'images/ldh.jpg'
+       img.title = '刘德华'
+     }
+   </script>
+   ```
+
+2. `element.setAttribute（属性名，属性值）`：可以自定义元素属性，目的：保存并使用数据，有些数据可以直接保存在页面中，无需从数据库中调用
+
+   ```html
+   <div id="demo" index="1" class="nav"></div>
+   <script>
+     var div = document.querySelector('div')
+     div.setAttribute('index', 2)
+     div.setAttribute('class', 'footer') // class特殊：这里面写的就是class，不是className
+   </script>
+   ```
+
+3. H5自定义属性：
+
+   1）格式：`data-属性名=属性值`，例：`<div data-index="1" >`
+
+   2）目的：消除歧义，便于区分内置属性和自定义属性
+
+###### 获取元素属性
+
+1. `element.属性`：只能获取元素内置属性
+
+2. `element.getAttribute（属性名）`：可以获取自定义属性
+
+3. `element.dataset.属性名`、`element.dataset[属性名]`：H5自定义属性
+
+   1）dataset：是一个集合（DOMStringMap），里面存放了所有以data开头的自定义属性，获取时属性名前无需再加'data-'
+
+   2）自定义属性里面有多个" - "链接的单词，获取的时候采取驼峰命名法，例：属性: data-list-name，获取: listName
+
+   3）例：div.dataset.listName、div.dataset['listName']
+
+   ```html
+   <div getTime="20" data-index="2" data-list-name="andy"></div>
+   <script>
+     var div = document.querySelector('div')
+     div.setAttribute('data-time', 20)
+     // 只能用getAttuibute获取自定义属性
+     console.log(div.getAttribute('data-index'))		// 2
+     console.log(div.getAttribute('data-list-name'))	// andy
+   
+     // dataset 是一个集合，里面存放了所有以data开头的自定义属性
+     console.log(div.dataset)			// DOMStringMap
+     console.log(div.dataset.index)	// 2
+     console.log(div.dataset['index'])	// 2
+     
+     // 如果自定义属性里面有多个-链接的单词，获取的时候采取驼峰命名法
+     console.log(div.dataset.listName)		// andy
+     console.log(div.dataset['listName'])	// andy
+   </script>
+   ```
+
+   
+
+###### 移除元素属性
+
+1. `element.removeAttibute（属性名）`
+
+##### 3.2.4.3 元素样式
+
+* 注意：样式属性需要采用驼峰命名法，background-color需要写成backgroundColor
+
+1. `element.style.样式属性`：行内样式操作，产生的是行内样式，权重较高
+
+   ```js
+   var div = document.querySelector('div')
+   div.onclick = function () {
+     // div.style里面的属性：采取驼峰命名法
+     this.style.backgroundColor = 'purple'
+     this.style.width = '250px'
+   }
+   ```
+
+2. `element.className = '新类名'`：类名样式操作
+
+   1）适用于需要修改样式较多的情况，先在css中写一个新类名，然后达到修改元素类名的效果
+
+   2）会直接更改元素的类名，覆盖原先的类名
+
+   3）如果希望保留原类名，可以在原类名后加空格，再写新类名
+
+   ```js
+   var test = document.querySelector('div')
+   test.onclick = function () {
+     // this.className = 'change'
+     // 如果想要保留原先的类名，可以用多类名选择器
+     this.className = 'first change'
+   }
+   ```
+
+3. `element.classList`：获取元素类名，返回DOMTokenList
+
+   1）增加类名：element.classList.add(类名)，不会覆盖原有类，类名不用加“.”
+
+   2）删除类名：element.classList.remove(类名)
+
+   3）切换类名：element.classList.toggle(类名)，若类名存在则删除，若类名不存在则添加上
+
+##### 3.2.4.4 创建元素
+
+1. `document.write()`：如果页面文档流加载完毕，再调用这句话会导致页面重绘，例：document.write('<div>123</div>')
+2. `window.onload=function(){}`：页面加载完毕再执行JS的函数
+
+##### 3.2.4.5 常用方法
+
+###### 排他思想
+
+* 多个按钮点击其中一个时，其余按钮恢复原样（首先先排除其他人，然后才设置自己的样式）
+
+```html
+<button>按钮1</button>
+<button>按钮2</button>
+<button>按钮3</button>
+<button>按钮4</button>
+<button>按钮5</button>
+<script>
+  // 获取所有按钮元素
+  var btns = document.getElementsByTagName('button')
+  // btns得到的是伪数组，里面的每一个元素 btns[i]
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].onclick = function () {
+      // 1. 先把所有的按钮背景颜色去掉：干掉所有人
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].style.backgroundColor = ''
+      }
+      // 2. 然后才让当前的元素背景颜色为pink：留下我自己
+      this.style.backgroundColor = 'pink'
+    }
+  }
+</script>
+```
+
+###### 换肤效果
+
+* 更改图片的src路径
+
+```html
+<ul class="baidu">
+  <li><img src="images/1.jpg" /></li>
+  <li><img src="images/2.jpg" /></li>
+  <li><img src="images/3.jpg" /></li>
+  <li><img src="images/4.jpg" /></li>
+</ul>
+
+<script>
+  // 1. 获取元素
+  var imgs = document.querySelector('.baidu').querySelectorAll('img')
+  // 2. 循环注册事件
+  for (var i = 0; i < imgs.length; i++) {
+    imgs[i].onclick = function () {
+      // this.src 就是点击图片的路径，把这个路径给body就可以了
+      document.body.style.backgroundImage = 'url(' + this.src + ')'
+    }
+  }
+</script>
+```
+
+###### 表格操作
+
+1. 表格变色
+
+```js
+<style>
+  .bg {
+    background-color: pink;
+  }
+</style>
+
+// 1.获取元素：获取的是 tbody 里面所有的行
+var trs = document.querySelector('tbody').querySelectorAll('tr')
+// 2. 利用循环绑定注册事件
+for (var i = 0; i < trs.length; i++) {
+  // 3. 鼠标经过事件 onmouseover
+  trs[i].onmouseover = function () {
+    this.className = 'bg'
+  }
+  // 4. 鼠标离开事件 onmouseout
+  trs[i].onmouseout = function () {
+    this.className = ''
+  }
+}
+```
+
+2. 表格选项框全选反选
+
+```js
+// 1. 全选和取消全选做法：让下面所有复选框的checked属性（选中状态）跟随，全选按钮即可
+// 获取元素
+var j_cbAll = document.getElementById('j_cbAll') // 全选按钮
+var j_tbs = document.getElementById('j_tb').getElementsByTagName('input') // 下面所有的复选框
+// 注册事件
+j_cbAll.onclick = function () {
+  // this.checked 它可以得到当前复选框的选中状态如果是true 就是选中，如果是false 就是未选中
+  console.log(this.checked)
+  for (var i = 0; i < j_tbs.length; i++) {
+    j_tbs[i].checked = this.checked
+  }
+}
+// 2. 下面复选框需要全部选中，上面全选才能选中做法：给下面所有复选框绑定点击事件，每次点击，都要循环查看下面所有的复选框是否有没选中的，如果有一个没选中的，上面全选就不选中。
+for (var i = 0; i < j_tbs.length; i++) {
+  j_tbs[i].onclick = function () {
+    // flag 控制全选按钮是否选中
+    var flag = true
+    // 每次点击下面的复选框都要循环检查者4个小按钮是否全被选中
+    for (var i = 0; i < j_tbs.length; i++) {
+      if (!j_tbs[i].checked) {
+        flag = false
+        break // 退出for循环 这样可以提高执行效率，因为只要有一个没有选中，剩下的就无需循环判断了
+      }
+    }
+    j_cbAll.checked = flag
+  }
+}
+```
+
+###### Tab栏切换内容
+
+1. tab栏选中效果：排他算法
+
+2. 底部内容区域跟随变化：通过对应tab栏的index编号进行索引，设置display属性（也用到了排他算法）
+
+```html
+<style>
+  .current {
+    background-color: red;
+  }
+</style>
+
+<div class="tab">
+  <div class="tab_list">
+    <ul>
+      <li class="current">商品介绍</li>
+      <li>规格与包装</li>
+      <li>售后保障</li>
+      <li>商品评价（50000）</li>
+      <li>手机社区</li>
+    </ul>
+  </div>
+  <div class="tab_con">
+    <div class="item" style="display: block">商品介绍模块内容</div>
+    <div class="item">规格与包装模块内容</div>
+    <div class="item">售后保障模块内容</div>
+    <div class="item">商品评价（50000）模块内容</div>
+    <div class="item">手机社区模块内容</div>
+  </div>
+</div>
+<script>
+  // 获取元素
+  var tab_list = document.querySelector('.tab_list')
+  var lis = tab_list.querySelectorAll('li')
+  var items = document.querySelectorAll('.item')
+  // for循环绑定点击事件
+  for (var i = 0; i < lis.length; i++) {
+    // 开始给5个小li，设置索引号（用于下面显示内容模块）
+    lis[i].setAttribute('index', i)
+    lis[i].onclick = function () {
+      // 1. 上面的模块选项卡：点击某一个，当前这一个底色会是红色，其余不变（排他思想）
+      // 干掉所有人：其余的li清除 class 这个类
+      for (var i = 0; i < lis.length; i++) {
+        lis[i].className = ''
+      }
+      // 留下我自己
+      this.className = 'current'
+        
+      // 2. 下面的显示内容模块
+      var index = this.getAttribute('index')
+      // 干掉所有人 让其余的item 这些div 隐藏
+      for (var i = 0; i < items.length; i++) {
+        items[i].style.display = 'none'
+      }
+      // 留下我自己 让对应的item 显示出来
+      items[index].style.display = 'block'
+    }
+  }
+</script>
+```
+
+------
+
+#### 3.2.5 Node操作
+
+1. 特点：相对DOM获取元素而言，节点操作利用父子兄节点关系获取元素，逻辑性强，但是兼容性差
+
+2. 基本属性：nodeType（节点类型）、nodeName（节点名称）、nodeValue（节点值）
+
+3. 常见节点类型（共12种）
+
+   1）元素节点
+
+   2）属性节点
+
+   3）文本节点
+
+##### 3.2.5.1 父节点
+
+1. 语法：`node.parentNode`
+2. 就近原则：得到的是离元素最近的父级节点，如果找不到父节点就返回为 null
+3. 如果存在页面嵌套（如iframe），子页面可以跳到父页面js中的方法，如：`window.parent.XXX()`
+
+##### 3.2.5.2 子节点
+
+1. 语法：
+
+   1）`parentNode.childNodes`：指定节点的子节点的集合（包含元素节点、文本节点等）
+
+   2）`parentNode.children`：返回所有的子元素节点（仅有元素节点），指定子元素节点：parentNode.children[i]
+
+2. 获取第一个子节点：
+
+   1）`parent.firstChild`：第一个子节点（所有类型）
+
+   2）`parent.firstElementChild`：第一个元素子节点，IE9上才支持
+
+   3）`parentNode.children[0]`：第一个元素子节点，兼容性较好
+
+3. 获取最后一个子节点:
+
+   1）`parent.lastChild`：最后一个子节点（所有类型）
+
+   2）`parent.lastElementChild`：最后一个元素子节点，IE9上才支持
+
+   3）`parentNode.children[parentNode.children.length-1]`：最后一个元素子节点，兼容性较好
+
+##### 3.2.5.3 兄弟节点
+
+1. 下一个兄弟节点
+
+   1）`node.nextSibling`：获取下一个兄弟节点（所有类型）
+
+   2）`node.nextElementSibling`：获取下一个兄弟元素节点
+
+2. 上一个兄弟节点：
+
+   1）`node.previousSibling`：获取下一个兄弟节点（所有类型）
+
+   2）`node.previousElementSibling`：获取下一个兄弟远元素节点
+
+##### 3.2.5.4 创建节点
+
+1. `document.createElement('tagName')`：动态创建节点
+
+##### 3.2.5.5 添加节点
+
+1. `node.appendChild(child)`：将一个节点添加到指定父节点的子节点列表末尾，像CSS的after伪元素
+
+2. `node.insertBefore(child, 指定元素)`：将一个节点添加到指定元素之前
+
+3. `node.insertAdjacentHTML(位置, 字符串元素)`：与appendChild的区别在于，此方法支持直接在父元素插入以字符串形式定义的新元素
+
+   1）beforebegin：元素自身的前面
+
+   2）afterbegin：插入元素内部第一个子节点之前
+
+   3）beforeend：插入元素内部最后一个子节点之后
+
+   4）afterend：元素自身后面
+
+   ```js
+   var ul = document.querySelector('div')
+   var li = '<li class=avtive><span>new</span></li>'
+   ul.insertAdjacentHTML('brforeend', li)
+   ```
+
+##### 3.2.5.6 删除节点
+
+1. `node.removeChild(child)`：删除父节点下的子节点
+
+2. 案例：删除留言：制作删除按钮，阻止链接<a>跳转：href = 'javascript: void(0);' 或 'javascript:;'
+
+   ```html
+   <textarea name="" id=""></textarea>
+   <button>发布</button>
+   <ul></ul>
+   
+   <script>
+     // 1. 获取元素
+     var btn = document.querySelector('button')
+     var text = document.querySelector('textarea')
+     var ul = document.querySelector('ul')
+     // 2. 注册事件
+     btn.onclick = function () {
+       if (text.value == '') {
+         alert('您没有输入内容')
+         return false
+       } else {
+         // 1. 创建元素
+         var li = document.createElement('li')
+         // 先有li才能赋值
+         li.innerHTML = text.value + "<a href='javascript:;'>删除</a>"
+         // 2. 添加元素：让最新的留言在前面
+         ul.insertBefore(li, ul.children[0])
+         // 3. 删除元素：删除的是当前链接的li的父亲
+         var as = document.querySelectorAll('a')
+         for (var i = 0; i < as.length; i++) {
+           as[i].onclick = function () {
+             // 删除的是 li：即当前 a 所在的父节点 li：this.parentNode
+             ul.removeChild(this.parentNode)
+           }
+         }
+       }
+     }
+   </script>
+   ```
+
+##### 3.2.5.7 复制节点
+
+1. `node.cloneNode()`：括号内为空或false，浅拷贝，只复制标签不复制里面的内容
+2. `node.cloneNode(true)`：括号内为true，深拷贝，复制标签和内容
+
+##### 3.2.5.8 动态创建表格
+
+1. 创建行：for循环储存数据的数组，有几条数据创建几行
+2. 创建单元格：for循环对象，对象有几个属性创建几个单元格，如果需要额外添加单元格（如：删除按钮），则再单独创建单元格
+3. 删除按钮<a>：tbody.removeChild( this.parentNode.parentNode)，即删除<a>的父元素<td>的父元素<tr>
+
+```html
+<style>
+  table {
+    width: 500px;
+    margin: 100px auto;
+    border-collapse: collapse;
+    text-align: center;
+  }
+  td,
+  th {
+    border: 1px solid #333;
+  }
+  thead tr {
+    height: 40px;
+    background-color: #ccc;
+  }
+</style>
+
+<body>
+  <table cellspacing="0">
+    <thead>
+      <tr>
+        <th>姓名</th>
+        <th>科目</th>
+        <th>成绩</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+    
+  <script>
+    // 1. 准备好学生的数据
+    var datas = [
+      {
+        name: '魏璎珞',
+        subject: 'JavaScript',
+        score: 100,
+      },
+      {
+        name: '弘历',
+        subject: 'JavaScript',
+        score: 98,
+      },
+      {
+        name: '傅恒',
+        subject: 'JavaScript',
+        score: 99,
+      },
+      {
+        name: '明玉',
+        subject: 'JavaScript',
+        score: 88,
+      },
+      {
+        name: '大猪蹄子',
+        subject: 'JavaScript',
+        score: 0,
+      },
+    ]
+    // 2. 往tbody里面创建行：有几个人（通过数组的长度）我们就创建几行
+    var tbody = document.querySelector('tbody')
+    for (var i = 0; i < datas.length; i++) {
+      // 外面的for循环：行tr
+      // 1. 创建 tr行
+      var tr = document.createElement('tr')
+      tbody.appendChild(tr)
+       
+      // 2. 行里面创建单元格(跟数据有关系的3个单元格) td，单元格的数量取决于每个对象里面的属性数量
+      for (var k in datas[i]) {
+        // 里面的for循环：列td
+        // 创建单元格
+        var td = document.createElement('td')
+        // 把对象里面的属性值 datas[i][k] 给 td
+        td.innerHTML = datas[i][k]
+        tr.appendChild(td)
+      }
+      
+      // 3. 创建有删除2个字的单元格
+      var td = document.createElement('td')
+      td.innerHTML = '<a href="javascript:;">删除 </a>'
+      tr.appendChild(td)
+    }
+      
+    // 4. 删除操作
+    var as = document.querySelectorAll('a')
+    for (var i = 0; i < as.length; i++) {
+      as[i].onclick = function () {
+        // 点击a，删除当前a所在的行(链接的爸爸的爸爸)
+        tbody.removeChild(this.parentNode.parentNode)
+      }
+    }
+  </script>
+</body>
+```
+
+------
+
+### 3.3 BOM
+
+> 浏览器对象模型（Browser Object Model），提供独立于内容而与浏览器窗口进行交互的对象，核心对象是window。
+
+#### 3.3.1 BOM简介
+
+1. BOM由一系列相关的对象构成，每个对象提供了很多方法和属性
+2. BOM缺乏标准，JS标准是ECMA，DOM标准是W3C，BOM是网景浏览器标准的一部分，兼容性较差
+3. 结构：window
+   * document
+   * location
+   * navigation
+   * screen
+   * history
+
+------
+
+#### 3.3.2 Windows对象
+
+1. 是浏览器的顶级对象，具有双重角色
+2. 是JS访问浏览器窗口的一个接口
+3. 是一个全局对象，定义在全局作用域中的变量、函数，都会变成windows对象的属性和方法
+
+##### 3.3.2.1 Windows属性
+
+1. `window.name`：窗口名字，用于为超链接和表单设置目标（targets）
+
+2. `window.devicePixelRatio`：物理像素比（1px能显示的物理像素点的个数）
+
+3. `window.innerWidth`：当前窗口大小
+
+4. 页面滚动：
+
+   1）`window.pageYOffset`：页面被卷去的头部大小（无单位）（IE9+支持）
+
+   2）`window.pageXOffset`：页面被卷去的左侧大小（无单位）（IE9+支持）
+
+   3）旧版兼容：
+
+   * 已声明DTD（即<!DOCTYPE html>）：`document.documentElement.scrollTop`
+   * 未声明DTD：`document.body.scrollTop`
+
+   ```js
+   // 使用时： getScroll().left 或 getScroll().top
+   function getScroll() {
+     return {
+       left: window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0,
+       top: window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0,
+     }
+   }
+   ```
+
+##### 3.3.2.2 Windows方法
+
+###### 窗口加载:load
+
+1. load
+
+   1）定义：当文档内容完全加载会触发该事件（包括图像、脚本、CSS等），可以把JS放在head里
+
+   2）触发动作：<a>、F5刷新、前进后退按钮
+
+   3）`window.onload`：传统注册事件，只能写一次，如果有多个以最后一个为准
+
+   ```js
+   window.onload = function () {
+     var btn = document.querySelector('button')
+     btn.addEventListener('click', function () {
+       alert('点击我')
+     })
+   }
+   ```
+
+   4）`window.addEventListener('load',fn)`：方法监听注册，可以写多个
+
+   ```js
+   window.addEventListener('load', function () {
+     var btn = document.querySelector('button')
+     btn.addEventListener('click', function () {
+       alert('点击我')
+     })
+   })
+   window.addEventListener('load', function () {
+     alert(22)
+   })
+   ```
+
+   5）`document.addEventListener('DOMContentLoaded',fn)`：仅当DOM加载完成时触发，包括JS，但不包括图片、CSS、flash等（IE9+支持），适用于多媒体较多的网页，不耽误用户操作其他按钮
+
+2. `window.addEventListener('pageshow',fn)`
+
+   1）背景：火狐浏览器具有“往返缓存”的特点，使用后退按钮返回页面时，如果使用load不会重新加载页面，此时需要pageshow
+
+   2）定义：页面显示时触发，无论页面是否来自于缓存，会在load事件后触发，根据 e.persisted 判断是否是缓存中的页面
+
+   ```js
+   window.addEventListener('pageshow', function (e) {
+     // e.persisted 返回的是true 就是说如果这个页面是从缓存取过来的页面，也需要从新计算一下rem 的大小
+     if (e.persisted) {
+       setRemUnit()
+     }
+   })
+   ```
+
+###### 窗口大小:resize
+
+1. `window.onresize`
+
+2. `window.addEventListener('resize',fn)`
+
+   ```js
+   window.addEventListener('load', function () {
+     var div = document.querySelector('div')
+   })
+   
+   window.addEventListener('resize', function () {
+     console.log(window.innerWidth)	// window.innerWidt：当前窗口大小
+     console.log('变化了')
+     if (window.innerWidth <= 800) {
+       div.style.display = 'none'
+     } else {
+       div.style.display = 'block'
+     }
+   })
+   ```
+
+###### 窗口滚动:scroll
+
+1. `window.scroll(x,y)`：里面数值不加单位
+
+###### 定时器
+
+* 注意：如果重复点击按钮触发定时器，动作会越来越快，这是由于定时器叠加导致的，需要清除掉旧定时器，只保留一个定时器
+
+1. `setTimeout(回调函数，[延迟的毫秒数])`：仅执行一次
+
+   1）调用函数可以直接写函数，还可以写函数名或 '函数名()'
+
+   2）页面中可能有很多的定时器，经常给定时器加名字
+
+   ```js
+   function callback() {
+     console.log('爆炸了')
+   }
+   var timer1 = setTimeout(callback, 3000)
+   var timer2 = setTimeout(callback, 5000)
+   ```
+
+   3)案例：页面广告自动隐藏
+
+   ```html
+   <img src="images/ad.jpg" alt="" class="ad" />
+   
+   <script>
+     var ad = document.querySelector('.ad')
+     setTimeout(function () {
+       ad.style.display = 'none'
+     }, 5000)
+   </script>
+   ```
+
+   4）停止定时器：`clearTimeout(定时器名称)`
+
+   ```html
+   <button>点击停止定时器</button>
+   
+   <script>
+     var btn = document.querySelector('button')
+     var timer = setTimeout(function () {
+       console.log('爆炸了')
+     }, 5000)
+     btn.addEventListener('click', function () {
+       clearTimeout(timer)
+     })
+   </script>
+   ```
+
+2. `setInterval(回调函数，[延迟的毫秒数])`：重复调用一个函数，每隔这个时间就调用一次回调函数
+
+   1）停止定时器：`clearInterval(定时器名称)`
+
+   2）注意：如果定时器被写入了注册事件函数内部的匿名函数，需要在外面声明一个与定时器同名的全局变量，令其为null
+
+   ```html
+   <button class="begin">开启定时器</button>
+   <button class="stop">停止定时器</button>
+   
+   <script>
+     var begin = document.querySelector('.begin')
+     var stop = document.querySelector('.stop')
+     var timer = null // 全局变量，null是一个空对象
+     begin.addEventListener('click', function () {
+       timer = setInterval(function () {
+         console.log('ni hao ma')
+       }, 1000)
+     })
+     stop.addEventListener('click', function () {
+       clearInterval(timer)
+     })
+   </script>
+   ```
+
+###### 本地储存
+
+1. 特性：
+
+   1）数据储存在用户浏览器中
+
+   2）设置/读取方便，页面刷新不丢失数据
+
+   3）容量大，sessionStorage存5M、localStorage存20M
+
+   4）查看数据：点击F12中的应用，本地储存空间/会话储存空间
+
+2. 储存与读取：
+
+   1）只能存储字符串，可以将对象`JSON.stringify()`编码后储存（格式为字符串）
+
+   2）读取数据时，也要先用`JSON.parse()`转化后才能使用（格式为数组）
+
+3. sessionStorage：会话储存，生命周期：关闭浏览器窗口
+
+   1）`sessionStorage.setItem(key,value)`：存储数据
+
+   ```js
+   sessionStorage.setItem('todo', JSON.stringify(todolist))
+   ```
+
+   2）`sessionStorage.getItem(key)`：获取数据
+
+   ```js
+   var data = sessionStorage.getItem('todo')
+   data = JSON.parse(data)
+   ```
+
+   3）`sessionStorage.removeItem(key)`：删除数据
+
+   4）`sessionStorage.clear()`：删除所有数据
+
+4. localStorage：本地储存，生命周期：永久，除非手动删除
+
+   1）可以多窗口/页面共享（同一浏览器可以共享）
+
+   2）方法：与sessionStorage相同
+
+5. 案例：记住用户名
+
+   ```js
+   <input type="text" id="username" /> <input type="checkbox" name="" id="remember" /> 记住用户名
+   <script>
+     var username = document.querySelector('#username')
+     var remember = document.querySelector('#remember')
+     if (localStorage.getItem('username')) {
+       username.value = localStorage.getItem('username')
+       remember.checked = true
+     }
+     remember.addEventListener('change', function () {
+       if (this.checked) {
+         localStorage.setItem('username', username.value)
+       } else {
+         localStorage.removeItem('username')
+       }
+     })
+   </script>
+   ```
+
+------
+
+#### 3.3.3 location对象
+
+1. 用途：用于获取或设置窗体的URL，可以解析URL
+
+2. URL：统一资源定位符（Uniform Resource Locator），互联网上每个文件都有唯一的URL
+
+   * 语法：`protocol://host[:port]/path/[?query]#fragment`
+
+   1）protocol：通信协议，如http、https、maito等
+
+   2）host：主机（域名）
+
+   3）port：端口号，可选，省略时使用方案默认端口，如http默认端口为80
+
+   4）path：路径，表示主机上的一个目录或文件地址
+
+   5）query：参数，以键值对的形式通过&符号分隔开来
+
+   6）fragment：片段，#后面内容常见于链接锚点
+
+3. 属性：
+
+   1）`location.href`：获取或设置整个URL
+
+   2）`location.host`：返回主机（域名）
+
+   3）`location.port`：返回端口号，如果未写返回空字符串" "
+
+   4）`location.pathname`：返回路径，对应的path
+
+   5）`location.search`：返回参数，对应的query，注意：如果参数中带有中文，需要用`decodeURIComponent()`解码
+
+   6）`location.hash`：返回片段，对应的fragment
+
+4. 方法:
+
+   1）location.assign()：与href相同，可以跳转页面，可以后退
+
+   2）location.replace()：替换当前页面，但不记录历史，不能后退页面
+
+   3）location.reload()：重新加载页面，相当于刷新按钮/F5，如果参数为true，强制刷新Ctrl+F5（不读取缓存）
+
+------
+
+#### 3.3.4 navigator对象
+
+1. `navigator.userAgent`：适配不同设备，如果是移动端，可以自动跳转到H5页面；返回由客户端发送服务器的user-agent头部的值
+
+```js
+if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|
+wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
+  window.location.href = '../H5/index.html' //手机
+}
+```
+
+------
+
+#### 3.3.5 history对象
+
+1. 定义：与浏览器历史进行交互，包含用户访问过的URL
+
+2. 方法：
+
+   1）`back()`：后退
+
+   2）`forward()`：前进
+
+   3）`go(参数)`：前进后退功能，参数为1即前进1个页面，参数为-1即后退1个页面
+
+------
+
+### 3.4 网页特效
+
+#### 3.4.1 offset偏移量
+
+1. 属性：只读属性，不可赋值，无法更改元素样式
+
+   1）`event.offsetParent`：返回作为该元素带有定位的父级元素，如过父级元素没有定位返回body
+
+   2）`event.offsetTop`：返回元素相对带有定位父元素上方的偏移
+
+   3）`event.offsetLeft`：返回元素相对带有定位父元素左边框的偏移
+
+   4）`event.offsetWidth`：返回自身包括padding、边框、内容区的宽度，返回数值不带单位
+
+   5）`event.offsetHeight`：返回自身包括padding、边框、内容区的高度，返回数值不带单位
+
+2. 与sytle的区别：想获取元素大小位置用offset，想改变元素样式用style
+
+   1）offset可获取任意样式表样式值，style只能得到行内样式表的样式值
+
+   2）offset获得值没有单位，style获得值有单位
+
+   3）offsetWidth 包含 padding+border+width，style.width只包含width
+
+   4）offsetWidth是只读属性不能赋值，style.width可读写属性可以赋值
+
+3. 案例1：计算鼠标在盒子内的坐标
+
+   ```html
+   <style>
+     .box {
+       width: 300px;
+       height: 300px;
+       background-color: pink;
+       margin: 200px;
+     }
+   </style>
+   
+   <body>
+     <div class="box"></div>
+     <script>
+       // 1. 首先得到鼠标在页面中的坐标（e.pageX, e.pageY）
+       // 2. 其次得到盒子在页面中的距离(box.offsetLeft, box.offsetTop)
+       // 3. 用鼠标距离页面的坐标减去盒子在页面中的距离，得到鼠标在盒子内的坐标
+       var box = document.querySelector('.box')
+       box.addEventListener('mousemove', function (e) {
+         var x = e.pageX - this.offsetLeft
+         var y = e.pageY - this.offsetTop
+         this.innerHTML = 'x坐标是' + x + ' y坐标是' + y
+       })
+     </script>
+   </body>
+   ```
+
+4. 案例2：模态框拖拽效果（mousedown开始拖拽事件，mouseup取消拖拽监听事件）
+
+   ```html
+   <div class="login-header"><a id="link" href="javascript:;">点击，弹出登录框</a></div>
+   <div id="login" class="login">
+     <div id="title" class="login-title">
+       登录会员
+       <span><a id="closeBtn" href="javascript:void(0);" class="close-login">关闭</a></span>
+     </div>
+     <div class="login-input-content">
+       <div class="login-input">
+         <label>用户名：</label>
+         <input type="text" placeholder="请输入用户名" name="info[username]" id="username" class="list-input" />
+       </div>
+       <div class="login-input">
+         <label>登录密码：</label>
+         <input type="password" placeholder="请输入登录密码" name="info[password]" id="password" class="list-input" />
+       </div>
+     </div>
+     <div id="loginBtn" class="login-button"><a href="javascript:void(0);" id="login-button-submit">登录会员</a></div>
+   </div>
+   <!-- 遮盖层 -->
+   <div id="bg" class="login-bg"></div>
+   
+   <script>
+       // 1. 获取元素
+       var login = document.querySelector('.login')
+       var mask = document.querySelector('.login-bg')
+       var link = document.querySelector('#link')
+       var closeBtn = document.querySelector('#closeBtn')
+       var title = document.querySelector('#title')
+       // 2. 点击弹出层这个链接 link，让 mask 和 login 显示出来
+       link.addEventListener('click', function () {
+         mask.style.display = 'block'
+         login.style.display = 'block'
+       })
+       // 3. 点击 closeBtn 就隐藏 mask 和 login
+       closeBtn.addEventListener('click', function () {
+         mask.style.display = 'none'
+         login.style.display = 'none'
+       })
+       // 4. 开始拖拽
+       // (1) 当我们鼠标按下，就获得鼠标在盒子内的坐标（一旦鼠标按下，这个坐标就是固定住了）
+       title.addEventListener('mousedown', function (e) {
+         var x = e.pageX - login.offsetLeft
+         var y = e.pageY - login.offsetTop
+         // (2) 鼠标移动的时候，把鼠标在页面中的坐标，减去鼠标在盒子内的坐标，就是模态框的left和top值
+         document.addEventListener('mousemove', move)
+         function move(e) {
+           login.style.left = e.pageX - x + 'px'
+           login.style.top = e.pageY - y + 'px'
+         }
+         // (3) 鼠标弹起，就让鼠标移动事件移除
+         document.addEventListener('mouseup', function () {
+           document.removeEventListener('mousemove', move)
+         })
+       })
+   </script>
+   ```
+
+5. 案例3：电商详情页放大镜
+
+   1）鼠标经过橱窗preview_img，显示/隐藏遮挡层 mask 和放大镜大盒子 big
+
+   ```js
+   preview_img.addEventListener('mouseover', function () {
+     mask.style.display = 'block'
+     big.style.display = 'block'
+   })
+   
+   preview_img.addEventListener('mouseout', function () {
+     mask.style.display = 'none'
+     big.style.display = 'none'
+   })
+   ```
+
+   2）鼠标移动时，遮挡层mask跟着鼠标走
+
+   ```js
+   // 由于mask坐标以父盒子为准，应该把鼠标在盒子内的坐标给mask
+   var x = e.pageX - this.offsetLeft
+   var y = e.pageY - this.offsetTop
+   // mask理论移动位置：鼠标盒内坐标 - 盒子宽高的一半
+   var maskX = x - mask.offsetWidth / 2
+   var maskY = y - mask.offsetHeight / 2
+   // 限制条件：mask移动最大距离：橱窗宽度-mask宽度
+   var maskMax = preview_img.offsetWidth - mask.offsetWidth
+   // 限制条件：鼠标移动距离小于mask宽高一半，则不移动；鼠标移动距离大于mask移动最大距离，则定位到最大移动距离坐标
+   if (maskX <= 0) {
+     maskX = 0
+   } else if (maskX >= maskMax) {
+     maskX = maskMax
+   }
+   if (maskY <= 0) {
+     maskY = 0
+   } else if (maskY >= maskMax) {
+     maskY = maskMax
+   }
+   mask.style.left = maskX + 'px'
+   mask.style.top = maskY + 'px'
+   ```
+
+   3）鼠标移动时，大图片也跟随mask移动
+
+   ```js
+   // 大图片最大移动距离：大图片宽度 - 大盒子宽度
+   var bigMax = bigIMg.offsetWidth - big.offsetWidth
+   // 大图片移动位置：mask位置 * 大图最大移动距离 / mask最大移动距离
+   var bigX = (maskX * bigMax) / maskMax
+   var bigY = (maskY * bigMax) / maskMax
+   bigIMg.style.left = -bigX + 'px'
+   bigIMg.style.top = -bigY + 'px'
+   ```
+
+------
+
+#### 3.4.2 client可视区
+
+1. `event.clientTop`：返回元素上边框大小
+2. `event.clientLeft`：返回元素左边框大小
+3. `event.clientWidth`：返回自身包括padding、内容区的宽度，不含边框，返回数值不带单位
+4. `event.clientHeight`：返回自身包括padding、内容区的高度，不含边框，返回数值不带单位
+
+------
+
+#### 3.4.3 scroll滚动区
+
+* 与client的区别：scroll是内容真正宽高大小（含隐藏部分），而client只是可见部分的宽高大小
+
+1. 属性：
+
+   1）`event.scrollTop`：返回被卷去的上侧距离（无单位）
+
+   2）`event.scrollLeft`：返回被卷去的左侧距离（无单位）
+
+   3）`event.scrollWidth`：返回自身实际宽度，不含边框（无单位）
+
+   4）`event.scrollHeight`：返回自身实际高度，不含边框（无单位）
+
+2. 事件：scroll
+
+   1）定义：只要滚动条发生变化，就会触发该事件
+
+   2）语法：`element.addEventListener('scroll', fn)`
+
+3. 案例：淘宝粘性固定侧边栏
+
+   1）原理：计算页面被卷去的头部大小，滚动到指定位置后，侧边栏变为固定定位
+
+   2）注意：侧边栏变成固定定位时，需要修改对应的距离顶部值，不然会出现向下跳的情况，返回时也需要修改回原值
+
+------
+
+#### 3.4.4 动画函数封装
+
+1. 原理：通过定时器`setInterval()`不断移动盒子位置，附加定时器停止的条件
+
+   ```js
+   var div = document.querySelector('div')
+   var timer = setInterval(function () {
+     if (div.offsetLeft >= 400) {
+       // 停止动画：本质是停止定时器
+       clearInterval(timer)
+     }
+     div.style.left = div.offsetLeft + 1 + 'px'
+   }, 30)
+   ```
+
+   1）通过函数封装动画函数，里面的定时器名字最好用`obj.timer`的方式命名，同时要先清除旧定时器，可以避免重复调用定时器（后果是越来越快）
+
+   2）注意：盒子有绝对定位才能动起来
+
+   ```js
+   function animate(obj, target) {
+     // 当我们不断的点击按钮，这个元素的速度会越来越快，因为开启了太多的定时器
+     // 解决方案：让元素只有一个定时器执行，先清除以前的定时器，只保留当前的一个定时器执行
+     clearInterval(obj.timer)
+     obj.timer = setInterval(function () {
+       if (obj.offsetLeft >= target) {
+         // 停止动画 本质是停止定时器
+         clearInterval(obj.timer)
+       } else {
+         obj.style.left = obj.offsetLeft + 1 + 'px'
+       }
+     }, 30)
+   }
+   ```
+
+2. 缓动动画：让盒子每次移动距离变小，速度就会慢下来
+
+   1）算法：步长=(目标值-当前位置)/n份数
+
+   2）除法计算步长容易出现小数问题，需要转换为整数：`step = step > 0 ? Math.ceil(step) : Math.floor(step);`
+
+   3）由于步长可以为负数，所以算法可以直接实现倒退效果
+
+   4）回调函数：如果想让元素在动画结束后执行某函数，可以将回调函数写到定时器结束语句后
+
+   * 写法1：`if(callback){callback()}`
+   * 写法2：`callback && callback()`（短路运算a && b，当a为真时返回b）
+
+   ```js
+   function animate(obj, target, callback) {
+     clearInterval(obj.timer)
+     obj.timer = setInterval(function () {
+       var step = (target - obj.offsetLeft) / 10
+       step = step > 0 ? Math.ceil(step) : Math.floor(step)
+       if (obj.offsetLeft == target) {
+         // 停止动画：本质是停止定时器
+         clearInterval(obj.timer)
+         // 回调函数写到定时器结束里面
+         if (callback) {
+           callback()
+         }
+         // 另外写法
+         // callback && callback()
+       } else {
+         obj.style.left = obj.offsetLeft + step + 'px'
+       }
+     }, 15)
+   }
+   btn800.addEventListener('click', function () {
+     animate(span, 800, function () {
+       span.style.backgroundColor = 'red'
+     })
+   })
+   ```
+
+------
+
+#### 3.4.5 轮播图特效
+
+> 轮播图插件：[swiper](https://www.swiper.com.cn/)
+
+1. 轮播图片：
+
+   1）ul>li放轮播图片（最后需要复制一个第一张图），共n+1张图
+
+   2）ul超大宽度，li在内浮动，使ul可以装下所有图
+
+   3）触发动画时，ul运动，li不动
+
+   4）自动播放：计时器触发右箭头点击事件，鼠标移入后清除计时器
+
+2. 底部圆点：
+
+   1）ol>li放小圆点，使用createElement创建圆点
+
+   2）添加index属性，代表图片编号：li.setAttribute('index',i)
+
+   3）用排他算法，令被选中的圆点具有突出效果
+
+   4）圆点索引变量：circle
+
+   5）同步左右箭头索引变量：num
+
+3. 左右箭头：
+
+   1）鼠标移动进轮播图主区域才显示箭头，离开时箭头消失
+
+   2）走到最前/最后时修改ul的left值，控制图片看起来像无缝衔接
+
+   3）箭头索引变量：num
+
+   4）同步底部圆点索引变量：circle
+
+4. 节流阀：
+
+   1）作用：在轮播图中，防止连续点击造成图片滚动过快，使用节流阀控制速度
+
+   2）算法：声明全局变量flag=true，if判断flag条件执行动画，先令flag=false，然后在动画函数传参使flag=true
+
+```js
+window.addEventListener('load', function () {
+  // 1. 获取元素
+  var arrow_l = document.querySelector('.arrow-l')
+  var arrow_r = document.querySelector('.arrow-r')
+  var focus = document.querySelector('.focus')
+  var focusWidth = focus.offsetWidth
+  // 2. 鼠标经过focus 就显示隐藏左右按钮
+  focus.addEventListener('mouseenter', function () {
+    arrow_l.style.display = 'block'
+    arrow_r.style.display = 'block'
+    clearInterval(timer)
+    timer = null // 清除定时器变量
+  })
+  focus.addEventListener('mouseleave', function () {
+    arrow_l.style.display = 'none'
+    arrow_r.style.display = 'none'
+    timer = setInterval(function () {
+      //手动调用点击事件
+      arrow_r.click()
+    }, 2000)
+  })
+  // 3. 动态生成小圆圈  有几张图片，我就生成几个小圆圈
+  var ul = focus.querySelector('ul')
+  var ol = focus.querySelector('.circle')
+  // console.log(ul.children.length);
+  for (var i = 0; i < ul.children.length; i++) {
+    // 创建一个小li
+    var li = document.createElement('li')
+    // 记录当前小圆圈的索引号 通过自定义属性来做
+    li.setAttribute('index', i)
+    // 把小li插入到ol 里面
+    ol.appendChild(li)
+    // 4. 小圆圈的排他思想 我们可以直接在生成小圆圈的同时直接绑定点击事件
+    li.addEventListener('click', function () {
+      // 干掉所有人 把所有的小li 清除 current 类名
+      for (var i = 0; i < ol.children.length; i++) {
+        ol.children[i].className = ''
+      }
+      // 留下我自己  当前的小li 设置current 类名
+      this.className = 'current'
+      // 5. 点击小圆圈，移动图片 当然移动的是 ul
+      // ul 的移动距离 小圆圈的索引号 乘以 图片的宽度 注意是负值
+      // 当我们点击了某个小li 就拿到当前小li 的索引号
+      var index = this.getAttribute('index')
+      // 当我们点击了某个小li 就要把这个li 的索引号给 num
+      num = index
+      // 当我们点击了某个小li 就要把这个li 的索引号给 circle
+      circle = index
+      // num = circle = index;
+      console.log(focusWidth)
+      console.log(index)
+      animate(ul, -index * focusWidth)
+    })
+  }
+  // 把ol里面的第一个小li设置类名为 current
+  ol.children[0].className = 'current'
+  // 6. 克隆第一张图片(li)放到ul 最后面
+  var first = ul.children[0].cloneNode(true)
+  ul.appendChild(first)
+  // 7. 点击右侧按钮， 图片滚动一张
+  var num = 0
+  // circle 控制小圆圈的播放
+  var circle = 0
+  // flag 节流阀
+  var flag = true
+  arrow_r.addEventListener('click', function () {
+    if (flag) {
+      flag = false // 关闭节流阀
+      // 如果走到了最后复制的一张图片，此时ul要快速复原 left 改为 0
+      if (num == ul.children.length - 1) {
+        ul.style.left = 0
+        num = 0
+      }
+      num++
+      // 之所以会调到第二张图，是因为num=0后，又进行了num++，此时num=1
+      animate(ul, -num * focusWidth, function () {
+        flag = true // 打开节流阀
+      })
+      // 8. 点击右侧按钮，小圆圈跟随一起变化 可以再声明一个变量控制小圆圈的播放
+      circle++
+      // 如果circle == 4 说明走到最后我们克隆的这张图片了 我们就复原
+      if (circle == ol.children.length) {
+        circle = 0
+      }
+      // 调用函数
+      circleChange()
+    }
+  })
+  // 9. 左侧按钮做法
+  arrow_l.addEventListener('click', function () {
+    if (flag) {
+      flag = false
+      if (num == 0) {
+        num = ul.children.length - 1
+        ul.style.left = -num * focusWidth + 'px'
+      }
+      num--
+      animate(ul, -num * focusWidth, function () {
+        flag = true
+      })
+      // 点击左侧按钮，小圆圈跟随一起变化 可以再声明一个变量控制小圆圈的播放
+      circle--
+      // 如果circle < 0  说明第一张图片，则小圆圈要改为第4个小圆圈（3）
+      // if (circle < 0) {
+      //     circle = ol.children.length - 1;
+      // }
+      circle = circle < 0 ? ol.children.length - 1 : circle
+      // 调用函数
+      circleChange()
+    }
+  })
+  function circleChange() {
+    // 先清除其余小圆圈的current类名
+    for (var i = 0; i < ol.children.length; i++) {
+      ol.children[i].className = ''
+    }
+    // 留下当前的小圆圈的current类名
+    ol.children[circle].className = 'current'
+  }
+  // 10. 自动播放轮播图
+  var timer = setInterval(function () {
+    //手动调用点击事件
+    arrow_r.click()
+  }, 2000)
+})
+```
+
+------
+
+#### 3.4.6 返回顶部
+
+1. 原理：将缓动动画函数中的 obj.offsetLeft 改为 window.pageYOffset
+2. 动作：window.scroll(0, window.pageYOffset + step)
+3. 调用：animate(window, 0)
+
+```js
+function animate(obj, target, callback) {
+  clearInterval(obj.timer)
+  obj.timer = setInterval(function () {
+    // obj.offsetLeft 改为 window.pageYOffset
+    var step = (target - window.pageYOffset) / 10
+    step = step > 0 ? Math.ceil(step) : Math.floor(step)
+    // obj.offsetLeft 改为 window.pageYOffset
+    if (window.pageYOffset == target) {
+      clearInterval(obj.timer)
+      callback && callback()
+    } else {
+      window.scroll(0, window.pageYOffset + step)
+    }
+  }, 15)
+}
+```
+
+------
+
+#### 3.4.7 筋斗云
+
+1. 鼠标经过li，筋斗云跟到当前li：mouseenter --> animate(cloud, this.offsetLeft)
+2. 鼠标离开li，筋斗云恢复原位：mouseleave --> animate(cloud, current)
+3. 鼠标点击li，筋斗云留在当前li：click --> current = this.offsetLeft
+
+------
+
+#### 3.4.8 移动端特效
+
+##### 3.4.8.1 触摸屏幕
+
+1. 事件动作：
+
+   1）`touchstart`：手指获取元素
+
+   2）`touchmove`：手指移动元素
+
+   3）`touchend`：手指离开元素
+
+2. 事件对象：
+
+   1）`e.touches`：正在触摸屏幕的所有手指的列表
+
+   2）`e.targetTouches`：正在触摸当前DOM元素上的手指列表
+
+   3）`e.changedTouches`：手指状态发生改变的列表
+
+3. click事件延迟300ms：
+
+   1）原因：由于移动端双击手指可以放大/缩小屏幕，在第一次点击后的300ms内如果有第二次点击，则会放大屏幕
+
+   2）解决方案：
+
+   * 禁用缩放：<meta name="viewport" content="user-scalable=no">
+
+   * 自己定义函数tap：如果手指触摸和离开时间小于150ms算作点击，但每次只能添加一个元素，非常麻烦
+
+   * fastclick.js插件：引入即可，按官方文档用法调用
+
+     ```js
+     if ('addEventListener' in document) {
+       document.addEventListener(
+         'DOMContentLoaded',
+         function () {
+           FastClick.attach(document.body)
+         },
+         false
+       )
+     }
+     ```
+
+##### 3.4.8.2 拖动元素
+
+1. touchstart：初始坐标
+
+   1）手指初始坐标：
+
+   ```js
+   startX = e.targetTouches[0].pageX
+   startY = e.targetTouches[0].pageY
+   ```
+
+   2）元素初始坐标：
+
+   ```js
+   x = this.offsetLeft
+   y = this.offsetTop
+   ```
+
+2. touchmove：移动距离
+
+   1）手指移动距离
+
+   ```js
+   var moveX = e.targetTouches[0].pageX - startX
+   var moveY = e.targetTouches[0].pageY - startY
+   ```
+
+   2）元素移动距离
+
+   ```js
+   this.style.left = x + moveX + 'px'
+   this.style.top = y + moveY + 'px'
+   ```
+
+   3）阻止屏幕滚动默认行为：`e.preventDefault()`
+
+##### 3.4.8.3 移动端轮播图
+
+1. 图片索引：index，由于ul一开始就往右移动了一格，最左侧的复制最后一张图被隐藏，这张图没有索引
+
+2. 轮播图片：
+
+   1）ul>li放图片，第一张前复制最后一张图，最后一张图复制第一张图，共n+2张图
+
+   2）在移动端中，装图片的li要用百分比表示，如有5张图，li宽度为20%，此时才能设置img宽度100%，不然图片会以ul宽度为参考溢出屏幕
+
+   3）利用CSS3过渡+位移：transition、transform
+
+   4）移动距离：var translatex = -index * w;
+
+3. 无缝滚动：
+
+   1）等图片滚动完毕后在判断，即过渡完判断
+
+   2）监听过渡完成的事件：transitionend
+
+   3）到最后一张图：若index>=ul.length-2，index恢复为0，取消transition='none'，translateX归位
+
+   4）手指在第一张图往前划：若index<0，index恢复为ul.length-3，取消transition='none'，translateX归位
+
+4. 圆点跟随：利用classList添加/删除类名选择器
+
+   ```js
+   ol.querySelector('.current').classList.remove('current')
+   ol.children[index].classList.add('current')
+   ```
+
+5. 手指滑动轮播图：
+
+   1）ul添加touchstart事件，获取手指初始X坐标，并停止计时器
+
+   2）ul添加touchmove事件，获取手指移动距离，移动ul，并取消过渡效果transition
+
+   3）e.preventDefault()：阻止滚动屏幕默认行为
+
+   4）添加flag=false全局变量，只有当手指滑动事件发生后，使flag=ture，便于后面手指松开效果触发的判断
+
+6. 手指离开图片回弹/跳转：
+
+   1）ul添加touchend事件，判断盒子移动距离的绝对值Math.abs(moveX)
+
+   * 大于某值：跳转
+     * 右划往左走：moveX>0：index--
+     * 左划往右走：moveX<0，index++
+   * 小于某值：回弹
+     * index不变
+     * 利用CSS3过渡+位移：transition、transform
+
+   2）利用flag判断是否为手指滑动了图片再触发事件，而不是滑动了其他地方
+
+   3）重新启动定时器
+
+##### 3.4.8.4 视频插件
+
+1. `zy.media.js`：可以解决不同浏览器之间视频播放器样式不同的情况

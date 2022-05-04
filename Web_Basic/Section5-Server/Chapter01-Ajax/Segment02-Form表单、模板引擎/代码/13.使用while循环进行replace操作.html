@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Document</title>
-    </head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
 
-    <body>
-        <script>
-            var str = '<div>{{name}}今年{{ age }}岁了</div>';
-            var pattern = /{{\s*([a-zA-Z]+)\s*}}/;
+  <body>
+    <script>
+      var str = '<div>{{name}}今年{{ age }}岁了</div>'
+      var pattern = /{{\s*([a-zA-Z]+)\s*}}/
 
-            var patternResult = null;
-            // 巧妙运算方法
-            while ((patternResult = pattern.exec(str))) {
-                str = str.replace(patternResult[0], patternResult[1]);
-            }
+      var patternResult = null
+      // 巧妙运算方法
+      while ((patternResult = pattern.exec(str))) {
+        str = str.replace(patternResult[0], patternResult[1])
+      }
 
-            // 等同于传统方法
-            /* while (pattern.exec(str) != null) {
+      // 等同于传统方法
+      /* while (pattern.exec(str) != null) {
                 patternResult = pattern.exec(str);
                 str = str.replace(patternResult[0], patternResult[1]);
             } */
-            console.log(str);
-        </script>
-    </body>
+      console.log(str)
+    </script>
+  </body>
 </html>

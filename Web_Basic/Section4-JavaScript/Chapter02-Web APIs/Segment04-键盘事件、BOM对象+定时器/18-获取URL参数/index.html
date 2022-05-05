@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div></div>
     <script>
-        console.log(location.search); // ?uname=andy
-        // 1.先去掉？  substr('起始的位置'，截取几个字符);
-        var params = location.search.substr(1); // uname=andy
-        console.log(params);
-        // 2. 利用=把字符串分割为数组 split('=');
-        var arr = params.split('=');
-        console.log(arr); // ["uname", "ANDY"]
-        var div = document.querySelector('div');
-        // 3.把数据写入div中，decodeURIComponent可以显示中文
-        div.innerHTML = decodeURIComponent(arr[1]) + '欢迎您';
+      console.log(location.search) // ?uname=andy
+      // 1.先去掉问号
+      var params = location.search.substr(1) // uname=andy
+      console.log(params)
+      // 2. 把字符串分割为数组
+      var arr = params.split('=')
+      console.log(arr) // ["uname", "ANDY"]
+      var div = document.querySelector('div')
+      // 3.把数据写入div中，decodeURIComponent可以显示中文
+      div.innerHTML = decodeURIComponent(arr[1]) + '欢迎您'
     </script>
-</body>
-
+  </body>
 </html>

@@ -1999,6 +1999,32 @@ alert(str)
 
    3）定时器：`setTimeout`、`setInterval`
 
+   ```js
+   // 问题1：结果：1、2、3
+   console.log(1)
+   setTimeout(function () {
+     console.log(3)
+   }, 1000)
+   console.log(2)
+   
+   // 问题2：结果：1、2、3
+   console.log(1)
+   setTimeout(function () {
+     console.log(3)
+   }, 0)
+   console.log(2)
+   
+   // 问题3：结果：1、2、3、cilck出现位置取决于何时点击
+   console.log(1)
+   document.onclick = function () {
+     console.log('click')
+   }
+   console.log(2)
+   setTimeout(function () {
+     console.log(3)
+   }, 3000)
+   ```
+
 4. 执行机制：先执行执行栈中的同步任务
 
    1）异步任务（回调函数）放到任务队列中：是先给异步进程处理，判断时间先后顺序，再放入任务队列
@@ -2030,6 +2056,18 @@ alert(str)
    1）方法1：`(function() {})()`
 
    2）方法2：`(function(){}())`
+   
+   ```js
+   ;(function (a, b) {
+     console.log(a + b)
+     var num = 10
+   })(1, 2) // 第二个小括号可以看做是调用函数
+   
+   ;(function sum(a, b) {
+     console.log(a + b)
+     var num = 10 // 局部变量
+   })(2, 3)
+   ```
 
 ------
 
@@ -2194,16 +2232,71 @@ btn.onclick = function () {
 
    1）捕获阶段：由网景提出，由DOM最顶层节点开始，逐级向下传播到最具体的元素接收的过程
 
-   * 如果 addEventListener 第三个参数是 true，那么则处于捕获阶段
+   * 如果 addEventListener 第三个参数是 `true`，那么则处于捕获阶段
    * 从外往里执行：document -> html -> body -> father -> son
+
+   ```html
+   <div class="father">
+     <div class="son">son盒子</div>
+   </div>
+   <script>
+     // 捕获阶段：addEventListener 第三个参数是 true
+     var son = document.querySelector('.son')
+     son.addEventListener(
+       'click',
+       function () {
+         alert('son')
+       },
+       true
+     )
+     var father = document.querySelector('.father')
+     father.addEventListener(
+       'click',
+       function () {
+         alert('father')
+       },
+       true
+     )
+   </script>  
+   ```
 
    2）目标阶段
 
    3）冒泡阶段：由IE提出，事件开始时由最具体的元素接收，逐级向上传播到DOM最顶层节点的过程
 
    * onclick、attachEvent只能得到冒泡阶段
-   * 如果 addEventListener 第三个参数是 false 或省略，那么则处于冒泡阶段
+   * 如果 addEventListener 第三个参数是 `false` 或省略，那么则处于冒泡阶段
    * 从里往外执行：son -> father ->body -> html -> document
+
+   ```html
+   <div class="father">
+     <div class="son">son盒子</div>
+   </div>
+   <script>
+     // 冒泡阶段：addEventListener 第三个参数是 false 或 省略
+     var son = document.querySelector('.son')
+     son.addEventListener(
+       'click',
+       function () {
+         alert('son')
+       },
+       false
+     )
+     var father = document.querySelector('.father')
+     father.addEventListener(
+       'click',
+       function () {
+         alert('father')
+       },
+       false
+     )
+     document.addEventListener('click', function () {
+       alert('document')
+     })
+   </script>  
+   ```
+
+   
 
 3. JS代码中只能执行捕获、冒泡其中之一的阶段
 
@@ -2218,7 +2311,11 @@ btn.onclick = function () {
 1. event 就是一个事件对象，写到侦听函数的小括号里面，当形参来看
 
    ```js
-   div.onclick = function(event) {XXX}
+   var div = document.querySelector('div')
+   div.onclick = function (event) {
+     console.log(window.event)
+     console.log(event)
+   }
    ```
 
 2. 事件对象只有有了事件才会存在，是系统自动创建的，不需要传递参数
@@ -2230,7 +2327,11 @@ btn.onclick = function () {
 5. 事件对象也有兼容性问题：ie678 通过 window.event 兼容性的写法
 
    ```js
-   e = e || window.event
+   var div = document.querySelector('div')
+   div.onclick = function (e) {
+     e = e || window.event;
+     console.log(e)
+   }
    ```
 
 ###### 属性和方法
@@ -2243,43 +2344,84 @@ btn.onclick = function () {
 
    3）e.currentTarget：和this效果相同，但是不兼容IE6-8，不如直接用this
 
+   ```js
+   <ul>
+     <li>abc</li>
+     <li>abc</li>
+     <li>abc</li>
+   </ul>
+   <script>
+     // e.target：返回的是触发事件的对象（元素）：点击了哪个元素，就返回哪个元素
+     // this：返回的是绑定事件的对象（元素）：哪个元素绑定了这个点击事件，那么就返回谁
+     var ul = document.querySelector('ul')
+     ul.addEventListener('click', function (e) {
+       console.log(this)				// ul绑定了点击事件，返回ul
+       console.log(e.currentTarget)	// ul绑定了点击事件，返回ul
+       console.log(e.target)			// 点击谁，返回谁
+     })
+   </script>
+   ```
+
 2. `e.srcElement`：返回触发事件的对象（非标准，IE6-8使用）
+
+   ```html
+   <div>123</div>
+   <script>
+     div.onclick = function (e) {
+       e = e || window.event
+       var target = e.target || e.srcElement
+       console.log(target)
+     }
+   </script>
+   ```
 
 3. `e.type`：返回事件类型，如：click、mouseover，前面不带on
 
-4. `e.stopPropagation()`：阻止冒泡（标准）
+4. 阻止冒泡：
 
-   ```js
-   var son = document.querySelector('.son')
-   son.addEventListener(
-     'click',
-     function (e) {
-       alert('son')
-       e.stopPropagation() // stop 停止  Propagation 传播
-       e.cancelBubble = true // 非标准 cancel 取消 bubble 泡泡
-     },
-     false
-   )
-   var father = document.querySelector('.father')
-   father.addEventListener(
-     'click',
-     function () {
-       alert('father')
-     },
-     false
-   )
-   document.addEventListener('click', function () {
-     alert('document')
-   })
+   1）`e.stopPropagation()`：标准写法
+
+   2）`e.canceBubble=true`：非标准，IE6-8使用
+
+   ```html
+   <div class="father">
+     <div class="son">son儿子</div>
+   </div>
+   <script>
+     // 常见事件对象的属性和方法
+     // 阻止冒泡  dom 推荐的标准 stopPropagation()
+     var son = document.querySelector('.son')
+     son.addEventListener(
+       'click',
+       function (e) {
+         alert('son')
+         e.stopPropagation() // stop 停止 Propagation 传播
+         // e.cancelBubble = true // 非标准 cancel 取消 bubble 泡泡
+       },
+       false
+     )
+     var father = document.querySelector('.father')
+     father.addEventListener(
+       'click',
+       function () {
+         alert('father')
+       },
+       false
+     )
+     document.addEventListener('click', function () {
+       alert('document')
+     })
+   </script>
    ```
 
-5. `e.canceBubble = true`：阻止冒泡（非标准，IE6-8使用）
+   
 
-6. 阻止默认事件：如不让链接跳转等
+5. 阻止默认事件：如不让链接跳转等
 
    1）`e.preventDefault()`：标准方法
 
    ```js
+   var a = document.querySelector('a')
    a.onclick = function (e) {
      // 普通浏览器：e.preventDefault()方法
      e.preventDefault()
@@ -2289,6 +2431,7 @@ btn.onclick = function () {
    2）`e.returnValue`：非标准方法，IE6-8使用
 
    ```js
+   var a = document.querySelector('a')
    a.onclick = function (e) {
      // 低版本浏览器 ie678：returnValue 属性
      e.returnValue
@@ -2298,13 +2441,23 @@ btn.onclick = function () {
    3）`return false`：也能阻止默认行为，没有兼容性问题，但return后面的代码不执行，且只限于传统的注册方式
 
    ```js
+   var a = document.querySelector('a')
    a.onclick = function (e) {
      return false
      alert(11) // 不会执行此行代码了
    }
    ```
 
-7. `e.persisted`：返回true代表页面从是缓存中取出的，返回false代表不是从缓存取出的，常与pageshow事件搭配使用
+6. `e.persisted`：返回true代表页面从是缓存中取出的，返回false代表不是从缓存取出的，常与pageshow事件搭配使用
+
+   ```js
+   window.addEventListener('pageshow', function (e) {
+     // e.persisted 返回的是true 就是说如果这个页面是从缓存取过来的页面，也需要从新计算一下rem 的大小
+     if (e.persisted) {
+       setRemUnit()
+     }
+   })
+   ```
 
 ------
 
@@ -2316,6 +2469,14 @@ btn.onclick = function () {
 
    2）特点：唯一性，同一个元素同一个事件只能设置一个处理函数，最后注册的处理函数将会覆盖前面注册的处理函数
 
+   ```js
+   var btns = document.querySelectorAll('button')
+   // 1. 传统方式注册事件
+   btns[0].onclick = function () {
+     alert('hi')
+   }
+   ```
+
 2. `addEventListener()`：方法监听注册
 
    1）语法：`eventTarget.addEventListener(type,listener,[,useCapture])`
@@ -2325,6 +2486,14 @@ btn.onclick = function () {
    * type：事件类型字符串，必须加引号，如：click, mouseover，前面无需加on
    * listener：事件处理函数，事件发生时，会调用该监听函数
    * userCapture：DOM事件流方向，可选，布尔值，默认false（冒泡阶段）
+
+   ```js
+   var btns = document.querySelectorAll('button')
+   // 1. 传统方式注册事件
+   btns[1].addEventListener('click', function () {
+     alert(22)
+   })
+   ```
 
 3. `attachEvent()`：方法监听注册，IE9之前的方法
 
@@ -2392,12 +2561,23 @@ btn.onclick = function () {
 1. 定义：不给每个子节点单独设置事件监听器，而将其设置在父节点上，利用冒泡原理影响设置每个子节点
 2. 作用：只操作一次DOM，提高程序性能
 
-```js
-// 案例：点击ul中每个li，变更背景颜色
-// 思路：给ul注册点击事件，利用e.target找到当前点击的li，事件冒泡到ul上，触发事件监听器
-ul.addEventListener('click', function (e) {
-  e.target.style.backgroundColor = 'pink'
-})
+```html
+<ul>
+  <li>知否知否，点我应有弹框在手！</li>
+  <li>知否知否，点我应有弹框在手！</li>
+  <li>知否知否，点我应有弹框在手！</li>
+</ul>
+<script>
+  // 事件委托的核心原理：给父节点添加侦听器，利用事件冒泡影响每一个子节点
+  var ul = document.querySelector('ul')
+  ul.addEventListener('click', function (e) {
+    alert('知否知否，点我应有弹框在手！')
+    for (var i = 0; i < ul.children.length; i++) {
+      ul.children[i].style.backgroundColor = null
+    }
+    e.target.style.backgroundColor = 'pink'	 // e.target 可以得到点击的对象
+  })
+</script>
 ```
 
 ------
@@ -2406,7 +2586,7 @@ ul.addEventListener('click', function (e) {
 
 ###### 事件动作
 
-1. `click`：点击左键触发：
+1. `click`：点击左键触发
 
 2. `dblclick`：双击左键触发
 
@@ -2414,6 +2594,39 @@ ul.addEventListener('click', function (e) {
    * `mouseover`：经过自身盒子触发，经过子盒子还会触发
    * `mouseenter`：仅经过自身盒子触发，因为它不冒泡
 
+   ```html
+   <style>
+     .father {
+       width: 300px;
+       height: 300px;
+       background-color: pink;
+       margin: 100px auto;
+     }
+     .son {
+       width: 200px;
+       height: 200px;
+       background-color: purple;
+     }
+   </style>
+   
+   <div class="father">
+     <div class="son"></div>
+   </div>
+   
+   <script>
+     var father = document.querySelector('.father')
+     var son = document.querySelector('.son')
+     // mouseover：经过自身盒子触发，经过子盒子还会触发
+     father.addEventListener('mouseover', function () {
+       console.log('mouseover触发')
+     })
+     // mouseenter：仅经过自身盒子触发，因为它不冒泡
+     father.addEventListener('mouseenter', function () {
+       console.log('mouseenter触发')
+     })
+   </script>
+   ```
+   
 4. 鼠标离开触发：
 
    * `mouseout`：经过自身盒子触发，经过子盒子还会触发
@@ -2438,7 +2651,7 @@ ul.addEventListener('click', function (e) {
     })
     ```
 
-11. 选中文字：`selectstart`
+11. `selectstart`：选中文字
 
     ```js
     // 例：禁止选中文字
@@ -2462,6 +2675,45 @@ ul.addEventListener('click', function (e) {
 5. `e.screenX`：鼠标相对于电脑屏幕的X坐标
 6. `e.screenY`：鼠标相对于电脑屏幕的Y坐标
 
+```js
+document.addEventListener('click', function (e) {
+  // 1. client 鼠标在可视区的x和y坐标
+  console.log(e.clientX)
+  console.log(e.clientY)
+  console.log('---------------------')
+  // 2. page 鼠标在页面文档的x和y坐标
+  console.log(e.pageX)
+  console.log(e.pageY)
+  console.log('---------------------')
+  // 3. screen 鼠标在电脑屏幕的x和y坐标
+  console.log(e.screenX)
+  console.log(e.screenY)
+})
+```
+
+```html
+<!--案例：跟随鼠标移动的天使-->
+<style>
+  img {
+    position: absolute;
+    top: 2px;
+  }
+</style>
+<img src="images/angel.gif" alt="" />
+<script>
+  var pic = document.querySelector('img')
+  document.addEventListener('mousemove', function (e) {
+    // 每次鼠标移动都会获得最新的鼠标坐标，把这个x和y坐标做为图片的top和left值就可以移动图片
+    var x = e.pageX
+    var y = e.pageY
+    console.log('x坐标是' + x, 'y坐标是' + y)
+    // 不要忘记给left和top添加px单位
+    pic.style.left = x - 40 + 'px'
+    pic.style.top = y - 40 + 'px'
+  })
+</script>
+```
+
 ###### 手动调用事件
 
 1. `element.click()`：点击事件
@@ -2474,7 +2726,7 @@ ul.addEventListener('click', function (e) {
 
 * 执行顺序：keydown --> keypress --> keyup
 
-1. `onkeyup`：某个按键松开时触发，注意：在文本框中的特点：事件触发时，文字还没落入文本框，所以最好用keyup
+1. `keyup`：某个按键松开时触发，注意：在文本框中的特点：事件触发时，文字还没落入文本框，所以最好用keyup
 
    ```js
    // 按回车触发
@@ -2485,9 +2737,43 @@ ul.addEventListener('click', function (e) {
    }
    ```
 
-2. `onkeydown`：某个按键按下时触发
+2. `keydown`：某个按键按下时触发
 
-3. `onkeypress`：某个按键按下时触发，但不能识别功能键，如ctrl、shift、箭头等
+3. `keypress`：某个按键按下时触发，但不能识别功能键，如ctrl、shift、箭头等
+
+   ```html
+   <!--案例：快递单号查询放大效果-->
+   <div class="search">
+     <div class="con">123</div>
+     <input type="text" placeholder="请输入您的快递单号" class="jd" />
+   </div>
+   <script>
+     // 快递单号输入内容时，上面的大号字体盒子（con）显示（里面的字号更大）
+     // 表单检测用户输入：给表单添加键盘事件
+     // 同时把快递单号里面的值（value）获取过来赋值给 con盒子（innerText）做为内容
+     // 如果快递单号里面内容为空，则隐藏大号字体盒子(con)盒子
+     var con = document.querySelector('.con')
+     var jd_input = document.querySelector('.jd')
+     jd_input.addEventListener('keyup', function () {
+       if (this.value == '') {
+         con.style.display = 'none'
+       } else {
+         con.style.display = 'block'
+         con.innerText = this.value
+       }
+     })
+     // 当失去焦点，就隐藏这个con盒子
+     jd_input.addEventListener('blur', function () {
+       con.style.display = 'none'
+     })
+     // 当获得焦点，就显示这个con盒子
+     jd_input.addEventListener('focus', function () {
+       if (this.value !== '') {
+         con.style.display = 'block'
+       }
+     })
+   </script>
+   ```
 
 ###### 事件对象：KeyboardEvent
 
@@ -2638,6 +2924,7 @@ ul.addEventListener('click', function (e) {
      for (var i = 0; i <= 100; i++) {
        arr.push('<a href="#">百度</a>')
      }
+     inner.innerHTML = arr.join('')
      ```
 
 ##### 3.2.4.2 元素属性
@@ -2979,27 +3266,92 @@ for (var i = 0; i < j_tbs.length; i++) {
 
 2. 基本属性：nodeType（节点类型）、nodeName（节点名称）、nodeValue（节点值）
 
-3. 常见节点类型（共12种）
+3. 节点类型：`nodeType`
 
-   1）元素节点
+   1）Element：元素节点
 
-   2）属性节点
+   2）Attribute：属性节点
 
-   3）文本节点
+   3）Text：文本节点
+
+   4）CDATA Section
+
+   5）Entity Reference
+
+   6）Entity
+
+   7）Processing Instrucion
+
+   8）Comment
+
+   9）Document
+
+   10）Document Type
+
+   11）Document Fragment
+
+   12）Notation
 
 ##### 3.2.5.1 父节点
 
 1. 语法：`node.parentNode`
+
 2. 就近原则：得到的是离元素最近的父级节点，如果找不到父节点就返回为 null
+
+   ```html
+   <div class="demo">
+     <div class="box">
+       <span class="erweima">×</span>
+     </div>
+   </div>
+   <script>
+     // 父节点 parentNode
+     // 得到的是离元素最近的父级节点(亲爸爸) 如果找不到父节点就返回为 null
+     var erweima = document.querySelector('.erweima')
+     console.log(erweima.parentNode)
+     // html元素的父节点是 #document
+     var demo = document.documentElement
+     console.log(demo.parentNode)
+   </script>
+   ```
+
 3. 如果存在页面嵌套（如iframe），子页面可以跳到父页面js中的方法，如：`window.parent.XXX()`
 
 ##### 3.2.5.2 子节点
 
 1. 语法：
 
-   1）`parentNode.childNodes`：指定节点的子节点的集合（包含元素节点、文本节点等）
+   1）`parentNode.childNodes`：指定节点的子节点的集合（包含元素节点、文本节点等），形式为 NodeList(x)
 
-   2）`parentNode.children`：返回所有的子元素节点（仅有元素节点），指定子元素节点：parentNode.children[i]
+   ```js
+   <ul>
+     <li>我是li</li>
+     <li>我是li</li>
+   </ul>
+   <script>
+     var ul = document.querySelector('ul')
+     var lis = ul.querySelectorAll('li')
+     // childNodes：所有的子节点，包含元素节点、文本节点等
+     console.log(ul.childNodes)				// NodeList(9)
+     console.log(ul.childNodes[0].nodeType)	// 3（text：文本节点，类型为3）
+     console.log(ul.childNodes[1].nodeType)	// 1（li：元素节点，类型为1）
+   </script>
+   ```
+
+   2）`parentNode.children`：返回所有的子元素节点（仅有元素节点），形式为HTMLCollection(x)，指定子元素节点：parentNode.children[i]
+
+   ```js
+   <ul>
+     <li>我是li</li>
+     <li>我是li</li>
+   </ul>
+   <script>
+     var ul = document.querySelector('ul')
+     var lis = ul.querySelectorAll('li')
+     // children：获取所有的子元素节点，实际开发常用
+     console.log(ul.children)	// HTMLCollection(4)
+   </script>
+   ```
 
 2. 获取第一个子节点：
 
@@ -3016,6 +3368,69 @@ for (var i = 0; i < j_tbs.length; i++) {
    2）`parent.lastElementChild`：最后一个元素子节点，IE9上才支持
 
    3）`parentNode.children[parentNode.children.length-1]`：最后一个元素子节点，兼容性较好
+   
+   ```js
+   <ol>
+     <li>我是li1</li>
+     <li>我是li2</li>
+     <li>我是li3</li>
+   </ol>
+   <script>
+     var ol = document.querySelector('ol')
+     // 1. firstChild 第一个子节点：不管是文本节点还是元素节点
+     console.log(ol.firstChild)
+     console.log(ol.lastChild)
+     // 2. firstElementChild 返回第一个子元素节点（ie9支持）
+     console.log(ol.firstElementChild)
+     console.log(ol.lastElementChild)
+     // 3. 实际开发写法：既没有兼容性问题又返回第一个子元素
+     console.log(ol.children[0])
+     console.log(ol.children[ol.children.length - 1])
+   </script>
+   ```
+
+4. 案例：下拉菜单
+
+   ```js
+   <ul class="nav">
+     <li>
+       <a href="#">微博</a>
+       <ul>
+         <li>
+           <a href="">私信</a>
+         </li>
+         <li>
+           <a href="">评论</a>
+         </li>
+       </ul>
+     </li>
+     <li>
+       <a href="#">微博</a>
+       <ul>
+         <li>
+           <a href="">私信</a>
+         </li>
+         <li>
+           <a href="">@我</a>
+         </li>
+       </ul>
+     </li>
+   </ul>
+   <script>
+     // 获取元素
+     var nav = document.querySelector('.nav')
+     var lis = nav.children // 得到里面的小li
+     // 循环注册事件
+     for (var i = 0; i < lis.length; i++) {
+       lis[i].onmouseover = function () {
+         this.children[1].style.display = 'block'
+       }
+       lis[i].onmouseout = function () {
+         this.children[1].style.display = 'none'
+       }
+     }
+   </script>
+   ```
 
 ##### 3.2.5.3 兄弟节点
 
@@ -3030,14 +3445,71 @@ for (var i = 0; i < j_tbs.length; i++) {
    1）`node.previousSibling`：获取下一个兄弟节点（所有类型）
 
    2）`node.previousElementSibling`：获取下一个兄弟远元素节点
+   
+   ```html
+   <div>我是div</div>
+   <span>我是span</span>
+   <script>
+     var div = document.querySelector('div')
+   
+     // 1.nextSibling 下一个兄弟节点：包含元素节点、文本节点等
+     console.log(div.nextSibling)
+     console.log(div.previousSibling)
+   
+     // 2. nextElementSibling 得到下一个兄弟元素节点
+     console.log(div.nextElementSibling)
+     console.log(div.previousElementSibling)
+   </script>
+   ```
 
 ##### 3.2.5.4 创建节点
 
 1. `document.createElement('tagName')`：动态创建节点
 
+   ```html
+   <textarea name="" id="">请输入您的留言...</textarea>
+   <button>发布</button>
+   <ul></ul>
+   <script>
+     // 1. 获取元素
+     var btn = document.querySelector('button')
+     var text = document.querySelector('textarea')
+     var ul = document.querySelector('ul')
+     // 2. 注册事件
+     text.onclick = function () {
+       text.value = ''
+     }
+     btn.onclick = function () {
+       if (text.value == '') {
+         alert('您没有输入内容')
+         return false
+       } else {
+         // (1) 创建元素
+         var li = document.createElement('li')
+         // 先有li 才能赋值
+         li.innerHTML = text.value
+         // (2) 添加元素
+         ul.insertBefore(li, ul.children[0])
+         text.value = ''
+       }
+     }
+   </script>
+   ```
+
 ##### 3.2.5.5 添加节点
 
 1. `node.appendChild(child)`：将一个节点添加到指定父节点的子节点列表末尾，像CSS的after伪元素
+
+   ```html
+   <div class="create"></div>
+   <script>
+     var create = document.querySelector('.create')
+     for (var i = 0; i <= 100; i++) {
+       var a = document.createElement('a')
+       create.appendChild(a)
+   }
+   </script>
+   ```
 
 2. `node.insertBefore(child, 指定元素)`：将一个节点添加到指定元素之前
 
@@ -3101,7 +3573,27 @@ for (var i = 0; i < j_tbs.length; i++) {
 ##### 3.2.5.7 复制节点
 
 1. `node.cloneNode()`：括号内为空或false，浅拷贝，只复制标签不复制里面的内容
+
 2. `node.cloneNode(true)`：括号内为true，深拷贝，复制标签和内容
+
+   ```js
+   <button>复制</button>
+   <ul>
+     <li>Jack</li>
+     <li>Emliy</li>
+     <li>Alice</li>
+   </ul>
+   <script>
+     var ul = document.querySelector('ul')
+     var btn = document.querySelector('button')
+     // 1. node.cloneNode(); 括号为空或者里面是false 浅拷贝 只复制标签不复制里面的内容
+     // 2. node.cloneNode(true); 括号为true 深拷贝 复制标签复制里面的内容
+     btn.onclick = function () {
+       var lili = ul.children[0].cloneNode(true)
+       ul.appendChild(lili)
+     }
+   </script>
+   ```
 
 ##### 3.2.5.8 动态创建表格
 
@@ -3261,7 +3753,7 @@ for (var i = 0; i < j_tbs.length; i++) {
 
 ##### 3.3.2.2 Windows方法
 
-###### 窗口加载:load
+###### 窗口加载: load
 
 1. load
 
@@ -3296,12 +3788,29 @@ for (var i = 0; i < j_tbs.length; i++) {
 
    5）`document.addEventListener('DOMContentLoaded',fn)`：仅当DOM加载完成时触发，包括JS，但不包括图片、CSS、flash等（IE9+支持），适用于多媒体较多的网页，不耽误用户操作其他按钮
 
+   ```js
+   document.addEventListener('DOMContentLoaded', function () {
+     alert(33)
+   })
+   ```
+
 2. `window.addEventListener('pageshow',fn)`
 
-   1）背景：火狐浏览器具有“往返缓存”的特点，使用后退按钮返回页面时，如果使用load不会重新加载页面，此时需要pageshow
+   1）火狐浏览器具有“往返缓存”的特点，使用后退按钮返回页面时，如果使用load不会重新加载页面，此时需要pageshow，页面先执行其中的回调函数
 
-   2）定义：页面显示时触发，无论页面是否来自于缓存，会在load事件后触发，根据 e.persisted 判断是否是缓存中的页面
-
+   ```html
+   <script>
+     // 会先执行pageshow内定义的回调函数
+     window.addEventListener('pageshow', function () {
+       alert(11)
+     })
+   </script>
+   <!--执行完毕后，才会显示下面内容-->
+   <a href="http://www.itcast.cn">链接</a>
+   ```
+   
+   2）页面显示时触发，无论页面是否来自于缓存，会在load事件后触发，可配合使用 e.persisted 判断是否是缓存中的页面
+   
    ```js
    window.addEventListener('pageshow', function (e) {
      // e.persisted 返回的是true 就是说如果这个页面是从缓存取过来的页面，也需要从新计算一下rem 的大小
@@ -3311,33 +3820,42 @@ for (var i = 0; i < j_tbs.length; i++) {
    })
    ```
 
-###### 窗口大小:resize
+###### 窗口大小: resize
 
 1. `window.onresize`
 
 2. `window.addEventListener('resize',fn)`
 
-   ```js
-   window.addEventListener('load', function () {
-     var div = document.querySelector('div')
-   })
-   
-   window.addEventListener('resize', function () {
-     console.log(window.innerWidth)	// window.innerWidt：当前窗口大小
-     console.log('变化了')
-     if (window.innerWidth <= 800) {
-       div.style.display = 'none'
-     } else {
-       div.style.display = 'block'
+   ```html
+   <style>
+     div {
+       width: 200px;
+       height: 200px;
+       background-color: pink;
      }
-   })
+   </style>
+   <script>
+     window.addEventListener('load', function () {
+       var div = document.querySelector('div')
+       window.addEventListener('resize', function () {
+         console.log(window.innerWidth)
+         console.log('变化了')
+         if (window.innerWidth <= 800) {
+           div.style.display = 'none'
+         } else {
+           div.style.display = 'block'
+         }
+       })
+     })
+   </script>
+   <div></div>
    ```
 
-###### 窗口滚动:scroll
+###### 窗口滚动: scroll
 
 1. `window.scroll(x,y)`：里面数值不加单位
 
-###### 定时器
+###### 定时器: setTimeout
 
 * 注意：如果重复点击按钮触发定时器，动作会越来越快，这是由于定时器叠加导致的，需要清除掉旧定时器，只保留一个定时器
 
@@ -3386,6 +3904,41 @@ for (var i = 0; i < j_tbs.length; i++) {
 
 2. `setInterval(回调函数，[延迟的毫秒数])`：重复调用一个函数，每隔这个时间就调用一次回调函数
 
+   ```html
+   <!--案例：倒计时-->
+   <div>
+       <span class="hour">1</span>
+       <span>时</span>
+       <span class="minute">2</span>
+       <span>分</span>
+       <span class="second">3</span>
+       <span>秒</span>
+   </div>
+   <script>
+       // 1. 获取元素 
+       var hour = document.querySelector('.hour'); 		// 小时的黑色盒子
+       var minute = document.querySelector('.minute'); 	// 分钟的黑色盒子
+       var second = document.querySelector('.second'); 	// 秒数的黑色盒子
+       var inputTime = +new Date('2025-12-31 18:00:00'); 	// 返回的是用户输入时间总的毫秒数
+       countDown() 										// 先调用一次这个函数，防止第一次刷新页面有空白 
+       // 2. 开启定时器
+       setInterval(countDown, 1000);
+       function countDown() {
+           var nowTime = +new Date(); 						// 返回的是当前时间总的毫秒数
+           var times = (inputTime - nowTime) / 1000; 		// times是剩余时间总的秒数 
+           var h = parseInt(times / 60 / 60 % 24); 		//时
+           h = h < 10 ? '0' + h : h;
+           hour.innerHTML = h; 							// 把剩余的小时给 小时黑色盒子
+           var m = parseInt(times / 60 % 60); 				// 分
+           m = m < 10 ? '0' + m : m;
+           minute.innerHTML = m;
+           var s = parseInt(times % 60); 					// 秒
+           s = s < 10 ? '0' + s : s;
+           second.innerHTML = s;
+       }
+   </script>
+   ```
+
    1）停止定时器：`clearInterval(定时器名称)`
 
    2）注意：如果定时器被写入了注册事件函数内部的匿名函数，需要在外面声明一个与定时器同名的全局变量，令其为null
@@ -3409,7 +3962,33 @@ for (var i = 0; i < j_tbs.length; i++) {
    </script>
    ```
 
-###### 本地储存
+   ```html
+   <!--案例：手机发送短信-->
+   手机号码： <input type="tel" /> <button>发送</button>
+   <script>
+     // 按钮点击之后，会禁用 disabled 为true，按钮里面内容变化
+     // 注意 button 里面的内容通过 innerHTML修改
+     var btn = document.querySelector('button')
+     var time = 3 // 定义剩下的秒数
+     btn.addEventListener('click', function () {
+       btn.disabled = true
+       var timer = setInterval(function () {
+         if (time == 0) {
+           // 清除定时器和复原按钮
+           clearInterval(timer)
+           btn.disabled = false
+           btn.innerHTML = '发送'
+           time = 3
+         } else {
+           btn.innerHTML = '还剩下' + time + '秒'
+           time--
+         }
+       }, 1000)
+     })
+   </script>
+   ```
+
+###### 本地储存: localStorage
 
 1. 特性：
 
@@ -3495,6 +4074,32 @@ for (var i = 0; i < j_tbs.length; i++) {
 
    6）fragment：片段，#后面内容常见于链接锚点
 
+   ```html
+   <!--案例：获取URL参数-->
+   <!--login.html-->
+   <form action="index.html">
+     用户名： <input type="text" name="uname" />
+     <input type="submit" value="登录" />
+   </form>
+   ```
+
+   ```html
+   <!--index.html-->
+   <div></div>
+   <script>
+     console.log(location.search) // ?uname=andy
+     // 1.先去掉问号
+     var params = location.search.substr(1) // uname=andy
+     console.log(params)
+     // 2. 把字符串分割为数组
+     var arr = params.split('=')
+     console.log(arr) // ["uname", "ANDY"]
+     // 3.把数据写入div中，decodeURIComponent可以显示中文
+     var div = document.querySelector('div')
+     div.innerHTML = decodeURIComponent(arr[1]) + '欢迎您'
+   </script>
+   ```
+
 3. 属性：
 
    1）`location.href`：获取或设置整个URL
@@ -3509,6 +4114,30 @@ for (var i = 0; i < j_tbs.length; i++) {
 
    6）`location.hash`：返回片段，对应的fragment
 
+   ```html
+   <button>点击</button>
+   <div></div>
+   <script>
+     var btn = document.querySelector('button')
+     var div = document.querySelector('div')
+     btn.addEventListener('click', function () {
+       // console.log(location.href);
+       location.href = 'http://www.itcast.cn'
+     })
+     var timer = 5
+     var count_down = function () {
+       if (timer == 0) {
+         location.href = 'http://www.itcast.cn'
+       } else {
+         div.innerHTML = '您将在' + timer + '秒钟之后跳转到首页'
+         timer--
+       }
+     }
+     count_down()
+     setInterval(count_down, 1000)
+   </script>
+   ```
+
 4. 方法:
 
    1）location.assign()：与href相同，可以跳转页面，可以后退
@@ -3516,6 +4145,27 @@ for (var i = 0; i < j_tbs.length; i++) {
    2）location.replace()：替换当前页面，但不记录历史，不能后退页面
 
    3）location.reload()：重新加载页面，相当于刷新按钮/F5，如果参数为true，强制刷新Ctrl+F5（不读取缓存）
+   
+   ```html
+   <button>黑马IT(可后退)</button>
+   <button>黑马IT(不可后退)</button>
+   <button>刷新页面</button>
+   <script>
+     var btns = document.querySelectorAll('button')
+     // 记录浏览历史，可以实现后退功能
+     btns[0].addEventListener('click', () => {
+       location.assign('http://www.itcast.cn')
+     })
+     // 不记录浏览历史，不可以实现后退功能
+     btns[1].addEventListener('click', () => {
+       location.replace('http://www.itcast.cn')
+     })
+     // 强制刷新页面
+     btns[2].addEventListener('click', () => {
+       location.reload(ture)
+     })
+   </script>
+   ```
 
 ------
 
@@ -3526,7 +4176,7 @@ for (var i = 0; i < j_tbs.length; i++) {
 ```js
 if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|
 wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
-  window.location.href = '../H5/index.html' //手机
+  window.location.href = '../H5/index.html' //手机页面所在文件
 }
 ```
 
@@ -3543,6 +4193,31 @@ wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
    2）`forward()`：前进
 
    3）`go(参数)`：前进后退功能，参数为1即前进1个页面，参数为-1即后退1个页面
+   
+   ```html
+   <!-- index.html -->
+   <a href="list.html">点击我去往列表页</a>
+   <button>前进</button>
+   <script>
+     var btn = document.querySelector('button')
+     btn.addEventListener('click', function () {
+       // history.forward();
+       history.go(1)
+     })
+   </script>
+   ```
+   
+   ```html
+   <a href="list.html">点击我去往首页</a>
+   <button>后退</button>
+   <script>
+     var btn = document.querySelector('button')
+     btn.addEventListener('click', function () {
+       // history.back();
+       history.go(-1)
+     })
+   </script>
+   ```
 
 ------
 
@@ -3550,17 +4225,67 @@ wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
 
 #### 3.4.1 offset偏移量
 
+* 带边框：padding、边框、内容
+
 1. 属性：只读属性，不可赋值，无法更改元素样式
 
-   1）`event.offsetParent`：返回作为该元素带有定位的父级元素，如过父级元素没有定位返回body
+   1）`element.offsetParent`：返回作为该元素带有定位的父级元素，如过父级元素没有定位返回body
 
-   2）`event.offsetTop`：返回元素相对带有定位父元素上方的偏移
+   2）`element.offsetTop`：返回元素相对带有定位父元素上方的偏移
 
-   3）`event.offsetLeft`：返回元素相对带有定位父元素左边框的偏移
+   3）`element.offsetLeft`：返回元素相对带有定位父元素左边框的偏移
 
-   4）`event.offsetWidth`：返回自身包括padding、边框、内容区的宽度，返回数值不带单位
+   4）`element.offsetWidth`：返回自身包括padding、边框、内容区的宽度，返回数值不带单位
 
-   5）`event.offsetHeight`：返回自身包括padding、边框、内容区的高度，返回数值不带单位
+   5）`element.offsetHeight`：返回自身包括padding、边框、内容区的高度，返回数值不带单位
+
+   ```html
+   <style>
+     .father {
+       /* position: relative; */
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+       margin: 150px;
+     }
+     .son {
+       width: 100px;
+       height: 100px;
+       background-color: purple;
+       margin-left: 45px;
+     }
+     .w {
+       height: 200px;
+       background-color: skyblue;
+       margin: 0 auto 200px;
+       padding: 10px;
+       border: 15px solid red;
+     }
+   </style>
+   
+   <div class="father">
+     <div class="son"></div>
+   </div>
+   <div class="w"></div>
+   <script>
+     var father = document.querySelector('.father')
+     var son = document.querySelector('.son')
+     // 1.可以得到元素的偏移位置，返回的不带单位的数值
+     console.log(father.offsetTop)
+     console.log(father.offsetLeft)
+     // 它以带有定位的父亲为准，如果没有父亲或者父亲没有定位，则以body为准
+     console.log(son.offsetLeft)
+     var w = document.querySelector('.w')
+     
+     // 2.可以得到元素的大小：宽度和高度，包含padding + border + width
+     console.log(w.offsetWidth)
+     console.log(w.offsetHeight)
+     
+     // 3. 返回带有定位的父亲，否则返回的是body
+     console.log(son.offsetParent) // 返回带有定位的父亲，否则返回的是body
+     console.log(son.parentNode)   // 对比：返回最近一级的父亲，不管父亲有没有定位
+   </script>
+   ```
 
 2. 与sytle的区别：想获取元素大小位置用offset，想改变元素样式用style
 
@@ -3571,6 +4296,26 @@ wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
    3）offsetWidth 包含 padding+border+width，style.width只包含width
 
    4）offsetWidth是只读属性不能赋值，style.width可读写属性可以赋值
+
+   ```html
+   <style>
+     .box {
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+       padding: 10px;
+     }
+   </style>
+   <div class="box" style="width: 200px"></div>
+   <script>
+     // offset与style的区别
+     var box = document.querySelector('.box')
+     console.log(box.offsetWidth)	// 220
+     console.log(box.style.width)	// 200px
+     // box.offsetWidth = '300px'  // 不能这样修改
+     box.style.width = '300px'
+   </script>
+   ```
 
 3. 案例1：计算鼠标在盒子内的坐标
 
@@ -3603,6 +4348,98 @@ wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
 4. 案例2：模态框拖拽效果（mousedown开始拖拽事件，mouseup取消拖拽监听事件）
 
    ```html
+   <style>
+     .login-header {
+       width: 100%;
+       text-align: center;
+       height: 30px;
+       font-size: 24px;
+       line-height: 30px;
+     }
+     a {
+       text-decoration: none;
+       color: #000000;
+     }
+     .login {
+       display: none;
+       width: 512px;
+       height: 280px;
+       position: fixed;
+       border: #ebebeb solid 1px;
+       left: 50%;
+       top: 50%;
+       background: #ffffff;
+       box-shadow: 0px 0px 20px #ddd;
+       z-index: 9999;
+       transform: translate(-50%, -50%);
+     }
+     .login-title {
+       width: 100%;
+       margin: 10px 0px 0px 0px;
+       text-align: center;
+       line-height: 40px;
+       height: 40px;
+       font-size: 18px;
+       position: relative;
+       cursor: move;
+     }
+     .login-title span {
+       position: absolute;
+       font-size: 12px;
+       right: -20px;
+       top: -30px;
+       background: #ffffff;
+       border: #ebebeb solid 1px;
+       width: 40px;
+       height: 40px;
+       border-radius: 20px;
+     }
+     .login-input-content {
+       margin-top: 20px;
+     }
+     .login-input {
+       overflow: hidden;
+       margin: 0px 0px 20px 0px;
+     }
+     .login-input label {
+       float: left;
+       width: 90px;
+       padding-right: 10px;
+       text-align: right;
+       line-height: 35px;
+       height: 35px;
+       font-size: 14px;
+     }
+     .login-input input.list-input {
+       float: left;
+       line-height: 35px;
+       height: 35px;
+       width: 350px;
+       border: #ebebeb 1px solid;
+       text-indent: 5px;
+     }
+     .login-button {
+       width: 50%;
+       margin: 30px auto 0px auto;
+       line-height: 40px;
+       font-size: 14px;
+       border: #ebebeb 1px solid;
+       text-align: center;
+     }
+     .login-button a {
+       display: block;
+     }
+     .login-bg {
+       display: none;
+       width: 100%;
+       height: 100%;
+       position: fixed;
+       top: 0px;
+       left: 0px;
+       background: rgba(0, 0, 0, 0.3);
+     }
+   </style>
+   
    <div class="login-header"><a id="link" href="javascript:;">点击，弹出登录框</a></div>
    <div id="login" class="login">
      <div id="title" class="login-title">
@@ -3664,64 +4501,97 @@ wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
 
    1）鼠标经过橱窗preview_img，显示/隐藏遮挡层 mask 和放大镜大盒子 big
 
-   ```js
-   preview_img.addEventListener('mouseover', function () {
-     mask.style.display = 'block'
-     big.style.display = 'block'
-   })
-   
-   preview_img.addEventListener('mouseout', function () {
-     mask.style.display = 'none'
-     big.style.display = 'none'
-   })
-   ```
-
    2）鼠标移动时，遮挡层mask跟着鼠标走
-
-   ```js
-   // 由于mask坐标以父盒子为准，应该把鼠标在盒子内的坐标给mask
-   var x = e.pageX - this.offsetLeft
-   var y = e.pageY - this.offsetTop
-   // mask理论移动位置：鼠标盒内坐标 - 盒子宽高的一半
-   var maskX = x - mask.offsetWidth / 2
-   var maskY = y - mask.offsetHeight / 2
-   // 限制条件：mask移动最大距离：橱窗宽度-mask宽度
-   var maskMax = preview_img.offsetWidth - mask.offsetWidth
-   // 限制条件：鼠标移动距离小于mask宽高一半，则不移动；鼠标移动距离大于mask移动最大距离，则定位到最大移动距离坐标
-   if (maskX <= 0) {
-     maskX = 0
-   } else if (maskX >= maskMax) {
-     maskX = maskMax
-   }
-   if (maskY <= 0) {
-     maskY = 0
-   } else if (maskY >= maskMax) {
-     maskY = maskMax
-   }
-   mask.style.left = maskX + 'px'
-   mask.style.top = maskY + 'px'
-   ```
-
+   
    3）鼠标移动时，大图片也跟随mask移动
-
+   
    ```js
-   // 大图片最大移动距离：大图片宽度 - 大盒子宽度
-   var bigMax = bigIMg.offsetWidth - big.offsetWidth
-   // 大图片移动位置：mask位置 * 大图最大移动距离 / mask最大移动距离
-   var bigX = (maskX * bigMax) / maskMax
-   var bigY = (maskY * bigMax) / maskMax
-   bigIMg.style.left = -bigX + 'px'
-   bigIMg.style.top = -bigY + 'px'
+   window.addEventListener('load', function () {
+     var preview_img = document.querySelector('.preview_img')
+     var mask = document.querySelector('.mask')
+     var big = document.querySelector('.big')
+     
+     // 1. 当鼠标经过 preview_img 就显示和隐藏 mask 遮挡层 和 big 大盒子
+     preview_img.addEventListener('mouseover', function () {
+       mask.style.display = 'block'
+       big.style.display = 'block'
+     })
+     preview_img.addEventListener('mouseout', function () {
+       mask.style.display = 'none'
+       big.style.display = 'none'
+     })
+      
+     // 2. 鼠标移动的时候，让黄色的盒子跟着鼠标来走
+     preview_img.addEventListener('mousemove', function (e) {
+       // (1). 先计算出鼠标在盒子内的坐标
+       var x = e.pageX - this.offsetLeft
+       var y = e.pageY - this.offsetTop
+       // (2) 减去盒子高度 300的一半是150，就是mask的最终left和top值了
+       // (3) mask 移动的距离
+       var maskX = x - mask.offsetWidth / 2
+       var maskY = y - mask.offsetHeight / 2
+       // (4) 如果x坐标小于0，就让他停在0的位置
+       // 遮挡层的最大移动距离
+       var maskMax = preview_img.offsetWidth - mask.offsetWidth
+       if (maskX <= 0) {
+         maskX = 0
+       } else if (maskX >= maskMax) {
+         maskX = maskMax
+       }
+       if (maskY <= 0) {
+         maskY = 0
+       } else if (maskY >= maskMax) {
+         maskY = maskMax
+       }
+       mask.style.left = maskX + 'px'
+       mask.style.top = maskY + 'px'
+       
+       // 3. 大图片的移动距离 = 遮挡层移动距离 * 大图片最大移动距离 / 遮挡层的最大移动距离
+       // 大图
+       var bigIMg = document.querySelector('.bigImg')
+       // 大图片最大移动距离
+       var bigMax = bigIMg.offsetWidth - big.offsetWidth
+       // 大图片的移动距离 X Y
+       var bigX = (maskX * bigMax) / maskMax
+       var bigY = (maskY * bigMax) / maskMax
+       bigIMg.style.left = -bigX + 'px'
+       bigIMg.style.top = -bigY + 'px'
+     })
+   })
    ```
+   
 
 ------
 
 #### 3.4.2 client可视区
 
+* 不带边框：padding、内容
+
 1. `event.clientTop`：返回元素上边框大小
+
 2. `event.clientLeft`：返回元素左边框大小
+
 3. `event.clientWidth`：返回自身包括padding、内容区的宽度，不含边框，返回数值不带单位
+
 4. `event.clientHeight`：返回自身包括padding、内容区的高度，不含边框，返回数值不带单位
+
+   ```html
+   <style>
+     div {
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+       border: 10px solid red;
+       padding: 10px;
+     }
+   </style>
+   <div></div>
+   <script>
+     // client与offsetWidth最大的区别就是：不包含边框
+     var div = document.querySelector('div')
+     console.log(div.clientWidth)
+   </script>
+   ```
 
 ------
 
@@ -3745,11 +4615,131 @@ wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
 
    2）语法：`element.addEventListener('scroll', fn)`
 
+   ```html
+   <style>
+     div {
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+       border: 10px solid red;
+       padding: 10px;
+       overflow: auto;
+     }
+   </style>
+   <div>
+     我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 
+   我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容
+     我是内容 我是内容 我是内容 我是内容 我是内容 我是内容 我是内容
+   </div>
+   <script>
+     // scroll 系列
+     var div = document.querySelector('div')
+     console.log(div.scrollHeight) // 290：自身实际高度，不含边框
+     console.log(div.clientHeight) // 220：自身包括padding、内容区的高度，不含边框
+   
+     // scroll滚动事件：当滚动条发生变化会触发的事件
+     div.addEventListener('scroll', function () {
+       console.log(div.scrollTop)	// 在顶部：0；在底部：70
+     })
+   </script>
+   ```
+
 3. 案例：淘宝粘性固定侧边栏
 
    1）原理：计算页面被卷去的头部大小，滚动到指定位置后，侧边栏变为固定定位
 
    2）注意：侧边栏变成固定定位时，需要修改对应的距离顶部值，不然会出现向下跳的情况，返回时也需要修改回原值
+   
+   ```html
+   <style>
+     .slider-bar {
+       position: absolute;
+       left: 50%;
+       top: 300px;
+       margin-left: 600px;
+       width: 45px;
+       height: 130px;
+       background-color: pink;
+     }
+     .w {
+       width: 1200px;
+       margin: 10px auto;
+     }
+     .header {
+       height: 150px;
+       background-color: purple;
+     }
+     .banner {
+       height: 250px;
+       background-color: skyblue;
+     }
+     .main {
+       height: 5000px;
+       background-color: yellowgreen;
+     }
+     span {
+       display: none;
+       position: absolute;
+       bottom: 0;
+     }
+   </style>
+   
+   <div class="slider-bar">
+     <span class="goBack">返回顶部</span>
+   </div>
+   <div class="header w">头部区域</div>
+   <div class="banner w">banner区域</div>
+   <div class="main w">主体部分</div>
+   <script>
+     //1. 获取元素
+     var sliderbar = document.querySelector('.slider-bar')
+     var banner = document.querySelector('.banner')
+     // banner与顶部的距离，用于判断是否令侧边栏显示
+     var bannerTop = banner.offsetTop
+     // 当侧边栏固定定位之后应该变化的数值
+     var sliderbarTop = sliderbar.offsetTop - bannerTop
+     // 获取main 主体元素
+     var main = document.querySelector('.main')
+     var goBack = document.querySelector('.goBack')
+     var mainTop = main.offsetTop
+     // 2. 页面滚动事件 scroll
+     document.addEventListener('scroll', function () {
+       // window.pageYOffset 页面被卷去的头部
+       // 当页面被卷去的头部大于等于banner距离页面顶端高度时，侧边栏就要改为固定定位，与页面顶部始终保持固定距
+       if (window.pageYOffset >= bannerTop) {
+         sliderbar.style.position = 'fixed'
+         sliderbar.style.top = sliderbarTop + 'px'
+       } else {
+         sliderbar.style.position = 'absolute'
+         sliderbar.style.top = '300px'
+       }
+       // 当页面滚动到main盒子，就显示 goback模块
+       if (window.pageYOffset >= mainTop) {
+         goBack.style.display = 'block'
+       } else {
+         goBack.style.display = 'none'
+       }
+     })
+     goBack.addEventListener('click', function () {
+       animate(window, 0)
+     })
+     // 动画函数
+     function animate(obj, target, callback) {
+       clearInterval(obj.timer)
+       obj.timer = setInterval(function () {
+         // obj.offsetLeft 改为 window.pageYOffset
+         var step = (target - window.pageYOffset) / 10
+         step = step > 0 ? Math.ceil(step) : Math.floor(step)
+         if (window.pageYOffset == target) {
+           clearInterval(obj.timer)
+           callback && callback()
+         } else {
+           window.scroll(0, window.pageYOffset + step)
+         }
+       }, 15)
+     }
+   </script>
+   ```
 
 ------
 
@@ -3772,20 +4762,39 @@ wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
 
    2）注意：盒子有绝对定位才能动起来
 
-   ```js
-   function animate(obj, target) {
-     // 当我们不断的点击按钮，这个元素的速度会越来越快，因为开启了太多的定时器
-     // 解决方案：让元素只有一个定时器执行，先清除以前的定时器，只保留当前的一个定时器执行
-     clearInterval(obj.timer)
-     obj.timer = setInterval(function () {
-       if (obj.offsetLeft >= target) {
-         // 停止动画 本质是停止定时器
-         clearInterval(obj.timer)
-       } else {
-         obj.style.left = obj.offsetLeft + 1 + 'px'
-       }
-     }, 30)
-   }
+   ```html
+   <style>
+     div {
+       position: absolute;
+       left: 0;
+       width: 200px;
+       height: 200px;
+       text-align: center;
+       line-height: 200px;
+       background-color: #00e5ee;
+       border-radius: 200px;
+     }
+   </style>
+   
+   <div>大明湖</div>
+   
+   <script>
+     function animate(obj, target) {
+       // 当我们不断的点击按钮，这个元素的速度会越来越快，因为开启了太多的定时器
+       // 解决方案：让元素只有一个定时器执行，先清除以前的定时器，只保留当前的一个定时器执行
+       clearInterval(obj.timer)
+       obj.timer = setInterval(function () {
+         if (obj.offsetLeft >= target) {
+           clearInterval(obj.timer)
+         } else {
+           obj.style.left = obj.offsetLeft + 1 + 'px'
+         }
+       }, 30)
+     }
+     var div = document.querySelector('div')
+     // 调用函数
+     animate(div, 300)
+   </script>
    ```
 
 2. 缓动动画：让盒子每次移动距离变小，速度就会慢下来
@@ -3802,33 +4811,50 @@ wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
    * 写法2：`callback && callback()`（短路运算a && b，当a为真时返回b）
 
    ```js
-   function animate(obj, target, callback) {
-     clearInterval(obj.timer)
-     obj.timer = setInterval(function () {
-       var step = (target - obj.offsetLeft) / 10
-       step = step > 0 ? Math.ceil(step) : Math.floor(step)
-       if (obj.offsetLeft == target) {
-         // 停止动画：本质是停止定时器
-         clearInterval(obj.timer)
-         // 回调函数写到定时器结束里面
-         if (callback) {
-           callback()
+   <style>
+     span {
+       position: absolute;
+       left: 0;
+       top: 200px;
+       display: block;
+       width: 150px;
+       height: 150px;
+       background-color: purple;
+     }
+   </style>
+   <button class="btn800">点击夏雨荷到800</button>
+   <span>夏雨荷</span>
+   <script>
+     function animate(obj, target, callback) {
+       clearInterval(obj.timer)
+       obj.timer = setInterval(function () {
+         var step = (target - obj.offsetLeft) / 10
+         step = step > 0 ? Math.ceil(step) : Math.floor(step)
+         if (obj.offsetLeft == target) {
+           // 停止动画：本质是停止定时器
+           clearInterval(obj.timer)
+           // 回调函数写到定时器结束里面
+           if (callback) {
+             callback()
+           }
+           // 另外写法
+           // callback && callback()
+         } else {
+           obj.style.left = obj.offsetLeft + step + 'px'
          }
-         // 另外写法
-         // callback && callback()
-       } else {
-         obj.style.left = obj.offsetLeft + step + 'px'
-       }
-     }, 15)
-   }
-   btn800.addEventListener('click', function () {
-     animate(span, 800, function () {
-       span.style.backgroundColor = 'red'
+       }, 15)
+     }
+     var span = document.querySelector('span')
+     var btn800 = document.querySelector('.btn800')
+     btn800.addEventListener('click', function () {
+       animate(span, 800, function () {
+         span.style.backgroundColor = 'red'
+       })
      })
-   })
+   </script>
    ```
 
-------
+3. 插件：animate
 
 #### 3.4.5 轮播图特效
 
@@ -4034,6 +5060,113 @@ function animate(obj, target, callback) {
 2. 鼠标离开li，筋斗云恢复原位：mouseleave --> animate(cloud, current)
 3. 鼠标点击li，筋斗云留在当前li：click --> current = this.offsetLeft
 
+```html
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  ul {
+    list-style: none;
+  }
+  body {
+    background-color: black;
+  }
+  .c-nav {
+    width: 900px;
+    height: 42px;
+    background: #fff url(images/rss.png) no-repeat right center;
+    margin: 100px auto;
+    border-radius: 5px;
+    position: relative;
+  }
+  .c-nav ul {
+    position: absolute;
+  }
+  .c-nav li {
+    float: left;
+    width: 83px;
+    text-align: center;
+    line-height: 42px;
+  }
+  .c-nav li a {
+    color: #333;
+    text-decoration: none;
+    display: inline-block;
+    height: 42px;
+  }
+  .c-nav li a:hover {
+    color: white;
+  }
+  .c-nav li.current a {
+    color: #0dff1d;
+  }
+  .cloud {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 83px;
+    height: 42px;
+    background: url(images/cloud.gif) no-repeat;
+  }
+</style>
+
+<script>
+  // 缓动动画函数
+  function animate(obj, target, callback) {
+    clearInterval(obj.timer)
+    obj.timer = setInterval(function () {
+      var step = (target - obj.offsetLeft) / 10
+      step = step > 0 ? Math.ceil(step) : Math.floor(step)
+      if (obj.offsetLeft == target) {
+        clearInterval(obj.timer)
+        // 回调函数写到定时器结束里面
+        callback && callback()
+      }
+      obj.style.left = obj.offsetLeft + step + 'px'
+    }, 15)
+  }
+  // 窗口加载
+  window.addEventListener('load', function () {
+    // 1. 获取元素
+    var cloud = document.querySelector('.cloud')
+    var c_nav = document.querySelector('.c-nav')
+    var lis = c_nav.querySelectorAll('li')
+    // 2. 给所有的小li绑定事件
+    // 这个current 做为筋斗云的起始位置
+    var current = 0
+    for (var i = 0; i < lis.length; i++) {
+      // (1) 鼠标经过把当前小li 的位置做为目标值
+      lis[i].addEventListener('mouseenter', function () {
+        animate(cloud, this.offsetLeft)
+      })
+      // (2) 鼠标离开就回到起始的位置
+      lis[i].addEventListener('mouseleave', function () {
+        animate(cloud, current)
+      })
+      // (3) 当鼠标点击，就把当前位置做为目标值
+      lis[i].addEventListener('click', function () {
+        current = this.offsetLeft
+      })
+    }
+  })
+</script>
+
+<div id="c_nav" class="c-nav">
+  <span class="cloud"></span>
+  <ul>
+    <li class="current"><a href="#">首页新闻</a></li>
+    <li><a href="#">师资力量</a></li>
+    <li><a href="#">活动策划</a></li>
+    <li><a href="#">企业文化</a></li>
+    <li><a href="#">招聘信息</a></li>
+    <li><a href="#">公司简介</a></li>
+    <li><a href="#">我是佩奇</a></li>
+    <li><a href="#">啥是佩奇</a></li>
+  </ul>
+</div>
+```
+
 ------
 
 #### 3.4.8 移动端特效
@@ -4048,6 +5181,32 @@ function animate(obj, target, callback) {
 
    3）`touchend`：手指离开元素
 
+   ```html
+   <style>
+     div {
+       width: 100px;
+       height: 100px;
+       background-color: pink;
+     }
+   </style>
+   <div></div>
+   <script>
+     // 1. 手指触摸DOM元素事件
+     var div = document.querySelector('div')
+     div.addEventListener('touchstart', function () {
+       console.log('我摸了你')
+     })
+     // 2. 手指在DOM元素身上移动事件
+     div.addEventListener('touchmove', function () {
+       console.log('我继续摸')
+     })
+     // 3. 手指离开DOM元素事件
+     div.addEventListener('touchend', function () {
+       console.log('轻轻的我走了')
+     })
+   </script>
+   ```
+
 2. 事件对象：
 
    1）`e.touches`：正在触摸屏幕的所有手指的列表
@@ -4055,6 +5214,32 @@ function animate(obj, target, callback) {
    2）`e.targetTouches`：正在触摸当前DOM元素上的手指列表
 
    3）`e.changedTouches`：手指状态发生改变的列表
+
+   ```html
+   <style>
+     div {
+       width: 100px;
+       height: 100px;
+       background-color: pink;
+     }
+   </style>
+   <div></div>
+   <script>
+     // 1. 手指触摸DOM元素事件
+     var div = document.querySelector('div')
+     div.addEventListener('touchstart', function (e) {
+       // 得到正在触摸dom元素的第一个手指的相关信息：如手指的坐标等等
+       console.log(e.targetTouches[0])
+     })
+     // 2. 手指在DOM元素身上移动事件
+     div.addEventListener('touchmove', function () {})
+     // 3. 手指离开DOM元素事件
+     div.addEventListener('touchend', function (e) {
+       // 当手指离开屏幕的时候，就没有了 touches 和 targetTouches 列表，但会有changedTouches
+       console.log(e.changedTouches[0])
+     })
+   </script>
+   ```
 
 3. click事件延迟300ms：
 
@@ -4115,6 +5300,47 @@ function animate(obj, target, callback) {
    ```
 
    3）阻止屏幕滚动默认行为：`e.preventDefault()`
+   
+   ```html
+   <!--案例：手指移动盒子-->
+   <style>
+     div {
+       position: absolute;
+       left: 0;
+       width: 100px;
+       height: 100px;
+       background-color: pink;
+     }
+   </style>
+   <div></div>
+   <script>
+     // （1） 触摸元素 touchstart： 获取手指初始坐标，同时获得盒子原来的位置
+     // （2） 移动手指 touchmove： 计算手指的滑动距离，并且移动盒子
+     // （3） 离开手指 touchend:
+     var div = document.querySelector('div')
+     var startX = 0
+     var startY = 0
+     var x = 0 
+     var y = 0
+     div.addEventListener('touchstart', function (e) {
+       //  获取手指初始坐标
+       startX = e.targetTouches[0].pageX
+       startY = e.targetTouches[0].pageY
+       // 获得盒子原来的位置
+       x = this.offsetLeft
+       y = this.offsetTop
+     })
+     div.addEventListener('touchmove', function (e) {
+       //  计算手指的移动距离： 手指移动之后的坐标减去手指初始的坐标
+       var moveX = e.targetTouches[0].pageX - startX
+       var moveY = e.targetTouches[0].pageY - startY
+       // 移动盒子：盒子原来的位置 + 手指移动的距离
+       this.style.left = x + moveX + 'px'
+       this.style.top = y + moveY + 'px'
+       e.preventDefault() // 阻止屏幕滚动的默认行为
+     })
+   </script>
+   ```
 
 ##### 3.4.8.3 移动端轮播图
 

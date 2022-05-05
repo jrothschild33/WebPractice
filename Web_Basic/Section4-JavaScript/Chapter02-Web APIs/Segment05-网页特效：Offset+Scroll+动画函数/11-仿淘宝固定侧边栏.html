@@ -15,27 +15,22 @@
         height: 130px;
         background-color: pink;
       }
-
       .w {
         width: 1200px;
         margin: 10px auto;
       }
-
       .header {
         height: 150px;
         background-color: purple;
       }
-
       .banner {
         height: 250px;
         background-color: skyblue;
       }
-
       .main {
         height: 5000px;
         background-color: yellowgreen;
       }
-
       span {
         display: none;
         position: absolute;
@@ -63,12 +58,11 @@
       var main = document.querySelector('.main')
       var goBack = document.querySelector('.goBack')
       var mainTop = main.offsetTop
+
       // 2. 页面滚动事件 scroll
       document.addEventListener('scroll', function () {
-        // console.log(11);
         // window.pageYOffset 页面被卷去的头部
-        // console.log(window.pageYOffset);
-        // 3 .当我们页面被卷去的头部大于等于了 172 此时 侧边栏就要改为固定定位
+        // 当页面被卷去的头部大于等于banner距离页面顶端高度时，侧边栏就要改为固定定位，与页面顶部始终保持固定距离
         if (window.pageYOffset >= bannerTop) {
           sliderbar.style.position = 'fixed'
           sliderbar.style.top = sliderbarTop + 'px'
@@ -76,11 +70,18 @@
           sliderbar.style.position = 'absolute'
           sliderbar.style.top = '300px'
         }
-        // 4. 当我们页面滚动到main盒子，就显示 goback模块
+
+        // 当页面滚动到main盒子，就显示 goback模块
         if (window.pageYOffset >= mainTop) {
           goBack.style.display = 'block'
         } else {
           goBack.style.display = 'none'
+        }
+      })
+
+      goBack.addEventListener('click', function () {
+        if (this.style.display == 'block') {
+          window.scroll(0, 0)
         }
       })
 

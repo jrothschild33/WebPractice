@@ -25,9 +25,9 @@
     <script>
       // scroll 系列
       var div = document.querySelector('div')
-      console.log(div.scrollHeight)
-      console.log(div.clientHeight)
-      // scroll滚动事件当我们滚动条发生变化会触发的事件
+      console.log(div.scrollHeight) // 290：自身实际高度，不含边框
+      console.log(div.clientHeight) // 220：自身包括padding、内容区的高度，不含边框
+      // scroll滚动事件：当滚动条发生变化会触发的事件
       div.addEventListener('scroll', function () {
         console.log(div.scrollTop)
       })

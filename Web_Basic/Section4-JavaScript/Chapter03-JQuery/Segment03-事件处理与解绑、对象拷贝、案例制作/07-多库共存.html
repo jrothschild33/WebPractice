@@ -1,31 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
     <script src="jquery.min.js"></script>
     <script>
-        $(function() {
-            function $(ele) {
-                return document.querySelector(ele);
-            }
-            console.log($("div"));
-            // 1. 如果$ 符号冲突 我们就使用 jQuery
-            jQuery.each();
-            // 2. 让jquery 释放对$ 控制权 让用户自己决定
-            var suibian = jQuery.noConflict();
-            console.log(suibian("span"));
-            suibian.each();
-        })
-    </script>
-</head>
+      // 定义一个$()函数
+      function $(ele) {
+        return document.querySelector(ele)
+      }
+      console.log($('div'))
 
-<body>
+      // 1. 如果$符号冲突，可使用jQuery
+      jQuery.each()
+
+      // 2. jquery释放对$控制权，让用户自己决定
+      var suibian = jQuery.noConflict()
+      console.log(suibian('span'))
+      suibian.each()
+    </script>
+  </head>
+
+  <body>
     <div></div>
     <span></span>
-</body>
-
+  </body>
 </html>

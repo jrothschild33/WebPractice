@@ -1070,7 +1070,7 @@ console.log('该数组里面的最大值是：' + max)
    ```js
    var arr = [10, 30, 4]
    var flag = arr.some(function (value) {
-     return value < 3
+     return value < 3	// false
    })
    console.log(flag)
    
@@ -1078,12 +1078,10 @@ console.log('该数组里面的最大值是：' + max)
    var flag1 = arr1.some(function (value) {
      return value == 'pink'
    })
-   console.log(flag1)
+   console.log(flag1)	// true
    ```
 
    2）注意：如果在内部函数中写return，一定要跟true终止迭代，否则一直循环下去
-
-   3）区别：forEach、filter中的函数如果写return，不会终止迭代，而some会
 
    ```js
    // 查找数组中唯一对象，并返回该完整对象
@@ -1117,6 +1115,36 @@ console.log('该数组里面的最大值是：' + max)
      }
    })
    console.log(arr)
+   ```
+   
+   3）区别：forEach、filter中的函数如果写return，不会终止迭代，而some会
+   
+   ```js
+   var arr = ['red', 'green', 'blue', 'pink']
+   // forEach遍历
+   arr.forEach(function (value) {
+     if (value == 'green') {
+       console.log('找到了该元素')
+       return true // forEach里面return true不会终止迭代
+     }
+     console.log(11)
+   })
+   // some遍历：适合查询数组中唯一的元素
+   arr.some(function (value) {
+     if (value == 'green') {
+       console.log('找到了该元素')
+       return true // some里面return true就是终止遍历，迭代效率更高
+     }
+     console.log(11)
+   })
+   // filter筛选
+   arr.filter(function (value) {
+     if (value == 'green') {
+       console.log('找到了该元素')
+       return true // filter里面return true不会终止迭代
+     }
+     console.log(11)
+   })
    ```
 
 #### 2.5.14 数组去重
@@ -1322,6 +1350,28 @@ alert(str)
 
 1. `str.trim()`：去除两端空白字符，不影响字符串本身，返回一个新字符串
 
+   ```js
+   <!--案例：输入框自动去除两端空格（无法去除中间空格）-->
+   <input type="text" /> <button>点击</button>
+   <script>
+     var input = document.querySelector('input')
+     var btn = document.querySelector('button')
+     var div = document.querySelector('div')
+     btn.onclick = function () {
+       var str = input.value.trim()
+       if (str === '') {
+         alert('请输入内容')
+       } else {
+         console.log(str)
+         console.log(str.length)
+         div.innerHTML = str
+       }
+     }
+   </script>
+   ```
+
+   
+
 ------
 
 ### 2.7 函数 Function
@@ -1497,6 +1547,17 @@ alert(str)
    * thisArg：当前调用函数this的指向对象
    * argsArray：传递的值，必须包含在【数组】里
 
+   ```js
+   var o = {
+     name: 'andy',
+   }
+   function fn(arr) {
+     console.log(this)	// 对象o：{name: 'andy'}
+     console.log(arr)  // pink
+   }
+   fn.apply(o, ['pink'])
+   ```
+
    2）应用：数组求最大最小值
 
    ```js
@@ -1555,6 +1616,37 @@ alert(str)
 
    5）案例2：Tab栏增删改内容完善（不需要在外部声明that，直接内部修改this指向即可）
 
+   ```html
+   <div class="tabsbox" id="tab">
+     <!-- tab 标签 -->
+     <nav class="fisrstnav">
+       <ul>
+         <li class="liactive">
+           <span>测试1</span>
+           <span class="iconfont icon-guanbi"></span>
+         </li>
+         <li>
+           <span>测试2</span>
+           <span class="iconfont icon-guanbi"></span>
+         </li>
+         <li>
+           <span>测试3</span>
+           <span class="iconfont icon-guanbi"></span>
+         </li>
+       </ul>
+       <div class="tabadd">
+         <span>+</span>
+       </div>
+     </nav>
+     <!-- tab 内容 -->
+     <div class="tabscon">
+       <section class="conactive">测试1</section>
+       <section>测试2</section>
+       <section>测试3</section>
+     </div>
+   </div>
+   ```
+   
    ```js
    class Tab {
      constructor(id) {
@@ -1670,13 +1762,16 @@ alert(str)
    1）为整个脚本(script标签)开启严格模式
 
    ```html
-   <script> 'use strict'; </script>
+   <!--方法1-->
+   <script> 'use strict'; ...</script>
+   <!--方法2-->
+   <script>(function(){'use strict'; ...})()</script>
    ```
 
    2）为某个函数开启严格模式
 
    ```js
-   function fn() { 'use strict'; .... }
+   function fn() {'use strict'; ...}
    ```
 
 5. 特性：
@@ -1894,12 +1989,38 @@ alert(str)
 2. 方法1：用for循环拷贝对象
 
    ```js
+   var obj = {
+     id: 1,
+     name: 'andy',
+     msg: {
+       age: 18,
+     },
+   }
+   var o = {}
    for (var k in obj) {
      o[k] = obj[k]
    }
+   console.log(o)			// {id: 1,name: 'andy',msg: {age: 18,},}
+   o.msg.age = 20
+   console.log(obj)		// 原对象也跟随改变：{id: 1,name: 'andy',msg: {age: 18}}
    ```
 
 3. 方法2：`Object.assign（拷贝对象，原对象）`
+
+   ```js
+   var obj = {
+     id: 1,
+     name: 'andy',
+     msg: {
+       age: 18,
+     },
+   }
+   var o = {}
+   Object.assign(o, obj)
+   console.log(o)			// {id: 1,name: 'andy',msg: {age: 18,},}
+   o.msg.age = 20
+   console.log(obj)		// 原对象也跟随改变：{id: 1,name: 'andy',msg: {age: 18}}
+   ```
 
 ##### 2.7.10.2 深拷贝
 
@@ -2085,26 +2206,38 @@ alert(str)
 
 #### 2.10.1 创建对象
 
-1. 字面量法：`var 对象名 = {key1：value1，key2：value2，key3：function(){}....}`
+##### 2.10.1.1 字面量法
 
-   ```js
-   var obj = {
-     uname: '张三疯',
-     age: 18,
-     sex: '男',
-     sayHi: function () {
-       console.log('hi~')
-     },
-   }
-   ```
+* 语法：`var 对象名 = {key1：value1，key2：value2，key3：function(){}....}`
 
-2. new Object：
+```js
+var obj = {
+  uname: '张三疯',
+  age: 18,
+  sex: '男',
+  sayHi: function () {
+    console.log('hi~')
+  },
+}
+```
 
-   1）语法：var 对象名 = new Object()
+##### 2.10.1.2 new关键字
 
-   2）对象名.属性名 = 属性
+1. 语法：`var 对象名 = new Object()`
 
-   3）对象名.方法名 = function() {...}
+2. 定义属性：`对象名.属性名 = 属性`
+
+3. 定义方法：`对象名.方法名 = function() {...}`
+
+4. new关键字执行过程
+
+   1）new 构造函数可以在内存中创建了一个空的对象
+
+   2）this 就会指向刚才创建的空对象
+
+   3）执行构造函数里面的代码 给这个空对象添加属性和方法
+
+   5）返回这个对象
 
    ```js
    var obj = new Object()
@@ -2116,7 +2249,15 @@ alert(str)
    }
    ```
 
-3. 构造函数法：如果需要重复引用同一个对象进行定义，可以利用函数的方法重复相同的代码，称为构造函数
+##### 2.10.1.3 构造函数
+
+1. 定义：如果需要重复引用同一个对象进行定义，可以利用函数的方法重复相同的代码，称为构造函数
+
+2. 目前大多数浏览器的JS是ES5版本，少部分高版本浏览器支持ES6；ES5中的对象不是基于类创建的，而是基于构造函数创建的
+
+3. 缺点：存在浪费内存的问题，每进行一次实例化，便新开辟一个内存空间
+
+4. 规则：
 
    1）构造函数名字首字母要大写
 
@@ -2126,24 +2267,37 @@ alert(str)
 
    4）属性和方法前面必须添加`this`
 
+5. 语法：`function Classname(arg1,arg2,...){this.attr1=arg1 this.attr2=arg2 this.method=function(){...}}`
+
    ```js
-   // new关键字执行过程
-   // 1. new 构造函数可以在内存中创建了一个空的对象
-   // 2. this 就会指向刚才创建的空对象
-   // 3. 执行构造函数里面的代码 给这个空对象添加属性和方法
-   // 4. 返回这个对象
-   function Star(uname, age, sex) {
-     this.name = uname
+   function Star(uname, age) {
+     this.uname = uname
      this.age = age
-     this.sex = sex
-     this.sing = function (sang) {
-       console.log(sang)
+     this.sing = function () {
+       console.log('我会唱歌')
      }
    }
-   
    // 创建新对象
-   var ldh = new Star('刘德华', 18, '男'); 
+   var ldh = new Star('刘德华',18)
    ```
+
+6. 实例成员：构造函数内部通过this添加的成员，只能通过实例化的对象来访问
+
+   ```js
+   // 构造函数Star的age属性，只能通过以下方法访问
+   var ldh = new Star('刘德华',48)
+   ldh.age
+   ```
+
+7. 静态成员：在构造函数本身上添加的成员（在外部后添加的），只能通过构造函数来访问，不能通过实例化对象来访问
+
+   ```js
+   // 构造函数Star没有sex属性，只能通过以下方法访问
+   Star.sex = '男'
+   Star.sex
+   ```
+
+------
 
 #### 2.10.2 调用对象
 
@@ -2217,11 +2371,11 @@ alert(str)
 
 ------
 
-### 2.11 内置对象
+#### 2.10.5 内置对象
 
 > 内置对象：JS已经定义好的，直接拿来使用即可，都是首字母大写的。
 
-#### 2.11.1 Math对象
+###### 2.11.1 Math对象
 
 1. 定义：不是构造函数，不用new实例化
 
@@ -2292,7 +2446,7 @@ alert(str)
    document.write(numArray)
    ```
 
-#### 2.11.2 Date对象
+###### 2.11.2 Date对象
 
 1. 定义：是构造函数，需要new实例化
 
@@ -2392,7 +2546,7 @@ alert(str)
    ```
    
 
-#### 2.11.3 扩展内置对象
+###### 2.11.3 扩展内置对象
 
 1. 作用：通过原型对象prototype，对JS内置对象进行扩展自定义的方法，如给Array添加求和的功能
 
@@ -2424,11 +2578,146 @@ alert(str)
 
 ------
 
-### 2.12 类 Class
+#### 2.10.6 原型 Proto
+
+##### 2.10.6.1 原型对象：prototype
+
+1. 定义：
+
+   1）每个构造函数都有一个prototype属性，指向另一个【对象】，这个对象的所有属性和方法，都会被构造函数拥有
+
+   2）把不变的方法直接定义在 prototype 对象上，所有对象实例都可以共享这些方法，可以有效解决浪费内存问题
+
+2. 语法：`Object.prototype.method = function() {...}`
+
+   1）一般来说，公共属性定义到构造函数里面，公共的方法放到原型对象身上
+
+   2）用原型在外部定义的成员，可以通过实例对象访问
+
+   ```js
+   // 构造函数创建Star类
+   function Star(uname, age) {
+     this.uname = uname
+     this.age = age
+   }
+   // 使用原型对象在外部定义sing方法，可以通过实例对象ldh或zxy访问（如果直接用Star.sing定义，实例对象无法调用）
+   Star.prototype.sing = function () {
+     console.log('我会唱歌')
+   }
+   
+   var ldh = new Star('刘德华', 18)
+   var zxy = new Star('张学友', 19)
+   
+   console.log(ldh.sing === zxy.sing)	// true
+   ldh.sing()	// 我会唱歌
+   zxy.sing()	// 我会唱歌
+   ```
+
+##### 2.10.6.2 对象原型: `__proto__`
+
+1. 定义：每个对象都会有一个属性`__proto__`指向【构造函数】的【原型对象prototype】，之所以对象可以使用【构造函数】的【原型对象prototype】的属性和方法，就是因为对象有`__proto__`原型存在
+
+2. 实例化对象的`__proto__`指向【构造函数】的【原型对象prototype】
+
+   ```js
+   var ldh = new Star(...)
+   console.log(ldh.__proto__ === Star.prototype)  // ture
+   ```
+
+3. 方法的查找规则：
+
+   1）首先先看ldh对象身上是否有sing方法，如果有就执行这个对象上的sing
+
+   2）如果没有sing这个方法，因为有`__proto__`的存在，就去【构造函数Star】的【原型对象prototype】身上去查找sing这个方法
+
+   3)`__proto__`对象原型的意义就在于为对象成员查找机制提供一个方向，或者说一条路线
+
+##### 2.10.6.3 构造函数 Constructor
+
+1. 定义：
+
+   1）【对象原型（`__proto__`）】和【构造函数】的【原型对象（`prototype`）】里都有一个`constructor`属性，指回【构造函数】本身
+
+   2）用于记录该对象引用于哪个构造函数，可以让原型对象prototype重新指向原来的构造函数
+
+   ```js
+   function Star(uname, age) {
+     this.uname = uname
+     this.age = age
+   }
+   console.log(ldh.__proto__.constructor === Star.prototype.constructor)  // ture
+   ```
+
+2. 作用：由于通过【原型对象prototype】定义公共的方法，而方法往往有多个，不可能重复书写，此时需要重新定义【原型对象prototype】
+
+   1）单一公共方法的定义
+
+   ```js
+   Star.prototype.sing = function () {
+     console.log('我会唱歌')
+   }
+   ```
+
+   2）多个公共方法的定义：此处修改了原来的原型对象，给原型对象赋值的是一个对象，则必须手动的利用constructor指回原来的构造函数
+
+   ```js
+   Star.prototype = {
+     constructor: Star,
+     sing: function () {
+       console.log('我会唱歌')
+     },
+     movie: function () {
+       console.log('我会演电影')
+     },
+   }
+   ```
+
+##### 2.10.6.4 原型链
+
+![原型链](D:\MyProjects\Website\Tutoring\Web_Basic\Section4-JavaScript\src\原型链.png)
+
+1. 只要是对象就有`__proto__`原型，指向原型对象【Object.prototype】
+
+   ```js
+   // 三者等价
+   ldh.__proto__.__proto__
+   Star.prototype.__proto__
+   Object.prototype
+   ```
+
+2. 【Object.prototype】原型对象里面的`__proto__`原型，指向为 null
+
+   ```js
+   Object.prototype.__proto__ === null
+   ```
+
+3. 成员查找规则（就近原则）
+
+   1）先看 `ldh` 自身是否有该属性/方法
+
+   2）没有的话查找它的原型 `Star.prototype`（即 `ldh.__proto__` 所指向的）
+
+   3）还没有的话查找原型对象的原型 `Object.prototype`（即 `Star.prototype.__proto__` 所指向的）
+
+   4）再没有的话，返回 `Object.prototype.__proto__`，即 `null`
+
+   5）注意：ldh、Star、Object身上可能有相同属性名但不同属性值的情况，此时要就近原则查找
+
+##### 2.10.6.5 this指向
+
+1. 都指向实例对象 ldh：
+
+   1）构造函数 Star(){...} 中的this
+
+   2）原型对象函数 Star.prototype.sing = function() {...} 中的this
+
+------
+
+### 2.11 类 Class
 
 > 类是语法糖：语法糖就是一种便捷写法，如果有2种方法可以实现同样的功能，但其中一种写法更清晰方便，这种方法称为语法糖。
 
-#### 2.12.1 创建类
+#### 2.11.1 创建类
 
 1. 类必须使用new实例化对象
 
@@ -2474,7 +2763,7 @@ alert(str)
 
    4）类创建的实例对象有`__proto__`原型指向类的原型对象：`ldh.__proto__ === Star.prototype`
 
-#### 2.12.2 类的方法
+#### 2.11.2 类的方法
 
 1. 语法：直接写到类里面即可，在constructor下面写
 
@@ -2493,9 +2782,9 @@ alert(str)
    }
    ```
 
-#### 2.12.3 类的继承
+#### 2.11.3 类的继承
 
-##### 2.12.3.1 ES6之后继承
+##### 2.11.3.1 ES6之后继承
 
 1. 就近原则：
 
@@ -2505,13 +2794,41 @@ alert(str)
 
 2. extends关键字：`class Son extends Father {...}`
 
+   ```js
+   class Father {
+     constructor() {}
+     money() {
+       console.log(100)
+     }
+   }
+   class Son extends Father {}
+   var son = new Son()
+   son.money()
+   ```
+
 3. super关键字：用于访问和调用父类上的函数，可以调用父类的构造函数、普通函数
 
    1）调用构造函数
 
    ```js
-   class Father{ constructor(x ,y) {...} }
-   class Son extends Father {constructor(x,y) {super(x,y)} }
+   class Father {
+     constructor(x, y) {
+       this.x = x
+       this.y = y
+     }
+     sum() {
+       console.log(this.x + this.y)
+     }
+   }
+   class Son extends Father {
+     constructor(x, y) {
+       super(x, y) //调用了父类中的构造函数
+     }
+   }
+   var son = new Son(1, 2)
+   var son1 = new Son(11, 22)
+   son.sum()
+   son1.sum()
    ```
 
    2）调用普通函数
@@ -2567,7 +2884,7 @@ alert(str)
    son.say()
    ```
 
-##### 2.12.3.2 ES6之前继承
+##### 2.11.3.2 ES6之前继承
 
 1. 组合继承：构造函数+原型对象，模拟实现继承
 
@@ -2604,7 +2921,7 @@ alert(str)
    Son.prototype.constructor = Son
    ```
 
-#### 2.12.4 this指向
+#### 2.11.4 this指向
 
 1. constructor中的this指向的是创建的实例对象
 
@@ -2649,188 +2966,17 @@ alert(str)
 
 ------
 
-### 2.13 构造函数 Constructor
-
-1. 目前大多数浏览器的JS是ES5版本，少部分高版本浏览器支持ES6；ES5中的对象不是基于类创建的，而是基于构造函数创建的
-
-2. 缺点：存在浪费内存的问题，每进行一次实例化，便新开辟一个内存空间
-
-3. 语法：`function Classname(arg1,arg2,...){this.attr1=arg1 this.attr2=arg2 this.method=function(){...}}`
-
-   ```js
-   function Star(uname, age) {
-     this.uname = uname
-     this.age = age
-     this.sing = function () {
-       console.log('我会唱歌')
-     }
-   }
-   ```
-
-4. 实例成员：构造函数内部通过this添加的成员，只能通过实例化的对象来访问
-
-   ```js
-   // 构造函数Star的age属性，只能通过以下方法访问
-   var ldh = new Star('刘德华',40)
-   ldh.age
-   ```
-
-5. 静态成员：在构造函数本身上添加的成员（在外部后添加的），只能通过构造函数来访问，不能通过实例化对象来访问
-
-   ```js
-   // 构造函数Star没有sex属性，只能通过以下方法访问
-   Star.sex = '男'
-   Star.sex
-   ```
-
-------
-
-### 2.14 原型 Proto
-
-#### 2.14.1 原型对象：prototype
-
-1. 定义：
-
-   1）每个构造函数都有一个prototype属性，指向另一个【对象】，这个对象的所有属性和方法，都会被构造函数拥有
-
-   2）把不变的方法直接定义在 prototype 对象上，所有对象实例都可以共享这些方法，可以有效解决浪费内存问题
-
-2. 语法：`Object.prototype.method = function() {...}`
-
-   1）一般来说，公共属性定义到构造函数里面，公共的方法放到原型对象身上
-
-   2）用原型在外部定义的成员，可以通过实例对象访问
-
-   ```js
-   // 构造函数创建Star类
-   function Star(uname, age) {
-     this.uname = uname
-     this.age = age
-   }
-   // 使用原型对象在外部定义sing方法，可以通过实例对象ldh或zxy访问（如果直接用Star.sing定义，实例对象无法调用）
-   Star.prototype.sing = function () {
-     console.log('我会唱歌')
-   }
-   
-   var ldh = new Star('刘德华', 18)
-   var zxy = new Star('张学友', 19)
-   
-   console.log(ldh.sing === zxy.sing)	// true
-   ldh.sing()	// 我会唱歌
-   zxy.sing()	// 我会唱歌
-   ```
-
-#### 2.14.2 对象原型: `__proto__`
-
-1. 定义：每个对象都会有一个属性`__proto__`指向【构造函数】的【原型对象prototype】，之所以对象可以使用【构造函数】的【原型对象prototype】的属性和方法，就是因为对象有`__proto__`原型存在
-
-2. 实例化对象的`__proto__`指向【构造函数】的【原型对象prototype】
-
-   ```js
-   var ldh = new Star(...)
-   console.log(ldh.__proto__ === Star.prototype)  // ture
-   ```
-
-3. 方法的查找规则：
-
-   1）首先先看ldh对象身上是否有sing方法，如果有就执行这个对象上的sing
-
-   2）如果没有sing这个方法，因为有`__proto__`的存在，就去【构造函数Star】的【原型对象prototype】身上去查找sing这个方法
-
-   3)`__proto__`对象原型的意义就在于为对象成员查找机制提供一个方向，或者说一条路线
-
-#### 2.14.3 构造函数 Constructor
-
-1. 定义：
-
-   1）【对象原型（`__proto__`）】和【构造函数】的【原型对象（`prototype`）】里都有一个`constructor`属性，指回【构造函数】本身
-
-   2）用于记录该对象引用于哪个构造函数，可以让原型对象prototype重新指向原来的构造函数
-
-   ```js
-   function Star(uname, age) {
-     this.uname = uname
-     this.age = age
-   }
-   console.log(ldh.__proto__.constructor === Star.prototype.constructor)  // ture
-   ```
-
-2. 作用：由于通过【原型对象prototype】定义公共的方法，而方法往往有多个，不可能重复书写，此时需要重新定义【原型对象prototype】
-
-   1）单一公共方法的定义
-
-   ```js
-   Star.prototype.sing = function () {
-     console.log('我会唱歌')
-   }
-   ```
-
-   2）多个公共方法的定义：此处修改了原来的原型对象，给原型对象赋值的是一个对象，则必须手动的利用constructor指回原来的构造函数
-
-   ```js
-   Star.prototype = {
-     constructor: Star,
-     sing: function () {
-       console.log('我会唱歌')
-     },
-     movie: function () {
-       console.log('我会演电影')
-     },
-   }
-   ```
-
-#### 2.14.4 原型链 Object.prototype
-
-![原型链](D:\MyProjects\Website\Tutoring\Web_Basic\Section4-JavaScript\src\原型链.png)
-
-1. 只要是对象就有`__proto__`原型，指向原型对象【Object.prototype】
-
-   ```js
-   // 三者等价
-   ldh.__proto__.__proto__
-   Star.prototype.__proto__
-   Object.prototype
-   ```
-
-2. 【Object.prototype】原型对象里面的`__proto__`原型，指向为 null
-
-   ```js
-   Object.prototype.__proto__ === null
-   ```
-
-3. 成员查找规则（就近原则）
-
-   1）先看 `ldh` 自身是否有该属性/方法
-
-   2）没有的话查找它的原型 `Star.prototype`（即 `ldh.__proto__` 所指向的）
-
-   3）还没有的话查找原型对象的原型 `Object.prototype`（即 `Star.prototype.__proto__` 所指向的）
-
-   4）再没有的话，返回 `Object.prototype.__proto__`，即 `null`
-
-   5）注意：ldh、Star、Object身上可能有相同属性名但不同属性值的情况，此时要就近原则查找
-
-#### 2.14.5 this指向
-
-1. 都指向实例对象 ldh：
-
-   1）构造函数 Star(){...} 中的this
-
-   2）原型对象函数 Star.prototype.sing = function() {...} 中的this
-
-------
-
-### 2.15 正则表达式
+### 2.12 正则表达式
 
 > Regular Expression，用于匹配字符串中字符组合的模式，在JS中正则表达式也是对象。
 
-#### 2.15.1 创建正则表达式
+#### 2.12.1 创建正则表达式
 
 1. 调用RegExp对象的构造函数：`var 变量名 = new RegExp(/表达式/)`
 2. 利用字面量创建：`var 变量名 = /表达式/`
 3. 注意：正则表达式里面不需要加引号，不管是数字型还是字符串型
 
-#### 2.15.2 测试正则表达式
+#### 2.12.2 测试正则表达式
 
 1. 检测字符串是否符合规则，返回布尔值
 
@@ -2843,7 +2989,7 @@ alert(str)
 
 3. 正则测试工具：[http://tool.oschina.net/regex](http://tool.oschina.net/regex)
 
-#### 2.15.3 检索正则表达式
+#### 2.12.3 检索正则表达式
 
 1. exec()函数：`regObj.exec(string)`，用于检索字符串中的正则表达式的匹配，如果有匹配的值，返回该匹配值，否则返回null
 
@@ -2855,11 +3001,11 @@ alert(str)
    // 输出结果：['o', index: 4, input: 'hello', groups: undefined]
    ```
 
-#### 2.15.4 元字符
+#### 2.12.4 元字符
 
 * 在正则表达式中具有特殊意义的专用符号，如：^、$、+ 等
 
-##### 2.15.4.1 边界符
+##### 2.12.4.1 边界符
 
 1. `^`：表示匹配行首的文本
 
@@ -2887,56 +3033,66 @@ alert(str)
    console.log(reg1.test('abcabc')) // false
    ```
 
-##### 2.15.4.2 字符类
+##### 2.12.4.2 字符类
 
 * 定义：表示有一系列字符可供选择，只要匹配其中一个就可以了，所有可供选择的字符都放在方括号内。
 
 1. `[]`：只要包含里面任意一个字符即可
 
-  ```js
-  var rg = /[abc]/ // 只要包含有a 或者 包含有b 或者包含有c 都返回为true
-  console.log(rg.test('andy'))
-  console.log(rg.test('baby'))
-  console.log(rg.test('color'))
-  console.log(rg.test('red'))
-  ```
+   ```js
+   var rg = /[abc]/ // 只要包含有a 或者 包含有b 或者包含有c 都返回为true
+   console.log(rg.test('andy'))
+   console.log(rg.test('baby'))
+   console.log(rg.test('color'))
+   console.log(rg.test('red'))
+   ```
 
 2. `^[]$`：只能是包含其中任意一个字符的单个字符
 
-  ```js
-  var rg1 = /^[abc]$/ // 三选一 只有是a 或者是 b  或者是c 这三个字母才返回 true
-  console.log(rg1.test('aa'))
-  console.log(rg1.test('a'))
-  console.log(rg1.test('b'))
-  console.log(rg1.test('c'))
-  console.log(rg1.test('abc'))
-  ```
+   ```js
+   var rg1 = /^[abc]$/ // 三选一，只有是a或b或c这三个字母才返回 true
+   console.log(rg1.test('aa'))
+   console.log(rg1.test('a'))
+   console.log(rg1.test('b'))
+   console.log(rg1.test('c'))
+   console.log(rg1.test('abc'))
+   ```
 
 3. `[-]`：表示范围，如`[a-z]`代表包含任意26个字母之一即可
 
-  ```js
-  var reg = /^[a-z]$/ // 26个英文字母任何一个字母返回true，- 表示的是a到z的范围
-  console.log(reg.test('a'))
-  console.log(reg.test('z'))
-  console.log(reg.test(1))
-  console.log(reg.test('A'))
-  ```
+   ```js
+   var reg = /^[a-z]$/ // 26个英文字母任何一个字母返回true，- 表示的是a到z的范围
+   console.log(reg.test('a'))
+   console.log(reg.test('z'))
+   console.log(reg.test(1))
+   console.log(reg.test('A'))
+   ```
 
 4. `^[a-zA-Z0-9_-]$`：26个大小写英文字母+0-9数字+下划线_+短横线-，包含任意其中之一的一个
 
+   ```js
+   var reg1 = /^[a-zA-Z0-9_-]$/ // 26个大小写英文字母+0-9数字+下划线_+短横线-，包含任意其中之一的一个，返回true
+   console.log(reg1.test('1'))
+   console.log(reg1.test('B'))
+   console.log(reg1.test(8))
+   console.log(reg1.test('-'))
+   console.log(reg1.test('_'))
+   console.log(reg1.test('!'))
+   ```
+
 5. `[^]`：方括号内部取反符^，只要包含其中任意字符，都返回false
 
-  ```js
-  var reg2 = /^[^a-zA-Z0-9_-]$/
-  console.log(reg2.test('a'))
-  console.log(reg2.test('B'))
-  console.log(reg2.test(8))
-  console.log(reg2.test('-'))
-  console.log(reg2.test('_'))
-  console.log(reg2.test('!'))
-  ```
+   ```js
+   var reg2 = /^[^a-zA-Z0-9_-]$/  // 26个大小写英文字母+0-9数字+下划线_+短横线-，包含任意其中之一的一个，返回false
+   console.log(reg2.test('a'))
+   console.log(reg2.test('B'))
+   console.log(reg2.test(8))
+   console.log(reg2.test('-'))
+   console.log(reg2.test('_'))
+   console.log(reg2.test('!'))
+   ```
 
-##### 2.15.4.3 量词符
+##### 2.12.4.3 量词符
 
 * 定义：设定某个模式出现的次数
 
@@ -2984,7 +3140,7 @@ alert(str)
 5. `{n, }`：大于等于n次
 
    ```js
-   //  {3, }  大于等于3
+   //  {3,}  大于等于3
    var reg4 = /^a{3,}$/
    console.log(reg4.test('')) // false
    console.log(reg4.test('a')) // false
@@ -3006,23 +3162,74 @@ alert(str)
 
 7. `var reg = /^[a-zA-Z0-9_-]{6,16}$/`：26个大小写英文字母+0-9数字+下划线_+短横线-，包含任意其中之一，6-16个字符之间
 
-##### 2.15.4.4 或者符
+   ```html
+   <!--案例：用户名验证-->
+   <style>
+     span {
+       color: #aaa;
+       font-size: 14px;
+     }
+     .right {
+       color: green;
+     }
+     .wrong {
+       color: red;
+     }
+   </style>
+   <input type="text" class="uname" /> <span>请输入用户名</span>
+   <script>
+     // 用户只能输入英文字母、数字、下划线、短横线但是有边界符和[]，包含任意其中之一，6-16个字符之间
+     var reg = /^[a-zA-Z0-9_-]{6,16}$/ 
+     var uname = document.querySelector('.uname')
+     var span = document.querySelector('span')
+     uname.onblur = function () {
+       if (reg.test(this.value)) {
+         console.log('正确的')
+         span.className = 'right'
+         span.innerHTML = '用户名格式输入正确'
+       } else {
+         console.log('错误的')
+         span.className = 'wrong'
+         span.innerHTML = '用户名格式输入不正确'
+       }
+     }
+   </script>
+   ```
+
+   
+
+##### 2.12.4.4 或者符
 
 1. 或者符：`|`
 
-##### 2.15.4.5 小括号
+##### 2.12.4.5 括号类
 
-1. 作用：表示优先级
+1. 小括号`()`：表示优先级，可与模板语法配合：`{{(...)}}`小括号内表示一个分组，提取想要的内容
 
-2. 区别：
+   ```js
+   // 让abc重复三次
+   var reg = /^(abc){3}$/
+   // 仅让c重复三次
+   var reg = /^abc{3}$/
+   ```
 
-   1）`var reg = /^(abc){3}$/`：让abc重复三次
+2. 中括号`[]`：字符集合，匹配方括号中的任意字符
 
-   2）`var reg = /^abc{3}$/`：仅让c重复三次
+   ```js
+   // 匹配a、b、c中的任意一个
+   var reg = /^[abc]$/;
+   ```
 
-3. 与模板语法配合：`{{(...)}}`小括号内表示一个分组，提取想要的内容
+3. 大括号`{}`：量词符，里面表示重复次数
 
-##### 2.15.4.6 预定义类
+   ```js
+   // 匹配连续出现3次的c
+   var reg = /^abc{3}$/
+   console.log(reg.test('abcabcabc'))	// false
+   console.log(reg.test('abccc'))		// true
+   ```
+
+##### 2.12.4.6 预定义类
 
 * 定义：某些常见模式的简写方式
 
@@ -3048,7 +3255,7 @@ alert(str)
 
 6. `\S`：匹配任何非空白字符，等价于`[^ \f\n\r\t\v]`
 
-##### 2.15.4.7 常用表达式
+##### 2.12.4.7 常用表达式
 
 1. 座机号：
 
@@ -3067,15 +3274,94 @@ alert(str)
    4）短信验证码：`/^\d{6}$/`
 
    5）密码：`/^[a-zA-Z0-9_-]{6,16}$/`
+   
+   ```html
+   <!--案例：表单验证-->
+   <ul>
+     <li>
+       <label for="tel">手机号:</label>
+       <input type="text" class="inp" id="tel" />
+       <span class=""> </span>
+     </li>
+     <li>
+       <label for="">QQ:</label>
+       <input type="text" class="inp" id="qq" />
+       <span></span>
+     </li>
+     <li>
+       <label for="">昵称:</label>
+       <input type="text" class="inp" id="nc" />
+       <span></span>
+     </li>
+     <li>
+       <label for="">短信验证码:</label>
+       <input type="text" class="inp" id="msg" />
+       <span></span>
+     </li>
+     <li>
+       <label for="">登陆密码:</label>
+       <input type="text" class="inp" id="pwd" />
+       <span> </span>
+     </li>
+     <li>
+       <label for="">确认密码:</label>
+       <input type="text" class="inp" id="surepwd" />
+       <span></span>
+     </li>
+   </ul>
+   <script>
+     window.onload = function () {
+       var regtel = /^1[3|4|5|7|8]\d{9}$/ // 手机号码的正则表达式
+       var regqq = /^[1-9]\d{4,}$/ // 10000
+       var regnc = /^[\u4e00-\u9fa5]{2,8}$/
+       var regmsg = /^\d{6}$/
+       var regpwd = /^[a-zA-Z0-9_-]{6,16}$/
+       var tel = document.querySelector('#tel')
+       var qq = document.querySelector('#qq')
+       var nc = document.querySelector('#nc')
+       var msg = document.querySelector('#msg')
+       var pwd = document.querySelector('#pwd')
+       var surepwd = document.querySelector('#surepwd')
+       
+       regexp(tel, regtel) // 手机号码
+       regexp(qq, regqq) // qq号码
+       regexp(nc, regnc) // 昵称
+       regexp(msg, regmsg) // 短信验证
+       regexp(pwd, regpwd) // 密码框
+       
+       // 表单验证的函数
+       function regexp(ele, reg) {
+         ele.onblur = function () {
+           if (reg.test(this.value)) {
+             this.nextElementSibling.className = 'success'
+             this.nextElementSibling.innerHTML = '<i class="success_icon"></i> 恭喜您输入正确'
+           } else {
+             this.nextElementSibling.className = 'error'
+             this.nextElementSibling.innerHTML = '<i class="error_icon"></i> 格式不正确，请从新输入 '
+           }
+         }
+       }
+       surepwd.onblur = function () {
+         if (this.value == pwd.value) {
+           this.nextElementSibling.className = 'success'
+           this.nextElementSibling.innerHTML = '<i class="success_icon"></i> 恭喜您输入正确'
+         } else {
+           this.nextElementSibling.className = 'error'
+           this.nextElementSibling.innerHTML = '<i class="error_icon"></i> 两次密码输入不一致'
+         }
+       }
+     }
+   </script>
+   ```
 
-#### 2.15.5 正则表达式参数
+#### 2.12.5 正则表达式参数
 
 1. 语法：`/表达式/[switch]`，switch又称修饰符，表示按照什么样的模式匹配
 2. 全局匹配：g
 3. 忽略大小写：i
 4. 全局匹配+忽略大小写：gi
 
-#### 2.15.6 正则表达式替换
+#### 2.12.6 正则表达式替换
 
 1. repalce()：`stringObject.replace(regexp/substr,replacement)`
 
@@ -3096,7 +3382,7 @@ alert(str)
    div.innerHTML = text.value.replace(/激情|gay/g, '**');
    ```
 
-#### 2.15.6 正则表达式匹配
+#### 2.12.7 正则表达式匹配
 
 1. match()：`stringObject.match(searchvalue/regexp)`
 
@@ -7052,26 +7338,34 @@ window.addEventListener('load', function () {
 
 2. 顶级对象` $`：`$`是jQuery的别称，可以用jQuery代替`$`符号，`$`也是jQuery的顶级对象，相当于window
 
+3. 语法：`$(document).ready(function(){...})`，`$(function() { ... })`
+
    ```js
+   // 等着页面DOM加载完毕再去执行js代码（以下三种写法等价）
+   $(document).ready(function () {
+     ...
+   })
+   
+   $(function () {
+     ...
+   })
+   
    jQuery(function () {
-     jQuery('div').hide()
+     ...
    })
    ```
-
-3. 语法：`$(document).ready(function(){...})`，`$(function() { ... })`
 
 4. 多库共存：
 
    1）若`$`符号冲突，使用jQuery代替`$`
 
    ```js
-   $(function () {
-     function $(ele) {
-       return document.querySelector(ele)
-     }
-     console.log($('div'))
-     jQuery.each()
-   })
+   // 定义一个$()函数
+   function $(ele) {
+     return document.querySelector(ele)
+   }
+   console.log($('div'))
+   jQuery.each()
    ```
 
    2）noConflick()：让jquery释放对`$`的控制权，自定义一个符号或名称
@@ -7089,17 +7383,54 @@ window.addEventListener('load', function () {
 
 2. jQuery对象：用jQuery方式获取过来的对象，利用`$`包装DOM元素（w.fn.init(n)），如：`$(div)`，只能使用 jQuery方法
 
+   ```js
+   // 1. DOM 对象：用原生js获取过来的对象就是DOM对象
+   var myDiv = document.querySelector('div') // myDiv 是DOM对象
+   var mySpan = document.querySelector('span') // mySpan 是DOM对象
+   console.dir(myDiv)
+   
+   // 2. jQuery对象：用jquery方式获取过来的对象是jQuery对象。 本质：通过$把DOM元素进行了包装
+   $('div') // $('div')是一个jQuery 对象
+   $('span') // $('span')是一个jQuery 对象
+   console.dir($('div'))
+   
+   // 3. jQuery 对象只能使用 jQuery 方法，DOM 对象则使用原生的 JavaScirpt 属性和方法
+   myDiv.style.display = 'none'
+   myDiv.hide() // myDiv是一个dom对象不能使用 jquery里面的hide方法
+   $('div').style.display = 'none' // 这个$('div')是一个jQuery对象不能使用原生js的属性和方法
+   ```
+
 3. DOM转JQ：
 
    1）DOM对象：`$('element')`，里面有引号
 
    2）用原生JS获取来的DOM对象：`$(object)`，里面没有引号
 
+   ```js
+   <video src="mov.mp4" muted></video>
+   <script>
+     // (1) 直接获取视频，得到就是jQuery对象
+     $('video')
+     // (2) 已经使用原生js获取过来DOM对象
+     var myvideo = document.querySelector('video')
+     $(myvideo)
+   </script>
+   ```
+
 4. JQ转DOM：
 
    1）`$('element')[index]`
 
    2）`$('element').get(index)`
+
+   ```js
+   <video src="mov.mp4" muted></video>
+   <script>
+     // play()方法只有原生DOM才能使用，需要把jQuery对象转为DOM
+     $('video')[0].play()
+     $('video').get(0).play()
+   </script>
+   ```
 
 ------
 
@@ -7166,21 +7497,89 @@ window.addEventListener('load', function () {
 ##### 4.2.1.1 基础选择器
 
 1. ID选择器：`$("#id")`
+
 2. 全选择器：`$("*")`
+
 3. 类选择器：`$(".class")`
+
 4. 标签选择器：`$("div")`
+
 5. 并集选择器：`$("div,p,li")`
+
 6. 交集选择器：`$("li.current")`
-7. 子代选择器：`$("ul>li")`
-8. 后代选择器：`$("ul li")`
+
+7. 子代选择器：`$("ul>li")`，选中最近一级子元素
+
+8. 后代选择器：`$("ul li")`，选中全部子元素
+
+   ```html
+   <!--案例：下拉菜单-->
+   <ul class="nav">
+     <li>
+       <a href="#">微博</a>
+       <ul>
+         <li>
+           <a href="">私信</a>
+         </li>
+       </ul>
+     </li>
+     <li>
+       <a href="#">微博</a>
+       <ul>
+         <li>
+           <a href="">私信</a>
+         </li>
+       </ul>
+     </li>
+   </ul>
+   <script>
+     $(function () {
+       // 鼠标经过
+       $('.nav>li').mouseover(function () {
+         $(this).children('ul').show()
+       })
+       // 鼠标离开
+       $('.nav>li').mouseout(function () {
+         $(this).children('ul').hide()
+       })
+     })
+   </script>
+   ```
 
 ##### 4.2.1.2 筛选选择器
 
 1. `:first`：获取第一个元素，例：`$("li:first")`
+
 2. `:last`：获取最后一个元素，例：`$("li:last")`
+
 3. `:eq(index)`：获取到的元素中索引号为index的元素，例：`$("li:eq(2)")`
+
 4. `:odd`：获取到的元素中索引号为奇数的元素，例：`$("li:odd")`
+
 5. `:even`：获取到的元素中索引号为偶数的元素，例：`$("li:even"):checked`：获取被选中的元素（如应用在checkbox）
+
+   ```js
+   <ul>
+     <li>多个里面筛选几个</li>
+     <li>多个里面筛选几个</li>
+     <li>多个里面筛选几个</li>
+     <li>多个里面筛选几个</li>
+   </ul>
+   <ol>
+     <li>多个里面筛选几个</li>
+     <li>多个里面筛选几个</li>
+     <li>多个里面筛选几个</li>
+     <li>多个里面筛选几个</li>
+   </ol>
+   <script>
+     $(function () {
+       $('ul li:first').css('color', 'red')
+       $('ul li:eq(2)').css('color', 'blue')
+       $('ol li:odd').css('color', 'skyblue')
+       $('ol li:even').css('color', 'pink')
+     })
+   </script>
+   ```
 
 ##### 4.2.1.3 筛选方法
 
@@ -7206,19 +7605,40 @@ window.addEventListener('load', function () {
 
 3. `find(selector)`：后代选择器，包含所有孩子，例：`$("ul").find("li")`，相当于`$("ul li")`
 
+   ```js
+   <div class="one">
+     <div class="two">
+       <div class="three">
+         <div class="four">我不容易</div>
+       </div>
+     </div>
+   </div>
+   <script>
+     // 查找最近一级子元素
+     console.log($('.one').children('div'))
+     // 后代选择器，包含所有孩子
+     console.log($('.one').find('div'))
+   </script>
+   ```
+
 4. `siblings(selector)`：查找兄弟节点，不包括自身，例：`$(".first").siblings("li")`
 
-   ```js
+   ```html
    // 应用：排他思想
-   $(function () {
-     // 1. 隐式迭代 给所有的按钮都绑定了点击事件
-     $('button').click(function () {
-       // 2. 当前的元素变化背景颜色
-       $(this).css('background', 'pink')
-       // 3. 其余的兄弟去掉背景颜色 隐式迭代
-       $(this).siblings('button').css('background', '')
+   <button>快速</button>
+   <button>快速</button>
+   <button>快速</button>
+   <script>
+     $(function () {
+       // 1. 隐式迭代，给所有的按钮都绑定了点击事件
+       $('button').click(function () {
+         // 2. 当前的元素变化背景颜色
+         $(this).css('background', 'pink')
+         // 3. 其余的兄弟去掉背景颜色
+         $(this).siblings('button').css('background', '')
+       })
      })
-   })
+   </script>
    ```
 
 5. `nextAll([expr])`：查找当前元素之后所有的同辈元素，例：`$(".first").nextAll()`
@@ -7227,7 +7647,40 @@ window.addEventListener('load', function () {
 
 7. `hasClass(class)`：检查当前元素是否含有某个特定类，返回true，例：`$("div").hasClass("protected")`
 
+   ```html
+   <div class="current">俺有current</div>
+   <div>俺没有current</div>
+   <script>
+     $(function () {
+       // 判断是否有某个类名
+       console.log($('div:first').hasClass('current'))
+       console.log($('div:last').hasClass('current'))
+     })
+   </script>
+   ```
+
 8. `eq(index)`：等同于:eq(index)，例：`$("li").eq(2)`，相当于`$("li:eq(2)")`
+
+   ```html
+   <ul>
+     <li>我是ol 的li</li>
+     <li>我是ol 的li</li>
+     <li>我是ol 的li</li>
+   </ul>
+   <script>
+     $(function () {
+       var index = 2
+       // (1) 可以利用选择器的方式选择
+       $('ul li:eq(2)').css('color', 'blue')
+       $('ul li:eq(' + index + ')').css('color', 'blue')
+       // (2) 可以利用选择方法的方式选择（更推荐这种写法）
+       $('ul li').eq(2).css('color', 'blue')
+       $('ul li').eq(index).css('color', 'blue')
+     })
+   </script>
+   ```
+
+   
 
 ------
 
@@ -7254,18 +7707,133 @@ window.addEventListener('load', function () {
    1）属性名不用加引号，复合属性必须用驼峰命名法
 
    2）属性值如果不是数字需要加引号
+   
+   ```js
+   $('div').css({
+     width: 400,
+     height: 400,
+     backgroundColor: 'red',
+   })
+   ```
 
 ##### 4.2.2.2 类样式方法
 
-1. 添加类：`$("element").addClass("classname")`
+* 里面写的类名不用加“.”
+
+1. 添加类：`$("element").addClass("classname")`,不影响原类名，类似JS的classList操作，而原生JS的element.className会覆盖原类名
+
 2. 删除类：`$("element").removeClass("classname")`
+
 3. 切换类：`$("element").toggleClass("classname")`，若类名存在则删除，若类名不存在则添加上
 
-4. 注意：
+   ```js
+   <style>
+     div {
+       width: 150px;
+       height: 150px;
+       background-color: pink;
+       margin: 100px auto;
+       transition: all 0.5s;
+     }
+     .current {
+       background-color: red;
+       transform: rotate(360deg);
+     }
+   </style>
+   
+   <div class="current"></div>
+   
+   <script>
+     $(function () {
+       // 1. 添加类 addClass()
+       $('div').click(function () {
+         $(this).addClass("current");
+       })
+       // 2. 删除类 removeClass()
+       $('div').click(function () {
+         $(this).removeClass('current')
+       })
+       // 3. 切换类 toggleClass()
+       $('div').click(function () {
+         $(this).toggleClass('current')
+       })
+     })
+   </script>
+   ```
 
-   1）里面写的类名不用加“.”
+4. 案例：Tab栏切换
 
-   2）jQuery类操作不影响原类名，类似原生JS的classList操作，而原生JS的element.className会覆盖原类名
+   ```html
+   <!--案例：Tab栏切换-->
+   <style>
+     * {
+       margin: 0;
+       padding: 0;
+     }
+     li {
+       list-style-type: none;
+     }
+     .tab {
+       width: 978px;
+       margin: 100px auto;
+     }
+     .tab_list {
+       height: 39px;
+       border: 1px solid #ccc;
+       background-color: #f1f1f1;
+     }
+     .tab_list li {
+       float: left;
+       height: 39px;
+       line-height: 39px;
+       padding: 0 20px;
+       text-align: center;
+       cursor: pointer;
+     }
+     .tab_list .current {
+       background-color: #c81623;
+       color: #fff;
+     }
+     .item_info {
+       padding: 20px 0 0 20px;
+     }
+     .item {
+       display: none;
+     }
+   </style>
+   
+   <div class="tab">
+     <div class="tab_list">
+       <ul>
+         <li class="current">商品介绍</li>
+         <li>规格与包装</li>
+         <li>售后保障</li>
+         <li>商品评价（50000）</li>
+         <li>手机社区</li>
+       </ul>
+     </div>
+     <div class="tab_con">
+       <div class="item" style="display: block">商品介绍模块内容</div>
+       <div class="item">规格与包装模块内容</div>
+       <div class="item">售后保障模块内容</div>
+       <div class="item">商品评价（50000）模块内容</div>
+       <div class="item">手机社区模块内容</div>
+     </div>
+   </div>
+   <script>
+     $(function () {
+       // 1.点击上部的li，当前li添加current类，其余兄弟移除类
+       $('.tab_list li').click(function () {
+         // 链式编程操作
+         $(this).addClass('current').siblings().removeClass('current')
+         // 2.点击的同时，得到当前li的索引号
+         var index = $(this).index()
+         // 3.让下部里面相应索引号的item显示，其余的item隐藏
+         $('.tab_con .item').eq(index).show().siblings().hide()
+       })
+     })
+   </script>
+   ```
 
 ------
 
@@ -7273,22 +7841,240 @@ window.addEventListener('load', function () {
 
 ##### 4.2.3.1 显示隐藏
 
-1. `show()`：显示
-2. `hide()`：隐藏
-3. `togggle()`：切换
+1. `show(speed,callback)`：显示
+
+2. `hide(speed,callback)`：隐藏
+
+3. `togggle(speed,callback)`：切换
+
+   ```html
+   <style>
+     div {
+       width: 150px;
+       height: 300px;
+       background-color: pink;
+     }
+   </style>
+   
+   <button>显示</button>
+   <button>隐藏</button>
+   <button>切换</button>
+   <div></div>
+   
+   <script>
+     $(function () {
+       $('button')
+         .eq(0)
+         .click(function () {
+           $('div').show(1000, function () {
+             alert(1)
+           })
+         })
+       $('button')
+         .eq(1)
+         .click(function () {
+           $('div').hide(1000, function () {
+             alert(1)
+           })
+         })
+       $('button')
+         .eq(2)
+         .click(function () {
+           $('div').toggle(1000)
+         })
+     })
+   </script>
+   ```
 
 ##### 4.2.3.2 滑动
 
-1. `slideDown()`：下滑，一般和display: none配合
-2. `slideUp()`：上滑，一般和display: none配合
-3. `slideToggle()`：切换滑动
+1. `slideDown(speed,callback)`：下滑，一般和display: none配合
+
+2. `slideUp(speed,callback)`：上滑，一般和display: none配合
+
+3. `slideToggle(speed,callback)`：切换滑动
+
+   ```html
+   <style>
+     div {
+       width: 150px;
+       height: 300px;
+       background-color: pink;
+       display: none;
+     }
+   </style>
+   
+   <button>下拉滑动</button>
+   <button>上拉滑动</button>
+   <button>切换滑动</button>
+   <div></div>
+   
+   <script>
+     $(function () {
+       $('button')
+         .eq(0)
+         .click(function () {
+           // 下滑动 slideDown()
+           $('div').slideDown()
+         })
+       $('button')
+         .eq(1)
+         .click(function () {
+           // 上滑动 slideUp()
+           $('div').slideUp(500)
+         })
+       $('button')
+         .eq(2)
+         .click(function () {
+           // 滑动切换 slideToggle()
+           $('div').slideToggle(500)
+         })
+     })
+   </script>
+   ```
+
+   ```html
+   <!--案例：下拉菜单-->
+   <ul class="nav">
+     <li>
+       <a href="#">微博</a>
+       <ul>
+         <li>
+           <a href="">私信</a>
+         </li>
+       </ul>
+     </li>
+     <li>
+       <a href="#">微博</a>
+       <ul>
+         <li>
+           <a href="">私信</a>
+         </li>
+       </ul>
+     </li>
+   </ul>
+   <script>
+     $(function () {
+       $('.nav>li').hover(function () {
+         // 注意：这里有个问题，如果鼠标快速滑动，会造成动画效果卡顿（后面可以用stop()解决）
+         $(this).children('ul').slideToggle()
+       })
+     })
+   </script>
+   ```
 
 ##### 4.2.3.3 淡入淡出
 
-1. `fadeIn()`：淡入
-2. `fadeOut()`：淡出
-3. `fadeToggle()`：淡入淡出切换
-4. `fadeTo([speed], opacity, [easing],[fn])`：修改透明度，速度和透明度参数必须写
+1. `fadeIn(speed,callback)`：淡入
+
+2. `fadeOut(speed,callback)`：淡出
+
+3. `fadeToggle(speed,callback)`：淡入淡出切换
+
+4. `fadeTo(speed,opacity,[easing],callback)`：修改透明度，速度和透明度参数必须写
+
+   ```html
+   <style>
+     div {
+       width: 150px;
+       height: 300px;
+       background-color: pink;
+       display: none;
+     }
+   </style>
+   
+   <button>淡入效果</button>
+   <button>淡出效果</button>
+   <button>淡入淡出切换</button>
+   <button>修改透明度</button>
+   <div></div>
+   
+   <script>
+     $(function () {
+       $('button')
+         .eq(0)
+         .click(function () {
+           // 淡入 fadeIn()
+           $('div').fadeIn(1000)
+         })
+       $('button')
+         .eq(1)
+         .click(function () {
+           // 淡出 fadeOut()
+           $('div').fadeOut(1000)
+         })
+       $('button')
+         .eq(2)
+         .click(function () {
+           // 淡入淡出切换 fadeToggle()
+           $('div').fadeToggle(1000)
+         })
+       $('button')
+         .eq(3)
+         .click(function () {
+           //  修改透明度 fadeTo() 这个速度和透明度要必须写
+           $('div').fadeTo(1000, 0.5)
+         })
+     })
+   </script>
+   ```
+
+   ```html
+   <!--案例：图片高亮显示-->
+   <style>
+     * {
+       margin: 0;
+       padding: 0;
+     }
+     ul {
+       list-style: none;
+     }
+     body {
+       background: #000;
+     }
+     .wrap {
+       margin: 100px auto 0;
+       width: 630px;
+       height: 394px;
+       padding: 10px 0 0 10px;
+       background: #000;
+       overflow: hidden;
+       border: 1px solid #fff;
+     }
+     .wrap li {
+       float: left;
+       margin: 0 10px 10px 0;
+     }
+     .wrap img {
+       display: block;
+       border: 0;
+     }
+   </style>
+   <script>
+     $(function () {
+       //鼠标进入的时候，其他的li标签透明度：0.5
+       $('.wrap li').hover(
+         function () {
+           $(this).siblings().stop().fadeTo(400, 0.5)
+         },
+         function () {
+           // 鼠标离开，其他li 透明度改为 1
+           $(this).siblings().stop().fadeTo(400, 1)
+         }
+       )
+     })
+   </script>
+   <div class="wrap">
+     <ul>
+       <li><a href="#"><img src="images/01.jpg" alt="" /></a></li>
+       <li><a href="#"><img src="images/02.jpg" alt="" /></a></li>
+       <li><a href="#"><img src="images/03.jpg" alt="" /></a></li>
+       <li><a href="#"><img src="images/04.jpg" alt="" /></a></li>
+       <li><a href="#"><img src="images/05.jpg" alt="" /></a></li>
+       <li><a href="#"><img src="images/06.jpg" alt="" /></a></li>
+     </ul>
+   </div>
+   ```
 
 ##### 4.2.3.4 效果函数参数
 
@@ -7296,7 +8082,7 @@ window.addEventListener('load', function () {
 
    1）预设字符：slow、normal、fast
 
-   2)毫秒数值：如1000，即为1秒
+   2）毫秒数值：如1000，即为1秒
 
 2. easing：切换效果
 
@@ -7313,14 +8099,50 @@ window.addEventListener('load', function () {
 3. 写到效果/动画函数的前面
 
    ```js
-   $(div).stop().slideToggle()
+   <!--案例：下拉菜单-->
+   <ul class="nav">
+     <li>
+       <a href="#">微博</a>
+       <ul>
+         <li>
+           <a href="">私信</a>
+         </li>
+       </ul>
+     </li>
+     <li>
+       <a href="#">微博</a>
+       <ul>
+         <li>
+           <a href="">私信</a>
+         </li>
+       </ul>
+     </li>
+   </ul>
+   <script>
+     $(function () {
+       $('.nav>li').hover(function () {
+         // 解决了鼠标快速滑动，造成动画效果卡顿的问题
+         $(this).children('ul').slideToggle()
+       })
+     })
+   </script>
    ```
 
 ##### 4.2.3.5 自定义动画
 
-1. 语法：`animate(params,[speed],[easing],[fn])`，params：想要更改的样式属性，以对象形式传递
+1. 语法：`animate(params,[speed],[easing],[callback])`，params：想要更改的样式属性，以对象形式传递
 
-   ```js
+   ```html
+   <style>
+     div {
+       position: absolute;
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+     }
+   </style>
+   <button>动起来</button>
+   <div></div>
    <script>
      $(function () {
        $('button').click(function () {
@@ -7341,6 +8163,56 @@ window.addEventListener('load', function () {
 2. 案例：王者荣耀手风琴效果
 
    ```html
+   <style type="text/css">
+     * {
+       margin: 0;
+       padding: 0;
+     }
+     img {
+       display: block;
+     }
+     ul {
+       list-style: none;
+     }
+     .king {
+       width: 852px;
+       margin: 100px auto;
+       background: url(https://game.gtimg.cn/images/yxzj/web201605/top_banner/bg_header.png) no-repeat;
+       overflow: hidden;
+       padding: 10px;
+     }
+     .king ul {
+       overflow: hidden;
+     }
+     .king li {
+       position: relative;
+       float: left;
+       width: 69px;
+       height: 69px;
+       margin-right: 10px;
+     }
+     .king li.current {
+       width: 224px;
+     }
+     .king li.current .big {
+       display: block;
+     }
+     .king li.current .small {
+       display: none;
+     }
+     .big {
+       width: 224px;
+       display: none;
+     }
+     .small {
+       position: absolute;
+       top: 0;
+       left: 0;
+       width: 69px;
+       height: 69px;
+       border-radius: 5px;
+     }
+   </style>
    <script src="js/jquery.min.js"></script>
    <script>
      $(function () {
@@ -7374,25 +8246,49 @@ window.addEventListener('load', function () {
        })
      })
    </script>
-   
+     
    <div class="king">
      <ul>
        <li class="current">
          <a href="#">
-           <img src="images/m1.jpg" alt="" class="small" />
-           <img src="images/m.png" alt="" class="big" />
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/116/116.jpg" alt="" class="small" />
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/116/116-freehover.png" alt="" class="big" />
          </a>
        </li>
        <li>
          <a href="#">
-           <img src="images/l1.jpg" alt="" class="small" />
-           <img src="images/l.png" alt="" class="big" />
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/117/117.jpg" alt="" class="small" />
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/117/117-freehover.png" alt="" class="big" />
          </a>
        </li>
        <li>
          <a href="#">
-           <img src="images/c1.jpg" alt="" class="small" />
-           <img src="images/c.png" alt="" class="big" />
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/118/118.jpg" alt="" class="small" />
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/118/118-freehover.png" alt="" class="big" />
+         </a>
+       </li>
+       <li>
+         <a href="#">
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/119/119.jpg" alt="" class="small" />
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/119/119-freehover.png" alt="" class="big" />
+         </a>
+       </li>
+       <li>
+         <a href="#">
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/120/120.jpg" alt="" class="small" />
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/120/120-freehover.png" alt="" class="big" />
+         </a>
+       </li>
+       <li>
+         <a href="#">
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/121/121.jpg" alt="" class="small" />
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/121/121-freehover.png" alt="" class="big" />
+         </a>
+       </li>
+       <li>
+         <a href="#">
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/123/123.jpg" alt="" class="small" />
+           <img src="https://game.gtimg.cn/images/yxzj/img201606/heroimg/123/123-freehover.png" alt="" class="big" />
          </a>
        </li>
      </ul>
@@ -7417,17 +8313,65 @@ window.addEventListener('load', function () {
 
 3. `data()`
 
-   1）获取缓存属性：`data("属性")`，注意：获取H5定义的“data-属性名”不用加“data-"
+   1）设置缓存属性：`data("属性","属性值")`，缓存在内存，浏览器刷新后消失
 
-   2）设置缓存属性：`data("属性","属性值")`，缓存在内存，浏览器刷新后消失
+   2）获取缓存属性：`data("属性")`，注意：获取H5定义的“data-属性名”不用加“data-"
+   
+   ```js
+   <a href="http://www.itcast.cn" title="都挺好">都挺好</a>
+   <input type="checkbox" name="" id="" checked />
+   <div index="1" data-index="2">我是div</div>
+   <span>123</span>
+   <script>
+     $(function () {
+       //1. prop()：获取元素固有的属性值
+       console.log($('a').prop('href'))
+       $('a').prop('title', '我们都挺好')
+       $('input').change(function () {
+         console.log($(this).prop('checked'))
+       })
+       
+       // 2. attr()：获取元素的自定义属性
+       console.log($('div').attr('index'))
+       $('div').attr('index', 4)
+       console.log($('div').attr('data-index'))
+       
+       // 3. data()：缓存在内存，浏览器刷新后消失
+       $('span').data('uname', 'andy')	// 为span设置uname属性，值为andy
+       console.log($('span').data('uname'))
+       // 获取H5定义的“data-属性名”不用加“data-"
+       console.log($('div').data('index'))
+     })
+   </script>
+   ```
 
 ------
 
 #### 4.2.5 jQuery文本属性
 
 1. 获取设置文本内容：`text()`，相当于原生JS的innerText
+
 2. 获取设置元素内容：`html()`，相当于原生JS的innerHTML
+
 3. 获取设置表单值：val()，例：清空表单值：`$('element').val('')`
+
+   ```js
+   <div>
+     <span>我是内容</span>
+   </div>
+   <input type="text" value="请输入内容" />
+   <script>
+     // 1. 获取设置元素内容 html()
+     console.log($('div').html())
+     $('div').html('123')
+     // 2. 获取设置元素文本内容 text()
+     console.log($('div').text())
+     $('div').text('123')
+     // 3. 获取设置表单值 val()
+     console.log($('input').val())
+     $('input').val('123')
+   </script>
+   ```
 
 ------
 
@@ -7443,11 +8387,23 @@ window.addEventListener('load', function () {
 
    2）domEle：每个DOM元素对象，不是JQ对象
 
-   ```js
-   var arr = ['red', 'green', 'blue']
-   $('div').each(function (i, domEle) {
-     $(domEle).css('color', arr[i])
-   })
+   ```html
+   <div>1</div>
+   <div>2</div>
+   <div>3</div>
+   <script>
+     $(function () {
+       var sum = 0
+       // each() 方法遍历元素
+       var arr = ['red', 'green', 'blue']
+       $('div').each(function (i, domEle) {
+         // 第一个参数：索引号；第二个参数：dom元素对象
+         $(domEle).css('color', arr[i])
+         sum += parseInt($(domEle).text())
+       })
+       console.log(sum)
+     })
+   </script>
    ```
 
 3. 语法2：`$.each($("element"),function(index, domEle){...})`
@@ -7455,6 +8411,35 @@ window.addEventListener('load', function () {
    1）区别：用于遍历、处理数据
 
    2）如果element是对象，index输出属性名，domEle输出属性值
+   
+   ```html
+   <div>1</div>
+   <div>2</div>
+   <div>3</div>
+   <script>
+     $(function () {
+       // $.each()方法遍历元素
+       $.each($('div'), function (i, ele) {
+         console.log(i)
+         console.log(ele)
+       })
+       $.each(arr, function (i, ele) {
+         console.log(i)
+         console.log(ele)
+       })
+       $.each(
+         {
+           name: 'andy',
+           age: 18,
+         },
+         function (i, ele) {
+           console.log(i)   // 属性名：name age
+           console.log(ele) // 属性值：andy  18
+         }
+       )
+     })
+   </script>
+   ```
 
 ##### 4.2.6.2 创建元素
 
@@ -7481,6 +8466,31 @@ window.addEventListener('load', function () {
    2）删除匹配的元素里面的子节点：`$("element").empty()`
 
    3）清空匹配的元素内容：`$("element").html("")`
+   
+   ```js
+   <ul>
+     <li>原先的li</li>
+   </ul>
+   <div class="test">我是原先的div</div>
+   <script>
+     $(function () {
+       // 1. 创建元素
+       var li = $('<li>我是后来创建的li</li>')
+       // 2. 添加元素
+       // (1) 内部添加
+       $('ul').append(li) //内部添加并且放到内容的最后面
+       $('ul').prepend(li) // 内部添加并且放到内容的最前面
+       // (2) 外部添加
+       var div = $('<div>我是后妈生的</div>')
+       $('.test').after(div)
+       $('.test').before(div)
+       // 3. 删除元素
+       $('ul').remove() // 可以删除匹配的元素 自杀
+       $('ul').empty() // 可以删除匹配的元素里面的子节点 孩子
+       $('ul').html('') // 可以删除匹配的元素里面的子节点 孩子
+     })
+   </script>
+   ```
 
 ------
 
@@ -7489,9 +8499,38 @@ window.addEventListener('load', function () {
 * 注意：若不填参数则返回数字值；若参数为数字则修改相应值，可以不写单位
 
 1. `width()` / `height()`：元素本身宽、高
+
 2. `innderWidth()` / `innerHeight()`：包含padding
+
 3. `outerWidth()` / `outerHeight()`：包含padding、border
+
 4. `outerWidth(ture)` / `outerHeight(ture)`：包含padding、border、margin
+
+   ```html
+   <style>
+     div {
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+       padding: 10px;
+       border: 15px solid red;
+       margin: 20px;
+     }
+   </style>
+   <div></div>
+   <script>
+     $(function () {
+       // 1. width() / height() 获取设置元素 width和height大小
+       console.log($('div').width())
+       // 2. innerWidth() / innerHeight()  获取设置元素 width和height + padding 大小
+       console.log($('div').innerWidth())
+       // 3. outerWidth()  / outerHeight()  获取设置元素 width和height + padding + border 大小
+       console.log($('div').outerWidth())
+       // 4. outerWidth(true) / outerHeight(true) 获取设置 width和height + padding + border + margin
+       console.log($('div').outerWidth(true))
+     })
+   </script>
+   ```
 
 ------
 
@@ -7509,6 +8548,44 @@ window.addEventListener('load', function () {
 
    2）只能获取，不能修改
 
+   ```html
+   <style>
+     .father {
+       width: 400px;
+       height: 400px;
+       background-color: pink;
+       margin: 100px;
+       overflow: hidden;
+       position: relative;
+     }
+     .son {
+       width: 150px;
+       height: 150px;
+       background-color: purple;
+       position: absolute;
+       left: 10px;
+       top: 10px;
+     }
+   </style>
+   <div class="father">
+     <div class="son"></div>
+   </div>
+   <script>
+     $(function () {
+       // 1. offset：获取设置距离文档的位置（偏移）
+       console.log($('.son').offset())		// {top: 200, left: 200}
+       console.log($('.son').offset().top)	// 200
+       $('.son').offset({
+         top: 200,
+         left: 200,
+       })
+       // 2. position：获取距离带有定位父级位置（偏移），如果没有带有定位的父级，则以文档为准
+       // 这个方法只能获取不能设置偏移
+       console.log($('.son').position())	// {top: 100, left: 100}
+     })
+   </script>
+   ```
+
 3. `scrollTop()` / `scrollLeft()`：元素被卷去的头部和左侧
 
    1）配合页面滚动事件：`$(window).scroll(function(){...})`
@@ -7517,6 +8594,53 @@ window.addEventListener('load', function () {
 
    3）返回顶部动画：`$("body, html").stop().animate({scrollTop:0})`
 
+   ```html
+   <style>
+     body {
+       height: 2000px;
+     }
+     .back {
+       position: fixed;
+       width: 50px;
+       height: 50px;
+       background-color: pink;
+       right: 30px;
+       bottom: 100px;
+       display: none;
+     }
+     .container {
+       width: 900px;
+       height: 500px;
+       background-color: skyblue;
+       margin: 400px auto;
+     }
+   </style>
+   
+   <div class="back">返回顶部</div>
+   <div class="container"></div>
+   <script>
+     $(function () {
+       $(document).scrollTop(100)
+       // 页面滚动事件
+       var boxTop = $('.container').offset().top
+       $(window).scroll(function () {
+         console.log($(document).scrollTop())
+         if ($(document).scrollTop() >= boxTop) {
+           $('.back').fadeIn()
+         } else {
+           $('.back').fadeOut()
+         }
+       })
+       // 返回顶部
+       $('.back').click(function () {
+         $('body, html').stop().animate({
+           scrollTop: 0,
+         })
+       })
+     })
+   </script>
+   ```
+   
    ```js
    // 案例：电梯导航
    $(function () {
@@ -7606,7 +8730,9 @@ window.addEventListener('load', function () {
    2）若多个事件处理方法相同可合并写
 
    ```js
-   $("div").on("mouseenter mouseleave", function() {...})
+   $('div').on('mouseenter mouseleave', function () {
+     $(this).toggleClass('current')
+   })
    ```
 
 2. 可以实现事件委托/委派
@@ -7617,7 +8743,9 @@ window.addEventListener('load', function () {
 
    ```js
    // click绑定在ul上，但触发的对象是里面的li
-   $("ul").on("click", "li",fn{...} )
+   $('ul').on('click', 'li', function () {
+     alert(11)
+   })
    ```
 
 3. 给未来动态创建的元素绑定事件
@@ -7629,32 +8757,203 @@ window.addEventListener('load', function () {
    3）添加子元素：`$("ol").append(li)`
 
    4）注意：此时$("ol li").click()是无效的，无法给动态创建的元素添加事件
+   
+   ```html
+   <ol></ol>
+   <script>
+     // 错误写法：单事件注册无法给动态创建的元素添加事件
+     // $('ol li').click(function () {
+     //   alert(11)
+     // })
+     // 正确写法：事件处理on()
+     $('ol').on('click', 'li', function () {
+       alert(11)
+     })
+     var li = $('<li>我是后来创建的</li>')
+     $('ol').append(li)
+   </script>
+   ```
+
+   ```html
+   <!--案例：微博发布效果-->
+   <style>
+     ul {
+       list-style: none;
+     }
+     .box {
+       width: 600px;
+       margin: 100px auto;
+       border: 1px solid #000;
+       padding: 20px;
+     }
+     textarea {
+       width: 450px;
+       height: 160px;
+       outline: none;
+       resize: none;
+     }
+     ul {
+       width: 450px;
+       padding-left: 80px;
+     }
+     ul li {
+       line-height: 25px;
+       border-bottom: 1px dashed #cccccc;
+       display: none;
+     }
+     input {
+       float: right;
+     }
+     ul li a {
+       float: right;
+     }
+   </style>
+   
+   <script>
+     $(function () {
+       // 1.点击发布按钮，动态创建一个小li，放入文本框的内容和删除按钮，并且加到ul中
+       $('.btn').on('click', function () {
+         var li = $('<li></li>')
+         li.html($('.txt').val() + "<a href='javascript:;'> 删除</a>")
+         $('ul').prepend(li)
+         li.slideDown()
+         $('.txt').val('')
+       })
+       // 2.点击删除按钮，可以删除当前的微博留言li
+       $('ul').on('click', 'a', function () {
+         // this是a, a的parent是li
+         $(this)
+           .parent()
+           .slideUp(function () {
+             $(this).remove()
+           })
+       })
+     })
+   </script>
+   
+   <div class="box" id="weibo">
+     <span>微博发布</span>
+     <textarea name="" class="txt" cols="30" rows="10"></textarea>
+     <button class="btn">发布</button>
+     <ul></ul>
+   </div>
+   ```
 
 #### 4.3.3 单次触发: one()
 
 1. `$("element").one(events,[selector],fn)`：只能触发一次事件
+
+   ```js
+   <p>我是P</p>
+   <script>
+     $(function () {
+       // one()：只能触发事件一次
+       $('p').one('click', function () {
+         alert(11)
+       })
+     })
+   </script>
+   ```
 
 #### 4.3.4 事件解绑: off()
 
 * off()可以移除通过on()添加的事件处理程序
 
 1. 解绑所有事件：`$("element").off()`
+
 2. 解绑指定事件：`$("element").off(events)`
+
 3. 解除事件委托：`$("element").off(events, [selector])`
+
+   ```html
+   <div></div>
+   <ul>
+     <li>我们都是好孩子</li>
+     <li>我们都是好孩子</li>
+     <li>我们都是好孩子</li>
+   </ul>
+   
+   
+   <script>
+     $(function () {
+       $('div').on({
+         click: function () {
+           console.log('我点击了')
+         },
+         mouseover: function () {
+           console.log('我鼠标经过了')
+         },
+       })
+       $('ul').on('click', 'li', function () {
+         alert(11)
+       })
+       // 事件解绑 off
+       $('div').off() 				// 解除div身上的所有事件
+       $('div').off('click') 		// 解除div身上的点击事件
+       $('ul').off('click', 'li')	// 解除ul身上的事件委托
+     })
+   </script>
+   ```
 
 #### 4.3.5 自动触发: trigger()
 
 1. `$("element").事件()`：默认方法
+
 2. `$("element").trigger("事件")`：触发元素的默认行为
+
 3. `$("element").triggerHandler("事件")`：不会触发元素的默认行为，例：表单获得焦点后会有光标闪烁，可以用此方法取消光标闪烁
+
+   ```html
+   <div></div>
+   <input type="text" />
+   <script>
+     $(function () {
+       $('div').on('click', function () {
+         alert(11)
+       })
+       // 自动触发事件
+       // 1. 元素.事件()：会触发元素的默认行为
+       $('div').click()
+       // 2. 元素.trigger("事件")：会触发元素的默认行为
+       $('div').trigger('click')
+       // 3. 元素.triggerHandler("事件") ：不会触发元素的默认行为
+       // 表单获得焦点后会有光标闪烁，可以用此方法取消光标闪烁
+       $('input').triggerHandler('focus', function () {
+         $(this).val('你好吗')
+       })
+     })
+   </script>
+   ```
 
 #### 4.3.6 事件对象: event
 
 1. `$("element").on( events,[selector],fn(event){...})`：使用方法与原生JS相同
 
+   ```html
+   <style>
+     div {
+       width: 100px;
+       height: 100px;
+       background-color: pink;
+     }
+   </style>
+   <div></div>
+   <script>
+     $(function () {
+       $(document).on('click', function () {
+         console.log('点击了document')
+       })
+       $('div').on('click', function (event) {
+         console.log('点击了div')
+         event.stopPropagation()
+       })
+     })
+   </script>
+   ```
+
 #### 4.3.7 对象拷贝: extend
 
-1. 语法：`.extend( [deep],target,object1,[objectN])`
+1. 语法：`.extend([deep],target,object1,[objectN])`
 
 2. 参数：
 
@@ -7666,10 +8965,39 @@ window.addEventListener('load', function () {
    2）target：要拷贝的目标对象
 
    3）object1：待拷贝到第一个对象的对象
+   
+   ```js
+   var targetObj = {
+     id: 0,
+     msg: {
+       sex: '男',
+     },
+   }
+   var obj = {
+     id: 1,
+     name: 'andy',
+     msg: {
+       age: 18,
+     },
+   }
+   // 1. 浅拷贝把原来对象里面的复杂数据类型地址拷贝给目标对象
+   $.extend(targetObj, obj)
+   console.log(targetObj) 	// 覆盖targetObj：{id: 1, msg: {age: 18}, name: 'andy'}
+   targetObj.msg.age = 20
+   console.log(targetObj) 	// {id: 1, msg: {age: 20}, name: 'andy'}
+   console.log(obj) 		// 跟随targetObj变化：{id: 1, msg: {age: 20}, name: 'andy'}
+   
+   // 2. 深拷贝把里面的数据完全复制一份给目标对象，如果里面有不冲突的属性，会合并到一起
+   $.extend(true, targetObj, obj)
+   console.log(targetObj) 	// 覆盖targetObj：{id: 1, msg: {age: 18}, name: 'andy'}
+   targetObj.msg.age = 20
+   console.log(targetObj) 	// {id: 1, msg: {sex: '男', age: 20}, name: 'andy'}
+   console.log(obj) 		// 不跟随targetObj变化：{id: 1, msg: {age: 18}, name: 'andy'}
+   ```
 
 ------
 
-#### 4.4 jQuery插件
+### 4.4 jQuery插件
 
 1. 网站：
 
@@ -7677,7 +9005,7 @@ window.addEventListener('load', function () {
 
    2）jQuery之家：[www.htmleaf.com](www.htmleaf.com)
 
-2. 瀑布流插件：[http://www.htmleaf.com/jQuery/pubuliuchajian/](http://www.htmleaf.com/jQuery/pubuliuchajian/)
+2. 瀑布流插件：[http://www.htmleaf.com/jQuery/pubuliuchajian](http://www.htmleaf.com/jQuery/pubuliuchajian)
 
 3. 图片懒加载：[https://www.jq22.com/jquery-info11629](https://www.jq22.com/jquery-info11629)
 

@@ -100,7 +100,7 @@
 > * HTTP 请求：客户端发起的请求
 > * HTTP 请求消息（请求报文）：客户端发送到服务器的消息
 
-![HTTP请求消息结构](D:\MyProjects\Website\Tutoring\Web_Basic\Section5-Server\src\HTTP请求消息结构.png)
+![HTTP请求消息结构](.\src\HTTP请求消息结构.png)
 
 1. 请求行（request line）
 
@@ -143,7 +143,7 @@
 > HTTP响应消息（响应报文）：服务器响应给客户端的消息内容
 >
 
-![HTTP响应](D:\MyProjects\Website\Tutoring\Web_Basic\Section5-Server\src\HTTP响应.png)
+![HTTP响应](.\src\HTTP响应.png)
 
 1. 状态行
 

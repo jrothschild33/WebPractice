@@ -224,11 +224,11 @@
 
 2. 特点：
 
-   * 不允许重复声明
+   1）不允许重复声明
 
-   * 块级作用域：块级作用域包括：if else、while、for、花括号{}等
+   2）块级作用域：块级作用域包括：if else、while、for、花括号{}等
 
-   * 不存在变量提升：不允许在声明变量之前调用它，直接报错，但如果是var会返回undefinded
+   3）不存在变量提升：不允许在声明变量之前调用它，直接报错，但如果是var会返回undefinded
 
    ```js
    console.log(song);
@@ -260,7 +260,7 @@
 
 4. 经典案例：for循环中的i
 
-   * 使用var，i会成为全局变量，直接跳到最终遍历结果
+   1）使用var，i会成为全局变量，直接跳到最终遍历结果
 
    ```js
      <body>
@@ -286,7 +286,7 @@
      </body>
    ```
 
-   * 使用let，i会成为函数变量，可以跟随遍历动态变化
+   2）使用let，i会成为函数变量，可以跟随遍历动态变化
 
    ```js
      <body>
@@ -1156,10 +1156,13 @@
 
 3. 特点：
 
-   * *的位置没有限制
-   * 生成器函数返回的结果是迭代器对象，调用迭代器对象的`next`方法可以得到`yield`语句后的值
-   * `yield`相当于函数的暂停标记，也可以认为是函数的分隔符，每调用一次`next`方法，执行一段代码
-   * `next`方法可以传递实参，作为`yield`语句的返回值
+   1）*的位置没有限制
+
+   2）生成器函数返回的结果是迭代器对象，调用迭代器对象的`next`方法可以得到`yield`语句后的值
+
+   3）`yield`相当于函数的暂停标记，也可以认为是函数的分隔符，每调用一次`next`方法，执行一段代码
+
+   4）`next`方法可以传递实参，作为`yield`语句的返回值
 
    ```js
    function* gen() {
@@ -1186,8 +1189,9 @@
 
 4. 参数：
 
-   * 在实例化迭代器时，可以传递参数：`let iterator = gen('args')`
-   * next方法可以传入实参，作为上一个yield语句的返回结果
+   1）在实例化迭代器时，可以传递参数：`let iterator = gen('args')`
+
+   2）next方法可以传入实参，作为上一个yield语句的返回结果
 
    ```js
    function* gen(arg) {
@@ -1215,7 +1219,7 @@
 
 5. 案例1：定时器——1s后控制台输出111、2s后输出222、3s后输出333
 
-   * 普通做法：层级嵌套太多，非常麻烦（回调地狱）
+   1）普通做法：层级嵌套太多，非常麻烦（回调地狱）
 
    ```js
    setTimeout(() => {
@@ -1229,7 +1233,7 @@
    }, 1000)
    ```
 
-   * 生成器函数
+   2）生成器函数
 
    ```js
    function one() {
@@ -2024,24 +2028,24 @@
 
 2. 特点：
 
-   * 字符串中可以出现换行符
+   1）字符串中可以出现换行符
 
-     ```js
-     let str = `<ul>
-                   <li>沈腾</li>
-                   <li>玛丽</li>
-                   <li>魏翔</li>
-                   <li>艾伦</li>
-               </ul>`
-     ```
+   ```js
+   let str = `<ul>
+                 <li>沈腾</li>
+                 <li>玛丽</li>
+                 <li>魏翔</li>
+                 <li>艾伦</li>
+             </ul>`
+   ```
 
-   * 可以使用 ${xxx} 形式输出变量
+   2）可以使用 ${xxx} 形式输出变量
 
-     ```js
-     let lovest = '魏翔'
-     let out = `${lovest}是我心目中最搞笑的演员!!`
-     console.log(out)
-     ```
+   ```js
+   let lovest = '魏翔'
+   let out = `${lovest}是我心目中最搞笑的演员!!`
+   console.log(out)
+   ```
 
 3. 注意：当遇到字符串与变量拼接的情况使用模板字符串
 
@@ -3902,43 +3906,44 @@
 #### 2.11.3 静态属性
 
 1. 定义：属于类的属性和方法，但不属于实例对象的属性和方法
+
 2. ES5方法：给实例对象添加属性和方法，使用 `Obj.prototype`，直接在类上添加的属性和方法，属于静态方法
 
-```js
-// ES5方法
-function Phone() {}
-Phone.name = '手机'
-Phone.change = function () {
-    console.log('我可以改变世界')
-}
-Phone.prototype.size = '5.5inch'
-
-let nokia = new Phone()
-// 直接在函数对象上添加属性，实例对象无法读取，必须用prototype添加，否则属于静态属性和方法
-console.log(nokia.name)    // undefined
-console.log(Phone.name)	   // '手机'
-nokia.change()            // 报错nokia.change is not a function
-Phone.change()			   // '我可以改变世界'
-console.log(nokia.size)   // '5.5inch'
-```
+   ```js
+   // ES5方法
+   function Phone() {}
+   Phone.name = '手机'
+   Phone.change = function () {
+       console.log('我可以改变世界')
+   }
+   Phone.prototype.size = '5.5inch'
+   
+   let nokia = new Phone()
+   // 直接在函数对象上添加属性，实例对象无法读取，必须用prototype添加，否则属于静态属性和方法
+   console.log(nokia.name)    // undefined
+   console.log(Phone.name)	   // '手机'
+   nokia.change()            // 报错nokia.change is not a function
+   Phone.change()			   // '我可以改变世界'
+   console.log(nokia.size)   // '5.5inch'
+   ```
 
 3. ES6方法：使用static定义静态方法
 
-```js
-// ES6方法
-class Phone {
-  //静态属性：属于类的属性和方法，但不属于实例对象的属性和方法
-  static name = '手机'
-  static change() {
-    console.log('我可以改变世界')
-  }
-}
-let nokia = new Phone()
-console.log(nokia.name)	// undefined
-console.log(Phone.name)	// '手机'
-nokia.change() // 报错nokia.change is not a function
-Phone.change() //'我可以改变世界' */
-```
+   ```js
+   // ES6方法
+   class Phone {
+     //静态属性：属于类的属性和方法，但不属于实例对象的属性和方法
+     static name = '手机'
+     static change() {
+       console.log('我可以改变世界')
+     }
+   }
+   let nokia = new Phone()
+   console.log(nokia.name)	// undefined
+   console.log(Phone.name)	// '手机'
+   nokia.change() // 报错nokia.change is not a function
+   Phone.change() //'我可以改变世界' */
+   ```
 
 #### 2.11.4 私有属性
 
@@ -4641,89 +4646,92 @@ Phone.change() //'我可以改变世界' */
 
 > ES9允许命名捕获组使用符号`?<name>`,这样获取捕获结果可读性更强，无需通过改变index来获取结果。
 
-```js
-// 传统方法
-// 声明一个字符串
-let str = '<a href="http://www.atguigu.com">尚硅谷</a>'
-// 提取 url 与 『标签文本』
-const reg = /<a href="(.*)">(.*)<\/a>/
-// 执行
-const result = reg.exec(str)
-// 返回结果：数组：[整个正则匹配结果,第一个小括号匹配结果,第二个小括号匹配结果,...]
-console.log(result)
-console.log(result[1])
-console.log(result[2])
-```
+1. 传统方法
 
-```js
-// ES9新特性：分组命名
-// 声明一个字符串
-let str = '<a href="http://www.atguigu.com">尚硅谷</a>'
-//分组命名
-const reg = /<a href="(?<url>.*)">(?<text>.*)<\/a>/
-// 返回结果，与传统方法相同，但多了一个groups属性，里面有url、text属性
-// 优势：如果正则发生变化，也无需通过改变小括号内index来获取结果
-const result = reg.exec(str)
-console.log(result.groups.url)
-console.log(result.groups.text)
-```
+   ```js
+   // 声明一个字符串
+   let str = '<a href="http://www.atguigu.com">尚硅谷</a>'
+   // 提取 url 与 『标签文本』
+   const reg = /<a href="(.*)">(.*)<\/a>/
+   // 执行
+   const result = reg.exec(str)
+   // 返回结果：数组：[整个正则匹配结果,第一个小括号匹配结果,第二个小括号匹配结果,...]
+   console.log(result)
+   console.log(result[1])
+   console.log(result[2])
+   ```
+
+2. ES9新特性
+
+   ```js
+   // ES9新特性：分组命名
+   // 声明一个字符串
+   let str = '<a href="http://www.atguigu.com">尚硅谷</a>'
+   //分组命名
+   const reg = /<a href="(?<url>.*)">(?<text>.*)<\/a>/
+   // 返回结果，与传统方法相同，但多了一个groups属性，里面有url、text属性
+   // 优势：如果正则发生变化，也无需通过改变小括号内index来获取结果
+   const result = reg.exec(str)
+   console.log(result.groups.url)
+   console.log(result.groups.text)
+   ```
 
 #### 2.12.9 反向断言
 
-> ES9支持反向断言，通过对匹配结果前面的内容进行判断，对匹配进行筛选。
+1. ES9支持反向断言，通过对匹配结果前面的内容进行判断，对匹配进行筛选。
 
-```js
-//需求：提取“你知道么”和“啦啦啦”之间的数字
-let str = 'JS5211314你知道么555啦啦啦'
-
-//正向断言
-const reg = /\d+(?=啦)/
-const result = reg.exec(str)
-
-//反向断言
-const reg2 = /(?<=么)\d+/
-const result2 = reg2.exec(str)
-console.log(result2)
-```
+   ```js
+   //需求：提取“你知道么”和“啦啦啦”之间的数字
+   let str = 'JS5211314你知道么555啦啦啦'
+   
+   //正向断言
+   const reg = /\d+(?=啦)/
+   const result = reg.exec(str)
+   
+   //反向断言
+   const reg2 = /(?<=么)\d+/
+   const result2 = reg2.exec(str)
+   console.log(result2)
+   ```
 
 #### 2.12.10 dotAll模式
 
-> 正则表达式中 dot（`.`）匹配除回车外的任意单个字符，标记`s`改变这种行为，允许行终止符出现。
+1. 正则表达式中 dot（`.`）匹配除回车外的任意单个字符，标记`s`改变这种行为，允许行终止符出现。
 
-```js
-// 传统方法
-// 需求：分别把电影名和日期提取出来，存入数组
-let str = `
-  <ul>
-      <li>
-          <a>肖生克的救赎</a>
-          <p>上映日期: 1994-09-10</p>
-      </li>
-      <li>
-          <a>阿甘正传</a>
-          <p>上映日期: 1994-07-06</p>
-      </li>
-  </ul>`
-// 声明正则
-const reg = /<li>\s+<a>(.*?)<\/a>\s+<p>(.*?)<\/p>/
-//执行匹配
-const result = reg.exec(str)
-console.log(result)
-```
+   ```js
+   // 传统方法
+   // 需求：分别把电影名和日期提取出来，存入数组
+   let str = `
+     <ul>
+         <li>
+             <a>肖生克的救赎</a>
+             <p>上映日期: 1994-09-10</p>
+         </li>
+         <li>
+             <a>阿甘正传</a>
+             <p>上映日期: 1994-07-06</p>
+         </li>
+     </ul>`
+   // 声明正则
+   const reg = /<li>\s+<a>(.*?)<\/a>\s+<p>(.*?)<\/p>/
+   //执行匹配
+   const result = reg.exec(str)
+   console.log(result)
+   ```
 
-```js
-// ES9新方法：dotAll模式
-// 声明正则
-const reg = /<li>.*?<a>(.*?)<\/a>.*?<p>(.*?)<\/p>/gs
-// 执行匹配
-let result
-let data = []
-while ((result = reg.exec(str))) {
-  data.push({ title: result[1], time: result[2] })
-}
-//输出结果
-console.log(data)
-```
+   ```js
+   // ES9新方法：dotAll模式
+   // 声明正则
+   const reg = /<li>.*?<a>(.*?)<\/a>.*?<p>(.*?)<\/p>/gs
+   // 执行匹配
+   let result
+   let data = []
+   while ((result = reg.exec(str))) {
+     data.push({ title: result[1], time: result[2] })
+   }
+   //输出结果
+   console.log(data)
+   ```
 
 ------
 
@@ -5279,140 +5287,138 @@ console.log(data)
 
 ##### 2.17.1.3 Promise基本案例
 
-1. 定时器模拟中奖
+1. 定时器模拟中奖：点击按钮, 1s 后显示是否中奖（30%概率中奖）
 
-> 需求：点击按钮, 1s 后显示是否中奖（30%概率中奖）
->
-> * 若中奖弹出:恭喜恭喜, 奖品为 10万 RMB 劳斯莱斯优惠券
-> * 若未中奖弹出:再接再厉 
+   ```js
+   // 若中奖弹出:恭喜恭喜, 奖品为 10万 RMB 劳斯莱斯优惠券
+   // 若未中奖弹出:再接再厉
+   
+   // 定时器实现
+   // 生成随机数
+   function rand(m, n) {
+     return Math.ceil(Math.random() * (n - m + 1)) + m - 1
+   }
+   //获取元素对象
+   const btn = document.querySelector('#btn')
+   
+   // 绑定单击事件
+   btn.addEventListener('click', function () {
+     //定时器实现
+     setTimeout(() => {
+       // 30%中奖概率
+       // 获取从1-100的一个随机数
+       let n = rand(1, 100)
+       //判断
+       if (n <= 30) {
+         alert('恭喜恭喜, 奖品为 10万 RMB 劳斯莱斯优惠券')
+       } else {
+         alert('再接再厉')
+       }
+     }, 1000)
+   })
+   ```
 
-```js
-// 定时器实现
-// 生成随机数
-function rand(m, n) {
-  return Math.ceil(Math.random() * (n - m + 1)) + m - 1
-}
-//获取元素对象
-const btn = document.querySelector('#btn')
-
-// 绑定单击事件
-btn.addEventListener('click', function () {
-  //定时器实现
-  setTimeout(() => {
-    // 30%中奖概率
-    // 获取从1-100的一个随机数
-    let n = rand(1, 100)
-    //判断
-    if (n <= 30) {
-      alert('恭喜恭喜, 奖品为 10万 RMB 劳斯莱斯优惠券')
-    } else {
-      alert('再接再厉')
-    }
-  }, 1000)
-})
-```
-
-```js
-// Promise形式实现
-// 生成随机数
-function rand(m, n) {
-  return Math.ceil(Math.random() * (n - m + 1)) + m - 1
-}
-//获取元素对象
-const btn = document.querySelector('#btn')
-// 绑定单击事件
-btn.addEventListener('click', function () {
-  //Promise形式实现
-  const p = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // 30%中奖概率
-      // 获取从1-100的一个随机数
-      let n = rand(1, 100)
-      //判断
-      if (n <= 30) {
-        resolve(n) // 将 promise 对象的状态设置为 『成功』
-      } else {
-        reject(n) // 将 promise 对象的状态设置为 『失败』
-      }
-    }, 1000)
-  })
-  console.log(p)
-  //调用 then 方法
-  p.then(
-    (value) => {
-      alert('恭喜恭喜, 奖品为 10万 RMB 劳斯莱斯优惠券, 您的中奖数字为：' + value)
-    },
-    (reason) => {
-      alert('再接再厉, 您的号码为：' + reason)
-    }
-  )
-})
-```
+   ```js
+   // Promise形式实现
+   // 生成随机数
+   function rand(m, n) {
+     return Math.ceil(Math.random() * (n - m + 1)) + m - 1
+   }
+   //获取元素对象
+   const btn = document.querySelector('#btn')
+   // 绑定单击事件
+   btn.addEventListener('click', function () {
+     //Promise形式实现
+     const p = new Promise((resolve, reject) => {
+       setTimeout(() => {
+         // 30%中奖概率
+         // 获取从1-100的一个随机数
+         let n = rand(1, 100)
+         //判断
+         if (n <= 30) {
+           resolve(n) // 将 promise 对象的状态设置为 『成功』
+         } else {
+           reject(n) // 将 promise 对象的状态设置为 『失败』
+         }
+       }, 1000)
+     })
+     console.log(p)
+     //调用 then 方法
+     p.then(
+       (value) => {
+         alert('恭喜恭喜, 奖品为 10万 RMB 劳斯莱斯优惠券, 您的中奖数字为：' + value)
+       },
+       (reason) => {
+         alert('再接再厉, 您的号码为：' + reason)
+       }
+     )
+   })
+   ```
 
 2. 判断时间戳是否为奇数
 
-```js
-// 1.创建 promise 对象(pending 状态), 指定执行器函数
-const p = new Promise((resolve, reject) => {
-  // 2.在执行器函数中启动异步任务
-  setTimeout(() => {
-    const time = Date.now()
-    // 3.根据结果做不同处理
-    // 如果成功了, 调用 resolve(), 指定成功的 value, 变为 resolved 状态
-    if (time % 2 === 1) {
-      resolve('成功的值 ' + time)
-    } else {
-      // 如果失败了, 调用 reject(), 指定失败的 reason, 变为rejected 状态
-      reject('失败的值' + time)
-    }
-  }, 2000)
-})
-// 4.指定成功或失败的回调函数来获取成功的 value 或失败的 reason
-p.then(
-  (value) => {
-    // 成功的回调函数 onResolved, 得到成功的 value
-    console.log('成功的 value: ', value)
-  },
-  (reason) => {
-    // 失败的回调函数 onRejected, 得到失败的 reason
-    console.log('失败的 reason: ', reason)
-  }
-)
-```
+   ```js
+   // 1.创建 promise 对象(pending 状态), 指定执行器函数
+   const p = new Promise((resolve, reject) => {
+     // 2.在执行器函数中启动异步任务
+     setTimeout(() => {
+       const time = Date.now()
+       // 3.根据结果做不同处理
+       // 如果成功了, 调用 resolve(), 指定成功的 value, 变为 resolved 状态
+       if (time % 2 === 1) {
+         resolve('成功的值 ' + time)
+       } else {
+         // 如果失败了, 调用 reject(), 指定失败的 reason, 变为rejected 状态
+         reject('失败的值' + time)
+       }
+     }, 2000)
+   })
+   // 4.指定成功或失败的回调函数来获取成功的 value 或失败的 reason
+   p.then(
+     (value) => {
+       // 成功的回调函数 onResolved, 得到成功的 value
+       console.log('成功的 value: ', value)
+     },
+     (reason) => {
+       // 失败的回调函数 onRejected, 得到失败的 reason
+       console.log('失败的 reason: ', reason)
+     }
+   )
+   ```
 
 3. 与fs模块结合读取文件
 
-```js
-const fs = require('fs')
-
-// 方法1：回调函数:
-fs.readFile('./resource/content.txt', (err, data) => {
-  // 如果出错 则抛出错误
-  if (err) throw err
-  //输出文件内容
-  console.log(data.toString())
-})
-
-// 方法2：Promise 形式
-let p = new Promise((resolve, reject) => {
-  fs.readFile('./resource/content.txt', (err, data) => {
-    //如果出错
-    if (err) reject(err)
-    //如果成功
-    resolve(data)
-  })
-})
-
-//调用 then
-p.then(
-  (value) => {
-    console.log(value.toString())
-  },
-  (reason) => {
-    console.log(reason)
-  }
-)
-```
+   ```js
+   const fs = require('fs')
+   
+   // 方法1：回调函数:
+   fs.readFile('./resource/content.txt', (err, data) => {
+     // 如果出错 则抛出错误
+     if (err) throw err
+     //输出文件内容
+     console.log(data.toString())
+   })
+   
+   // 方法2：Promise 形式
+   let p = new Promise((resolve, reject) => {
+     fs.readFile('./resource/content.txt', (err, data) => {
+       //如果出错
+       if (err) reject(err)
+       //如果成功
+       resolve(data)
+     })
+   })
+   
+   //调用 then
+   p.then(
+     (value) => {
+       console.log(value.toString())
+     },
+     (reason) => {
+       console.log(reason)
+     }
+   )
+   ```
 
 ------
 
@@ -5519,24 +5525,24 @@ p.then(
 
 ##### 2.17.1.5 util.promisify方法
 
-> 传入一个遵循常见错误优先的回调风格函数（即以`(err,value)=>...`回调作为最后一个参数），并返回一个promise版本。可以使用它来达到用promise封装功能的效果。
+1. 第三方插件`util`：传入一个遵循常见错误优先的回调风格函数（即以`(err,value)=>...`回调作为最后一个参数），并返回一个promise版本。可以使用它来达到用promise封装功能的效果。
 
-```js
-// 封装fs读取模块（node.js）
-// 引入 util 模块
-const util = require('util')
-// 引入 fs 模块
-const fs = require('fs')
-// 返回一个新的函数
-let mineReadFile = util.promisify(fs.readFile)
-
-mineReadFile('./resource/content.txt').then((value) => {
-  console.log(value.toString()),
-    (reason) => {
-      console.log(reason)
-    }
-})
-```
+   ```js
+   // 封装fs读取模块（node.js）
+   // 引入 util 模块
+   const util = require('util')
+   // 引入 fs 模块
+   const fs = require('fs')
+   // 返回一个新的函数
+   let mineReadFile = util.promisify(fs.readFile)
+   
+   mineReadFile('./resource/content.txt').then((value) => {
+     console.log(value.toString()),
+       (reason) => {
+         console.log(reason)
+       }
+   })
+   ```
 
 ------
 
@@ -5723,21 +5729,15 @@ mineReadFile('./resource/content.txt').then((value) => {
 
 ------
 
-1. 
-
-   ```js
-   
-   ```
-
 #### 2.17.3 Promise的关键问题
 
 1. 如何改变 Promise 的状态?
 
-   > (1) resolve(value): 如果当前是 pending 就会变为 resolved
-   >
-   > (2) reject(reason): 如果当前是 pending 就会变为 rejected
-   >
-   > (3) 抛出异常 throw('error'): 如果当前是 pending 就会变为 rejected
+   (1) resolve(value): 如果当前是 pending 就会变为 resolved
+   
+   (2) reject(reason): 如果当前是 pending 就会变为 rejected
+   
+   (3) 抛出异常 throw('error'): 如果当前是 pending 就会变为 rejected
 
    ```js
    let p = new Promise((resolve, reject) => {
@@ -5753,7 +5753,7 @@ mineReadFile('./resource/content.txt').then((value) => {
 
 2. 一个 Promise 指定多个成功/失败回调函数, 都会调用吗？
 
-   > 当 promise 改变为对应状态时都会调用
+   * 当 promise 改变为对应状态时都会调用
 
    ```js
    let p = new Promise((resolve, reject) => {
@@ -5783,18 +5783,18 @@ mineReadFile('./resource/content.txt').then((value) => {
 
 3. 改变 Promise 状态和指定回调函数谁先谁后？
 
-   > (1) 都有可能, 同步任务是先改变状态、再指定回调，异步任务是先指定回调、再改变状态
-   >
-   > (2) 如何先改状态再指定回调？
-   >
-   > * 在执行器中直接调用 resolve()/reject()
-   >
-   > * 延迟更长时间才调用 then()
-   >
-   > (3) 什么时候才能得到数据？
-   >
-   > * 如果先指定的回调, 那当状态发生改变时, 回调函数就会调用, 得到数据
-   > * 如果先改变的状态, 那当指定回调时, 回调函数就会调用, 得到数据
+   (1) 都有可能, 同步任务是先改变状态、再指定回调，异步任务是先指定回调、再改变状态
+   
+   (2) 如何先改状态再指定回调？
+   
+   * 在执行器中直接调用 resolve()/reject()
+   
+   * 延迟更长时间才调用 then()
+   
+   (3) 什么时候才能得到数据？
+   
+   * 如果先指定的回调, 那当状态发生改变时, 回调函数就会调用, 得到数据
+   * 如果先改变的状态, 那当指定回调时, 回调函数就会调用, 得到数据
 
    ```js
    // 同步任务：先改变状态，再指定回调
@@ -5827,13 +5827,13 @@ mineReadFile('./resource/content.txt').then((value) => {
 
 4. Promise.then()返回的新 promise 的结果状态由什么决定？
 
-   > (1) 简单表达: 由 then()指定的回调函数执行的结果决定
-   >
-   > (2) 详细表达:
-   >
-   > * 如果抛出异常, 新 promise 变为 rejected, reason 为抛出的异常
-   > * 如果返回的是非 promise 的任意值, 新 promise 变为 resolved, value 为返回的值
-   > * 如果返回的是另一个新 promise, 此 promise 的结果就会成为新 promise 的结果
+   (1) 简单表达: 由 then()指定的回调函数执行的结果决定
+   
+   (2) 详细表达:
+   
+   * 如果抛出异常, 新 promise 变为 rejected, reason 为抛出的异常
+   * 如果返回的是非 promise 的任意值, 新 promise 变为 resolved, value 为返回的值
+   * 如果返回的是另一个新 promise, 此 promise 的结果就会成为新 promise 的结果
 
    ```js
    let p = new Promise((resolve, reject) => {
@@ -5864,9 +5864,9 @@ mineReadFile('./resource/content.txt').then((value) => {
 
 5. Promise 如何串连多个操作任务？
 
-   > (1) promise 的 then()返回一个新的 promise, 可以开成 then()的链式调用
-   >
-   > (2) 通过 then 的链式调用串连多个同步/异步任务
+   (1) promise 的 then()返回一个新的 promise, 可以开成 then()的链式调用
+   
+   (2) 通过 then 的链式调用串连多个同步/异步任务
 
    ```js
    let p = new Promise((resolve, reject) => {
@@ -5889,8 +5889,9 @@ mineReadFile('./resource/content.txt').then((value) => {
 
 6. Promise 异常穿透？
 
-   > (1) 当使用 promise 的 then 链式调用时, 可以在最后指定失败的回调
-   > (2) 前面任何操作出了异常, 都会传到最后失败的回调中处理
+   (1) 当使用 promise 的 then 链式调用时, 可以在最后指定失败的回调
+
+   (2) 前面任何操作出了异常, 都会传到最后失败的回调中处理
 
    ```js
    let p = new Promise((resolve, reject) => {
@@ -5916,9 +5917,10 @@ mineReadFile('./resource/content.txt').then((value) => {
 
 7. 中断 Promise 链？
 
-   > (1) 当使用 promise 的 then 链式调用时, 在中间中断, 不再调用后面的回调函数
-   > (2) 办法: 在回调函数中返回一个 pendding 状态的 promise 对象
-
+   (1) 当使用 promise 的 then 链式调用时, 在中间中断, 不再调用后面的回调函数
+   
+   (2) 办法: 在回调函数中返回一个 pendding 状态的 promise 对象
+   
    ```js
    let p = new Promise((resolve, reject) => {
      setTimeout(() => {
@@ -5948,130 +5950,135 @@ mineReadFile('./resource/content.txt').then((value) => {
 #### 2.18.1 [async函数](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/async_function)
 
 1. 函数的返回值为 promise 对象
+
 2. promise 对象的结果由 async 函数执行的返回值决定
 
-```js
-async function main() {
-  // 1. 如果返回值是一个非Promise类型的数据：return一个成功状态的promise
-  // PromiseState: "fulfilled", PromiseResult: 521
-  return 521
-  // PromiseState:'fulfilled'，PromiseResult:undefined
-  return
-  
-  // 2. 如果返回的是一个Promise对象：return一个与该promise对象状态相同的promise对象
-  return new Promise((resolve, reject) => {
-    resolve('OK')   // PromiseState: "fulfilled", PromiseResult: "OK"
-    reject('Error') //  PromiseState: "rejected", PromiseResult: "Error"
-  })
-  
-  // 3. 抛出异常：返回一个失败状态的promise
-  //  PromiseState: "rejected", PromiseResult: "Oh NO"
-  throw 'Oh NO'
-}
-let result = main()
-// 如果想直接返回promise值（value或reason），可以用then
-result.then(
-  (value) => {
-    console.log(value)
-  },
-  (reason) => {
-    console.warn(reason)
-  }
-)
-```
+   ```js
+   async function main() {
+     // 1. 如果返回值是一个非Promise类型的数据：return一个成功状态的promise
+     // PromiseState: "fulfilled", PromiseResult: 521
+     return 521
+     // PromiseState:'fulfilled'，PromiseResult:undefined
+     return
+     
+     // 2. 如果返回的是一个Promise对象：return一个与该promise对象状态相同的promise对象
+     return new Promise((resolve, reject) => {
+       resolve('OK')   // PromiseState: "fulfilled", PromiseResult: "OK"
+       reject('Error') //  PromiseState: "rejected", PromiseResult: "Error"
+     })
+     
+     // 3. 抛出异常：返回一个失败状态的promise
+     //  PromiseState: "rejected", PromiseResult: "Oh NO"
+     throw 'Oh NO'
+   }
+   let result = main()
+   // 如果想直接返回promise值（value或reason），可以用then
+   result.then(
+     (value) => {
+       console.log(value)
+     },
+     (reason) => {
+       console.warn(reason)
+     }
+   )
+   ```
 
 #### 2.18.2 [await表达式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/await)
 
 1. await 右侧的表达式一般为 promise 对象, 但也可以是其它的值
+
 2. 如果表达式是 promise 对象, await 返回的是 promise 成功的值
+
 3. 如果表达式是其它值, 直接将此值作为 await 的返回值
+
 4. await 必须写在 async 函数中, 但 async 函数中可以没有 await
+
 5. 如果 await 的 promise 失败了, 就会抛出异常, 需要通过 try...catch 捕获处理
 
-```js
-async function main() {
-  let p = new Promise((resolve, reject) => {
-    // resolve('OK')
-    reject('Error')
-  })
-  //1. 右侧为promise的情况：返回promise成功的值：'OK'
-  let res = await p
-  console.log(res)
-  
-  //2. 右侧为其他类型的数据：20
-  let res2 = await 20
-  console.log(res2)
-  
-  //3. 如果promise是失败的状态：res、res2、res3都不会执行，直接执行catch部分
-  try {
-    let res3 = await p
-    console.log(res3)
-  } catch (e) {
-    console.log(e)
-  }
-}
-main()
-```
+   ```js
+   async function main() {
+     let p = new Promise((resolve, reject) => {
+       // resolve('OK')
+       reject('Error')
+     })
+     //1. 右侧为promise的情况：返回promise成功的值：'OK'
+     let res = await p
+     console.log(res)
+     
+     //2. 右侧为其他类型的数据：20
+     let res2 = await 20
+     console.log(res2)
+     
+     //3. 如果promise是失败的状态：res、res2、res3都不会执行，直接执行catch部分
+     try {
+       let res3 = await p
+       console.log(res3)
+     } catch (e) {
+       console.log(e)
+     }
+   }
+   main()
+   ```
 
 #### 2.18.3 async与await结合
 
 1. 使用fs读取文件内容
 
-```js
-const fs = require('fs')
-const util = require('util')
-// util.promisify可以返回一个promise对象，免去封装过程
-const mineReadFile = util.promisify(fs.readFile)
-
-//async 与 await
-async function main() {
-  try {
-    //读取第一个文件的内容
-    let data1 = await mineReadFile('./resource/1x.html')
-    let data2 = await mineReadFile('./resource/2.html')
-    let data3 = await mineReadFile('./resource/3.html')
-    console.log(data1 + data2 + data3)
-  } catch (e) {
-    console.log(e.code)
-  }
-}
-
-main()
-```
+   ```js
+   const fs = require('fs')
+   const util = require('util')
+   // util.promisify可以返回一个promise对象，免去封装过程
+   const mineReadFile = util.promisify(fs.readFile)
+   
+   //async 与 await
+   async function main() {
+     try {
+       //读取第一个文件的内容
+       let data1 = await mineReadFile('./resource/1x.html')
+       let data2 = await mineReadFile('./resource/2.html')
+       let data3 = await mineReadFile('./resource/3.html')
+       console.log(data1 + data2 + data3)
+     } catch (e) {
+       console.log(e.code)
+     }
+   }
+   
+   main()
+   ```
 
 2. 封装Ajax请求
 
-```js
-function sendAJAX(url) {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest()
-    xhr.responseType = 'json'
-    xhr.open('GET', url)
-    xhr.send()
-    //处理结果
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        //判断成功
-        if (xhr.status >= 200 && xhr.status < 300) {
-          //成功的结果
-          resolve(xhr.response)
-        } else {
-          reject(xhr.status)
-        }
-      }
-    }
-  })
-}
-let btn = document.querySelector('#btn')
-btn.addEventListener('click', async function () {
-  try {
-    let duanzi = await sendAJAX('https://api.apiopen.top/getJoke')
-    console.log(duanzi)
-  } catch (e) {
-    alert(e)
-  }
-})
-```
+   ```js
+   function sendAJAX(url) {
+     return new Promise((resolve, reject) => {
+       const xhr = new XMLHttpRequest()
+       xhr.responseType = 'json'
+       xhr.open('GET', url)
+       xhr.send()
+       //处理结果
+       xhr.onreadystatechange = function () {
+         if (xhr.readyState === 4) {
+           //判断成功
+           if (xhr.status >= 200 && xhr.status < 300) {
+             //成功的结果
+             resolve(xhr.response)
+           } else {
+             reject(xhr.status)
+           }
+         }
+       }
+     })
+   }
+   let btn = document.querySelector('#btn')
+   btn.addEventListener('click', async function () {
+     try {
+       let duanzi = await sendAJAX('https://api.apiopen.top/getJoke')
+       console.log(duanzi)
+     } catch (e) {
+       alert(e)
+     }
+   })
+   ```
 
 ------
 
@@ -6416,14 +6423,14 @@ btn.addEventListener('click', async function () {
 
 3. 添加事件处理程序（函数赋值）
 
-```js
-<button id="btn">唐伯虎</button>
-
-var btn = document.getElementById('btn')
-btn.onclick = function () {
-  alert('点秋香')
-}
-```
+   ```js
+   <button id="btn">唐伯虎</button>
+   
+   var btn = document.getElementById('btn')
+   btn.onclick = function () {
+     alert('点秋香')
+   }
+   ```
 
 ###### DOM事件流：捕获与冒泡
 
@@ -6760,26 +6767,27 @@ btn.onclick = function () {
 ##### 3.2.3.5 事件委托
 
 1. 定义：不给每个子节点单独设置事件监听器，而将其设置在父节点上，利用冒泡原理影响设置每个子节点
+
 2. 作用：只操作一次DOM，提高程序性能
 
-```html
-<ul>
-  <li>知否知否，点我应有弹框在手！</li>
-  <li>知否知否，点我应有弹框在手！</li>
-  <li>知否知否，点我应有弹框在手！</li>
-</ul>
-<script>
-  // 事件委托的核心原理：给父节点添加侦听器，利用事件冒泡影响每一个子节点
-  var ul = document.querySelector('ul')
-  ul.addEventListener('click', function (e) {
-    alert('知否知否，点我应有弹框在手！')
-    for (var i = 0; i < ul.children.length; i++) {
-      ul.children[i].style.backgroundColor = null
-    }
-    e.target.style.backgroundColor = 'pink'	 // e.target 可以得到点击的对象
-  })
-</script>
-```
+   ```js
+   <ul>
+     <li>知否知否，点我应有弹框在手！</li>
+     <li>知否知否，点我应有弹框在手！</li>
+     <li>知否知否，点我应有弹框在手！</li>
+   </ul>
+   <script>
+     // 事件委托的核心原理：给父节点添加侦听器，利用事件冒泡影响每一个子节点
+     var ul = document.querySelector('ul')
+     ul.addEventListener('click', function (e) {
+       alert('知否知否，点我应有弹框在手！')
+       for (var i = 0; i < ul.children.length; i++) {
+         ul.children[i].style.backgroundColor = null
+       }
+       e.target.style.backgroundColor = 'pink'	 // e.target 可以得到点击的对象
+     })
+   </script>
+   ```
 
 ------
 
@@ -6870,50 +6878,55 @@ btn.onclick = function () {
 ###### 事件对象：MouseEvent
 
 1. `e.clientX`：鼠标相对浏览器可视区的X坐标
+
 2. `e.clientY`：鼠标相对浏览器可视区的Y坐标
+
 3. `e.pageX`：鼠标相对于文档页面的X坐标（IE9+支持）
+
 4. `e.pageY`：鼠标相对于文档页面的Y坐标（IE9+支持）
+
 5. `e.screenX`：鼠标相对于电脑屏幕的X坐标
+
 6. `e.screenY`：鼠标相对于电脑屏幕的Y坐标
 
-```js
-document.addEventListener('click', function (e) {
-  // 1. client 鼠标在可视区的x和y坐标
-  console.log(e.clientX)
-  console.log(e.clientY)
-  console.log('---------------------')
-  // 2. page 鼠标在页面文档的x和y坐标
-  console.log(e.pageX)
-  console.log(e.pageY)
-  console.log('---------------------')
-  // 3. screen 鼠标在电脑屏幕的x和y坐标
-  console.log(e.screenX)
-  console.log(e.screenY)
-})
-```
+   ```js
+   document.addEventListener('click', function (e) {
+     // 1. client 鼠标在可视区的x和y坐标
+     console.log(e.clientX)
+     console.log(e.clientY)
+     console.log('---------------------')
+     // 2. page 鼠标在页面文档的x和y坐标
+     console.log(e.pageX)
+     console.log(e.pageY)
+     console.log('---------------------')
+     // 3. screen 鼠标在电脑屏幕的x和y坐标
+     console.log(e.screenX)
+     console.log(e.screenY)
+   })
+   ```
 
-```html
-<!--案例：跟随鼠标移动的天使-->
-<style>
-  img {
-    position: absolute;
-    top: 2px;
-  }
-</style>
-<img src="images/angel.gif" alt="" />
-<script>
-  var pic = document.querySelector('img')
-  document.addEventListener('mousemove', function (e) {
-    // 每次鼠标移动都会获得最新的鼠标坐标，把这个x和y坐标做为图片的top和left值就可以移动图片
-    var x = e.pageX
-    var y = e.pageY
-    console.log('x坐标是' + x, 'y坐标是' + y)
-    // 不要忘记给left和top添加px单位
-    pic.style.left = x - 40 + 'px'
-    pic.style.top = y - 40 + 'px'
-  })
-</script>
-```
+   ```html
+   <!--案例：跟随鼠标移动的天使-->
+   <style>
+     img {
+       position: absolute;
+       top: 2px;
+     }
+   </style>
+   <img src="images/angel.gif" alt="" />
+   <script>
+     var pic = document.querySelector('img')
+     document.addEventListener('mousemove', function (e) {
+       // 每次鼠标移动都会获得最新的鼠标坐标，把这个x和y坐标做为图片的top和left值就可以移动图片
+       var x = e.pageX
+       var y = e.pageY
+       console.log('x坐标是' + x, 'y坐标是' + y)
+       // 不要忘记给left和top添加px单位
+       pic.style.left = x - 40 + 'px'
+       pic.style.top = y - 40 + 'px'
+     })
+   </script>
+   ```
 
 ###### 手动调用事件
 
@@ -7091,7 +7104,7 @@ document.addEventListener('click', function (e) {
    ```js
    // innerText不识别html标签：非标准，去除空格和换行
    var div = document.querySelector('div')
-   div.innerText = '<strong>今天是：</strong> 2019'
+   div.innerText = "<b>今天是：</b> 2019"
    ```
 
 2. `element.innerHTML`：从起始位置到终止位置的内容，保留html标签、空格、换行
@@ -7234,7 +7247,6 @@ document.addEventListener('click', function (e) {
    </script>
    ```
 
-   
 
 ###### 移除元素属性
 
@@ -7309,111 +7321,112 @@ document.addEventListener('click', function (e) {
 
 * 多个按钮点击其中一个时，其余按钮恢复原样（首先先排除其他人，然后才设置自己的样式）
 
-```html
-<button>按钮1</button>
-<button>按钮2</button>
-<button>按钮3</button>
-<button>按钮4</button>
-<button>按钮5</button>
-<script>
-  // 获取所有按钮元素
-  var btns = document.getElementsByTagName('button')
-  // btns得到的是伪数组，里面的每一个元素 btns[i]
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].onclick = function () {
-      // 1. 先把所有的按钮背景颜色去掉：干掉所有人
-      for (var i = 0; i < btns.length; i++) {
-        btns[i].style.backgroundColor = ''
+  ```html
+  <button>按钮1</button>
+  <button>按钮2</button>
+  <button>按钮3</button>
+  <button>按钮4</button>
+  <button>按钮5</button>
+  <script>
+    // 获取所有按钮元素
+    var btns = document.getElementsByTagName('button')
+    // btns得到的是伪数组，里面的每一个元素 btns[i]
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].onclick = function () {
+        // 1. 先把所有的按钮背景颜色去掉：干掉所有人
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].style.backgroundColor = ''
+        }
+        // 2. 然后才让当前的元素背景颜色为pink：留下我自己
+        this.style.backgroundColor = 'pink'
       }
-      // 2. 然后才让当前的元素背景颜色为pink：留下我自己
-      this.style.backgroundColor = 'pink'
     }
-  }
-</script>
-```
+  </script>
+  ```
 
 ###### 换肤效果
 
 * 更改图片的src路径
 
-```html
-<ul class="baidu">
-  <li><img src="images/1.jpg" /></li>
-  <li><img src="images/2.jpg" /></li>
-  <li><img src="images/3.jpg" /></li>
-  <li><img src="images/4.jpg" /></li>
-</ul>
-
-<script>
-  // 1. 获取元素
-  var imgs = document.querySelector('.baidu').querySelectorAll('img')
-  // 2. 循环注册事件
-  for (var i = 0; i < imgs.length; i++) {
-    imgs[i].onclick = function () {
-      // this.src 就是点击图片的路径，把这个路径给body就可以了
-      document.body.style.backgroundImage = 'url(' + this.src + ')'
+  ```html
+  <ul class="baidu">
+    <li><img src="images/1.jpg" /></li>
+    <li><img src="images/2.jpg" /></li>
+    <li><img src="images/3.jpg" /></li>
+    <li><img src="images/4.jpg" /></li>
+  </ul>
+  
+  <script>
+    // 1. 获取元素
+    var imgs = document.querySelector('.baidu').querySelectorAll('img')
+    // 2. 循环注册事件
+    for (var i = 0; i < imgs.length; i++) {
+      imgs[i].onclick = function () {
+        // this.src 就是点击图片的路径，把这个路径给body就可以了
+        document.body.style.backgroundImage = 'url(' + this.src + ')'
+      }
     }
-  }
-</script>
-```
+  </script>
+  ```
 
 ###### 表格操作
 
 1. 表格变色
 
-```js
-<style>
-  .bg {
-    background-color: pink;
-  }
-</style>
-
-// 1.获取元素：获取的是 tbody 里面所有的行
-var trs = document.querySelector('tbody').querySelectorAll('tr')
-// 2. 利用循环绑定注册事件
-for (var i = 0; i < trs.length; i++) {
-  // 3. 鼠标经过事件 onmouseover
-  trs[i].onmouseover = function () {
-    this.className = 'bg'
-  }
-  // 4. 鼠标离开事件 onmouseout
-  trs[i].onmouseout = function () {
-    this.className = ''
-  }
-}
-```
+   ```html
+   <style>
+     .bg {
+       background-color: pink;
+     }
+   </style>
+   <script>
+     // 1.获取元素：获取的是 tbody 里面所有的行
+     var trs = document.querySelector('tbody').querySelectorAll('tr')
+     // 2. 利用循环绑定注册事件
+     for (var i = 0; i < trs.length; i++) {
+       // 3. 鼠标经过事件 onmouseover
+       trs[i].onmouseover = function () {
+         this.className = 'bg'
+       }
+       // 4. 鼠标离开事件 onmouseout
+       trs[i].onmouseout = function () {
+         this.className = ''
+       }
+     }
+   </script>
+   ```
 
 2. 表格选项框全选反选
 
-```js
-// 1. 全选和取消全选做法：让下面所有复选框的checked属性（选中状态）跟随，全选按钮即可
-// 获取元素
-var j_cbAll = document.getElementById('j_cbAll') // 全选按钮
-var j_tbs = document.getElementById('j_tb').getElementsByTagName('input') // 下面所有的复选框
-// 注册事件
-j_cbAll.onclick = function () {
-  // this.checked 它可以得到当前复选框的选中状态如果是true 就是选中，如果是false 就是未选中
-  console.log(this.checked)
-  for (var i = 0; i < j_tbs.length; i++) {
-    j_tbs[i].checked = this.checked
-  }
-}
-// 2. 下面复选框需要全部选中，上面全选才能选中做法：给下面所有复选框绑定点击事件，每次点击，都要循环查看下面所有的复选框是否有没选中的，如果有一个没选中的，上面全选就不选中。
-for (var i = 0; i < j_tbs.length; i++) {
-  j_tbs[i].onclick = function () {
-    // flag 控制全选按钮是否选中
-    var flag = true
-    // 每次点击下面的复选框都要循环检查者4个小按钮是否全被选中
-    for (var i = 0; i < j_tbs.length; i++) {
-      if (!j_tbs[i].checked) {
-        flag = false
-        break // 退出for循环 这样可以提高执行效率，因为只要有一个没有选中，剩下的就无需循环判断了
-      }
-    }
-    j_cbAll.checked = flag
-  }
-}
-```
+   ```js
+   // 1. 全选和取消全选做法：让下面所有复选框的checked属性（选中状态）跟随，全选按钮即可
+   // 获取元素
+   var j_cbAll = document.getElementById('j_cbAll') // 全选按钮
+   var j_tbs = document.getElementById('j_tb').getElementsByTagName('input') // 下面所有的复选框
+   // 注册事件
+   j_cbAll.onclick = function () {
+     // this.checked 它可以得到当前复选框的选中状态如果是true 就是选中，如果是false 就是未选中
+     console.log(this.checked)
+     for (var i = 0; i < j_tbs.length; i++) {
+       j_tbs[i].checked = this.checked
+     }
+   }
+   // 2. 下面复选框需要全部选中，上面全选才能选中做法：给下面所有复选框绑定点击事件，每次点击，都要循环查看下面所有的复选框是否有没选中的，如果有一个没选中的，上面全选就不选中。
+   for (var i = 0; i < j_tbs.length; i++) {
+     j_tbs[i].onclick = function () {
+       // flag 控制全选按钮是否选中
+       var flag = true
+       // 每次点击下面的复选框都要循环检查者4个小按钮是否全被选中
+       for (var i = 0; i < j_tbs.length; i++) {
+         if (!j_tbs[i].checked) {
+           flag = false
+           break // 退出for循环 这样可以提高执行效率，因为只要有一个没有选中，剩下的就无需循环判断了
+         }
+       }
+       j_cbAll.checked = flag
+     }
+   }
+   ```
 
 ###### Tab栏切换内容
 
@@ -7421,61 +7434,61 @@ for (var i = 0; i < j_tbs.length; i++) {
 
 2. 底部内容区域跟随变化：通过对应tab栏的index编号进行索引，设置display属性（也用到了排他算法）
 
-```html
-<style>
-  .current {
-    background-color: red;
-  }
-</style>
-
-<div class="tab">
-  <div class="tab_list">
-    <ul>
-      <li class="current">商品介绍</li>
-      <li>规格与包装</li>
-      <li>售后保障</li>
-      <li>商品评价（50000）</li>
-      <li>手机社区</li>
-    </ul>
-  </div>
-  <div class="tab_con">
-    <div class="item" style="display: block">商品介绍模块内容</div>
-    <div class="item">规格与包装模块内容</div>
-    <div class="item">售后保障模块内容</div>
-    <div class="item">商品评价（50000）模块内容</div>
-    <div class="item">手机社区模块内容</div>
-  </div>
-</div>
-<script>
-  // 获取元素
-  var tab_list = document.querySelector('.tab_list')
-  var lis = tab_list.querySelectorAll('li')
-  var items = document.querySelectorAll('.item')
-  // for循环绑定点击事件
-  for (var i = 0; i < lis.length; i++) {
-    // 开始给5个小li，设置索引号（用于下面显示内容模块）
-    lis[i].setAttribute('index', i)
-    lis[i].onclick = function () {
-      // 1. 上面的模块选项卡：点击某一个，当前这一个底色会是红色，其余不变（排他思想）
-      // 干掉所有人：其余的li清除 class 这个类
-      for (var i = 0; i < lis.length; i++) {
-        lis[i].className = ''
-      }
-      // 留下我自己
-      this.className = 'current'
-        
-      // 2. 下面的显示内容模块
-      var index = this.getAttribute('index')
-      // 干掉所有人 让其余的item 这些div 隐藏
-      for (var i = 0; i < items.length; i++) {
-        items[i].style.display = 'none'
-      }
-      // 留下我自己 让对应的item 显示出来
-      items[index].style.display = 'block'
-    }
-  }
-</script>
-```
+   ```html
+   <style>
+     .current {
+       background-color: red;
+     }
+   </style>
+   
+   <div class="tab">
+     <div class="tab_list">
+       <ul>
+         <li class="current">商品介绍</li>
+         <li>规格与包装</li>
+         <li>售后保障</li>
+         <li>商品评价（50000）</li>
+         <li>手机社区</li>
+       </ul>
+     </div>
+     <div class="tab_con">
+       <div class="item" style="display: block">商品介绍模块内容</div>
+       <div class="item">规格与包装模块内容</div>
+       <div class="item">售后保障模块内容</div>
+       <div class="item">商品评价（50000）模块内容</div>
+       <div class="item">手机社区模块内容</div>
+     </div>
+   </div>
+   <script>
+     // 获取元素
+     var tab_list = document.querySelector('.tab_list')
+     var lis = tab_list.querySelectorAll('li')
+     var items = document.querySelectorAll('.item')
+     // for循环绑定点击事件
+     for (var i = 0; i < lis.length; i++) {
+       // 开始给5个小li，设置索引号（用于下面显示内容模块）
+       lis[i].setAttribute('index', i)
+       lis[i].onclick = function () {
+         // 1. 上面的模块选项卡：点击某一个，当前这一个底色会是红色，其余不变（排他思想）
+         // 干掉所有人：其余的li清除 class 这个类
+         for (var i = 0; i < lis.length; i++) {
+           lis[i].className = ''
+         }
+         // 留下我自己
+         this.className = 'current'
+           
+         // 2. 下面的显示内容模块
+         var index = this.getAttribute('index')
+         // 干掉所有人 让其余的item 这些div 隐藏
+         for (var i = 0; i < items.length; i++) {
+           items[i].style.display = 'none'
+         }
+         // 留下我自己 让对应的item 显示出来
+         items[index].style.display = 'block'
+       }
+     }
+   </script>
+   ```
 
 ------
 
@@ -7752,7 +7765,7 @@ for (var i = 0; i < j_tbs.length; i++) {
 
 1. `node.removeChild(child)`：删除父节点下的子节点
 
-2. 案例：删除留言：制作删除按钮，阻止链接<a>跳转：href = 'javascript: void(0);' 或 'javascript:;'
+2. 案例：删除留言：制作删除按钮，阻止链接`<a>`跳转：href = 'javascript: void(0);' 或 'javascript:;'
 
    ```html
    <textarea name="" id=""></textarea>
@@ -7817,104 +7830,106 @@ for (var i = 0; i < j_tbs.length; i++) {
 ##### 3.2.5.8 动态创建表格
 
 1. 创建行：for循环储存数据的数组，有几条数据创建几行
+
 2. 创建单元格：for循环对象，对象有几个属性创建几个单元格，如果需要额外添加单元格（如：删除按钮），则再单独创建单元格
-3. 删除按钮<a>：tbody.removeChild( this.parentNode.parentNode)，即删除<a>的父元素<td>的父元素<tr>
 
-```html
-<style>
-  table {
-    width: 500px;
-    margin: 100px auto;
-    border-collapse: collapse;
-    text-align: center;
-  }
-  td,
-  th {
-    border: 1px solid #333;
-  }
-  thead tr {
-    height: 40px;
-    background-color: #ccc;
-  }
-</style>
+3. 删除按钮`<a>`：tbody.removeChild( this.parentNode.parentNode)，即删除`<a>`的父元素`<td>`的父元素`<tr>`
 
-<body>
-  <table cellspacing="0">
-    <thead>
-      <tr>
-        <th>姓名</th>
-        <th>科目</th>
-        <th>成绩</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-    
-  <script>
-    // 1. 准备好学生的数据
-    var datas = [
-      {
-        name: '魏璎珞',
-        subject: 'JavaScript',
-        score: 100,
-      },
-      {
-        name: '弘历',
-        subject: 'JavaScript',
-        score: 98,
-      },
-      {
-        name: '傅恒',
-        subject: 'JavaScript',
-        score: 99,
-      },
-      {
-        name: '明玉',
-        subject: 'JavaScript',
-        score: 88,
-      },
-      {
-        name: '大猪蹄子',
-        subject: 'JavaScript',
-        score: 0,
-      },
-    ]
-    // 2. 往tbody里面创建行：有几个人（通过数组的长度）我们就创建几行
-    var tbody = document.querySelector('tbody')
-    for (var i = 0; i < datas.length; i++) {
-      // 外面的for循环：行tr
-      // 1. 创建 tr行
-      var tr = document.createElement('tr')
-      tbody.appendChild(tr)
+   ```js
+   <style>
+     table {
+       width: 500px;
+       margin: 100px auto;
+       border-collapse: collapse;
+       text-align: center;
+     }
+     td,
+     th {
+       border: 1px solid #333;
+     }
+     thead tr {
+       height: 40px;
+       background-color: #ccc;
+     }
+   </style>
+   
+   <body>
+     <table cellspacing="0">
+       <thead>
+         <tr>
+           <th>姓名</th>
+           <th>科目</th>
+           <th>成绩</th>
+           <th>操作</th>
+         </tr>
+       </thead>
+       <tbody></tbody>
+     </table>
        
-      // 2. 行里面创建单元格(跟数据有关系的3个单元格) td，单元格的数量取决于每个对象里面的属性数量
-      for (var k in datas[i]) {
-        // 里面的for循环：列td
-        // 创建单元格
-        var td = document.createElement('td')
-        // 把对象里面的属性值 datas[i][k] 给 td
-        td.innerHTML = datas[i][k]
-        tr.appendChild(td)
-      }
-      
-      // 3. 创建有删除2个字的单元格
-      var td = document.createElement('td')
-      td.innerHTML = '<a href="javascript:;">删除 </a>'
-      tr.appendChild(td)
-    }
-      
-    // 4. 删除操作
-    var as = document.querySelectorAll('a')
-    for (var i = 0; i < as.length; i++) {
-      as[i].onclick = function () {
-        // 点击a，删除当前a所在的行(链接的爸爸的爸爸)
-        tbody.removeChild(this.parentNode.parentNode)
-      }
-    }
-  </script>
-</body>
-```
+     <script>
+       // 1. 准备好学生的数据
+       var datas = [
+         {
+           name: '魏璎珞',
+           subject: 'JavaScript',
+           score: 100,
+         },
+         {
+           name: '弘历',
+           subject: 'JavaScript',
+           score: 98,
+         },
+         {
+           name: '傅恒',
+           subject: 'JavaScript',
+           score: 99,
+         },
+         {
+           name: '明玉',
+           subject: 'JavaScript',
+           score: 88,
+         },
+         {
+           name: '大猪蹄子',
+           subject: 'JavaScript',
+           score: 0,
+         },
+       ]
+       // 2. 往tbody里面创建行：有几个人（通过数组的长度）我们就创建几行
+       var tbody = document.querySelector('tbody')
+       for (var i = 0; i < datas.length; i++) {
+         // 外面的for循环：行tr
+         // 1. 创建 tr行
+         var tr = document.createElement('tr')
+         tbody.appendChild(tr)
+          
+         // 2. 行里面创建单元格(跟数据有关系的3个单元格) td，单元格的数量取决于每个对象里面的属性数量
+         for (var k in datas[i]) {
+           // 里面的for循环：列td
+           // 创建单元格
+           var td = document.createElement('td')
+           // 把对象里面的属性值 datas[i][k] 给 td
+           td.innerHTML = datas[i][k]
+           tr.appendChild(td)
+         }
+         
+         // 3. 创建有删除2个字的单元格
+         var td = document.createElement('td')
+         td.innerHTML = '<a href="javascript:;">删除 </a>'
+         tr.appendChild(td)
+       }
+         
+       // 4. 删除操作
+       var as = document.querySelectorAll('a')
+       for (var i = 0; i < as.length; i++) {
+         as[i].onclick = function () {
+           // 点击a，删除当前a所在的行(链接的爸爸的爸爸)
+           tbody.removeChild(this.parentNode.parentNode)
+         }
+       }
+     </script>
+   </body>
+   ```
 
 ------
 
@@ -7957,7 +7972,7 @@ for (var i = 0; i < j_tbs.length; i++) {
 
    3）旧版兼容：
 
-   * 已声明DTD（即<!DOCTYPE html>）：`document.documentElement.scrollTop`
+   * 已声明DTD（即`<!DOCTYPE html>`）：`document.documentElement.scrollTop`
    * 未声明DTD：`document.body.scrollTop`
 
    ```js
@@ -7978,7 +7993,7 @@ for (var i = 0; i < j_tbs.length; i++) {
 
    1）定义：当文档内容完全加载会触发该事件（包括图像、脚本、CSS等），可以把JS放在head里
 
-   2）触发动作：<a>、F5刷新、前进后退按钮
+   2）触发动作：`<a>`、F5刷新、前进后退按钮
 
    3）`window.onload`：传统注册事件，只能写一次，如果有多个以最后一个为准
 
@@ -9429,141 +9444,145 @@ for (var i = 0; i < j_tbs.length; i++) {
 #### 3.4.6 返回顶部
 
 1. 原理：将缓动动画函数中的 obj.offsetLeft 改为 window.pageYOffset
+
 2. 动作：window.scroll(0, window.pageYOffset + step)
+
 3. 调用：animate(window, 0)
 
-```js
-function animate(obj, target, callback) {
-  clearInterval(obj.timer)
-  obj.timer = setInterval(function () {
-    // obj.offsetLeft 改为 window.pageYOffset
-    var step = (target - window.pageYOffset) / 10
-    step = step > 0 ? Math.ceil(step) : Math.floor(step)
-    // obj.offsetLeft 改为 window.pageYOffset
-    if (window.pageYOffset == target) {
-      clearInterval(obj.timer)
-      callback && callback()
-    } else {
-      window.scroll(0, window.pageYOffset + step)
-    }
-  }, 15)
-}
-```
+   ```js
+   function animate(obj, target, callback) {
+     clearInterval(obj.timer)
+     obj.timer = setInterval(function () {
+       // obj.offsetLeft 改为 window.pageYOffset
+       var step = (target - window.pageYOffset) / 10
+       step = step > 0 ? Math.ceil(step) : Math.floor(step)
+       // obj.offsetLeft 改为 window.pageYOffset
+       if (window.pageYOffset == target) {
+         clearInterval(obj.timer)
+         callback && callback()
+       } else {
+         window.scroll(0, window.pageYOffset + step)
+       }
+     }, 15)
+   }
+   ```
 
 ------
 
 #### 3.4.7 筋斗云
 
 1. 鼠标经过li，筋斗云跟到当前li：mouseenter --> animate(cloud, this.offsetLeft)
+
 2. 鼠标离开li，筋斗云恢复原位：mouseleave --> animate(cloud, current)
+
 3. 鼠标点击li，筋斗云留在当前li：click --> current = this.offsetLeft
 
-```html
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-  }
-  ul {
-    list-style: none;
-  }
-  body {
-    background-color: black;
-  }
-  .c-nav {
-    width: 900px;
-    height: 42px;
-    background: #fff url(images/rss.png) no-repeat right center;
-    margin: 100px auto;
-    border-radius: 5px;
-    position: relative;
-  }
-  .c-nav ul {
-    position: absolute;
-  }
-  .c-nav li {
-    float: left;
-    width: 83px;
-    text-align: center;
-    line-height: 42px;
-  }
-  .c-nav li a {
-    color: #333;
-    text-decoration: none;
-    display: inline-block;
-    height: 42px;
-  }
-  .c-nav li a:hover {
-    color: white;
-  }
-  .c-nav li.current a {
-    color: #0dff1d;
-  }
-  .cloud {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 83px;
-    height: 42px;
-    background: url(images/cloud.gif) no-repeat;
-  }
-</style>
-
-<script>
-  // 缓动动画函数
-  function animate(obj, target, callback) {
-    clearInterval(obj.timer)
-    obj.timer = setInterval(function () {
-      var step = (target - obj.offsetLeft) / 10
-      step = step > 0 ? Math.ceil(step) : Math.floor(step)
-      if (obj.offsetLeft == target) {
-        clearInterval(obj.timer)
-        // 回调函数写到定时器结束里面
-        callback && callback()
-      }
-      obj.style.left = obj.offsetLeft + step + 'px'
-    }, 15)
-  }
-  // 窗口加载
-  window.addEventListener('load', function () {
-    // 1. 获取元素
-    var cloud = document.querySelector('.cloud')
-    var c_nav = document.querySelector('.c-nav')
-    var lis = c_nav.querySelectorAll('li')
-    // 2. 给所有的小li绑定事件
-    // 这个current 做为筋斗云的起始位置
-    var current = 0
-    for (var i = 0; i < lis.length; i++) {
-      // (1) 鼠标经过把当前小li 的位置做为目标值
-      lis[i].addEventListener('mouseenter', function () {
-        animate(cloud, this.offsetLeft)
-      })
-      // (2) 鼠标离开就回到起始的位置
-      lis[i].addEventListener('mouseleave', function () {
-        animate(cloud, current)
-      })
-      // (3) 当鼠标点击，就把当前位置做为目标值
-      lis[i].addEventListener('click', function () {
-        current = this.offsetLeft
-      })
-    }
-  })
-</script>
-
-<div id="c_nav" class="c-nav">
-  <span class="cloud"></span>
-  <ul>
-    <li class="current"><a href="#">首页新闻</a></li>
-    <li><a href="#">师资力量</a></li>
-    <li><a href="#">活动策划</a></li>
-    <li><a href="#">企业文化</a></li>
-    <li><a href="#">招聘信息</a></li>
-    <li><a href="#">公司简介</a></li>
-    <li><a href="#">我是佩奇</a></li>
-    <li><a href="#">啥是佩奇</a></li>
-  </ul>
-</div>
-```
+   ```html
+   <style>
+     * {
+       margin: 0;
+       padding: 0;
+     }
+     ul {
+       list-style: none;
+     }
+     body {
+       background-color: black;
+     }
+     .c-nav {
+       width: 900px;
+       height: 42px;
+       background: #fff url(images/rss.png) no-repeat right center;
+       margin: 100px auto;
+       border-radius: 5px;
+       position: relative;
+     }
+     .c-nav ul {
+       position: absolute;
+     }
+     .c-nav li {
+       float: left;
+       width: 83px;
+       text-align: center;
+       line-height: 42px;
+     }
+     .c-nav li a {
+       color: #333;
+       text-decoration: none;
+       display: inline-block;
+       height: 42px;
+     }
+     .c-nav li a:hover {
+       color: white;
+     }
+     .c-nav li.current a {
+       color: #0dff1d;
+     }
+     .cloud {
+       position: absolute;
+       left: 0;
+       top: 0;
+       width: 83px;
+       height: 42px;
+       background: url(images/cloud.gif) no-repeat;
+     }
+   </style>
+   
+   <script>
+     // 缓动动画函数
+     function animate(obj, target, callback) {
+       clearInterval(obj.timer)
+       obj.timer = setInterval(function () {
+         var step = (target - obj.offsetLeft) / 10
+         step = step > 0 ? Math.ceil(step) : Math.floor(step)
+         if (obj.offsetLeft == target) {
+           clearInterval(obj.timer)
+           // 回调函数写到定时器结束里面
+           callback && callback()
+         }
+         obj.style.left = obj.offsetLeft + step + 'px'
+       }, 15)
+     }
+     // 窗口加载
+     window.addEventListener('load', function () {
+       // 1. 获取元素
+       var cloud = document.querySelector('.cloud')
+       var c_nav = document.querySelector('.c-nav')
+       var lis = c_nav.querySelectorAll('li')
+       // 2. 给所有的小li绑定事件
+       // 这个current 做为筋斗云的起始位置
+       var current = 0
+       for (var i = 0; i < lis.length; i++) {
+         // (1) 鼠标经过把当前小li 的位置做为目标值
+         lis[i].addEventListener('mouseenter', function () {
+           animate(cloud, this.offsetLeft)
+         })
+         // (2) 鼠标离开就回到起始的位置
+         lis[i].addEventListener('mouseleave', function () {
+           animate(cloud, current)
+         })
+         // (3) 当鼠标点击，就把当前位置做为目标值
+         lis[i].addEventListener('click', function () {
+           current = this.offsetLeft
+         })
+       }
+     })
+   </script>
+   
+   <div id="c_nav" class="c-nav">
+     <span class="cloud"></span>
+     <ul>
+       <li class="current"><a href="#">首页新闻</a></li>
+       <li><a href="#">师资力量</a></li>
+       <li><a href="#">活动策划</a></li>
+       <li><a href="#">企业文化</a></li>
+       <li><a href="#">招聘信息</a></li>
+       <li><a href="#">公司简介</a></li>
+       <li><a href="#">我是佩奇</a></li>
+       <li><a href="#">啥是佩奇</a></li>
+     </ul>
+   </div>
+   ```
 
 ------
 
@@ -9651,25 +9670,25 @@ function animate(obj, target, callback) {
 
    * [fastclick.js](https://github.com/ftlabs/fastclick)插件：引入即可，按官方文档用法调用
 
-     ```js
-     <script src="fastclick.js"></script>
-     <div></div>
-     <script>
-       if ('addEventListener' in document) {
-         document.addEventListener(
-           'DOMContentLoaded',
-           function () {
-             FastClick.attach(document.body)
-           },
-           false
-         )
-       }
-       var div = document.querySelector('div')
-       div.addEventListener('click', function () {
-         alert(11)
-       })
-     </script>
-     ```
+   ```html
+   <script src="fastclick.js"></script>
+   <div></div>
+   <script>
+     if ('addEventListener' in document) {
+       document.addEventListener(
+         'DOMContentLoaded',
+         function () {
+           FastClick.attach(document.body)
+         },
+         false
+       )
+     }
+     var div = document.querySelector('div')
+     div.addEventListener('click', function () {
+       alert(11)
+     })
+   </script>
+   ```
 
 ##### 3.4.8.2 拖动元素
 
@@ -9803,136 +9822,136 @@ function animate(obj, target, callback) {
    2）利用flag判断是否为手指滑动了图片再触发事件，而不是滑动了其他地方
 
    3）重新启动定时器
-
-```html
-<!-- 焦点图模块 -->
-<div class="focus">
-  <ul>
-    <li><img src="upload/focus3.jpg" alt="" /></li>
-    <li><img src="upload/focus1.jpg" alt="" /></li>
-    <li><img src="upload/focus2.jpg" alt="" /></li>
-    <li><img src="upload/focus3.jpg" alt="" /></li>
-    <li><img src="upload/focus1.jpg" alt="" /></li>
-  </ul>
-  <!-- 小圆点 -->
-  <ol>
-    <li class="current"></li>
-    <li></li>
-    <li></li>
-  </ol>
-</div>
-```
-
-```js
-window.addEventListener('load', function () {
-  // 1. 获取元素
-  var focus = document.querySelector('.focus')
-  var ul = focus.children[0]
-  // 获得focus 的宽度
-  var w = focus.offsetWidth
-  var ol = focus.children[1]
-  // 2. 利用定时器自动轮播图图片
-  var index = 0
-  var timer = setInterval(function () {
-    index++
-    var translatex = -index * w
-    ul.style.transition = 'all .3s'
-    ul.style.transform = 'translateX(' + translatex + 'px)'
-  }, 2000)
-  // 等着过渡完成之后，再去判断（监听过渡完成的事件：transitionend）
-  ul.addEventListener('transitionend', function () {
-    // 无缝滚动
-    if (index >= 3) {
-      index = 0
-      // console.log(index);
-      // 去掉过渡效果，这样让的ul快速的跳到目标位置
-      ul.style.transition = 'none'
-      // 利用最新的索引号乘以宽度 去滚动图片
-      var translatex = -index * w
-      ul.style.transform = 'translateX(' + translatex + 'px)'
-    } else if (index < 0) {
-      index = 2
-      ul.style.transition = 'none'
-      // 利用最新的索引号乘以宽度去滚动图片
-      var translatex = -index * w
-      ul.style.transform = 'translateX(' + translatex + 'px)'
-    }
-    // 3. 小圆点跟随变化
-    // 把ol里面li带有current类名的选出来去掉类名 remove
-    ol.querySelector('.current').classList.remove('current')
-    // 让当前索引号的小li，加上 current（add）
-    ol.children[index].classList.add('current')
-  })
-
-  // 4. 手指滑动轮播图
-  // 触摸元素 touchstart： 获取手指初始坐标
-  var startX = 0
-  var moveX = 0 // 后面会使用这个移动距离所以要定义一个全局变量
-  var flag = false
-  ul.addEventListener('touchstart', function (e) {
-    startX = e.targetTouches[0].pageX
-    // 手指触摸的时候就停止定时器
-    clearInterval(timer)
-  })
-  // 移动手指 touchmove：计算手指的滑动距离，并移动盒子
-  ul.addEventListener('touchmove', function (e) {
-    // 计算移动距离
-    moveX = e.targetTouches[0].pageX - startX
-    // 移动盒子：  盒子原来的位置 + 手指移动的距离
-    var translatex = -index * w + moveX
-    // 手指拖动的时候，不需要动画效果所以要取消过渡效果
-    ul.style.transition = 'none'
-    ul.style.transform = 'translateX(' + translatex + 'px)'
-    flag = true // 如果用户手指移动过再去判断否则不做判断效果
-    e.preventDefault() // 阻止滚动屏幕的行为
-  })
-  // 手指离开，根据移动距离去判断是回弹还是播放上一张下一张
-  ul.addEventListener('touchend', function (e) {
-    if (flag) {
-      // (1) 如果移动距离大于50像素就播放上一张或者下一张
-      if (Math.abs(moveX) > 50) {
-        // 如果是右滑就是 播放上一张 moveX 是正值
-        if (moveX > 0) {
-          index--
-        } else {
-          // 如果是左滑就是 播放下一张 moveX 是负值
-          index++
-        }
-        var translatex = -index * w
-        ul.style.transition = 'all .3s'
-        ul.style.transform = 'translateX(' + translatex + 'px)'
-      } else {
-        // (2) 如果移动距离小于50像素就回弹
-        var translatex = -index * w
-        ul.style.transition = 'all .1s'
-        ul.style.transform = 'translateX(' + translatex + 'px)'
-      }
-    }
-    // 手指离开的时候就重新开启定时器
-    clearInterval(timer)
-    timer = setInterval(function () {
-      index++
-      var translatex = -index * w
-      ul.style.transition = 'all .3s'
-      ul.style.transform = 'translateX(' + translatex + 'px)'
-    }, 2000)
-  })
-
-  // 返回顶部模块制作
-  var goBack = document.querySelector('.goBack')
-  var nav = document.querySelector('nav')
-  window.addEventListener('scroll', function () {
-    if (window.pageYOffset >= nav.offsetTop) {
-      goBack.style.display = 'block'
-    } else {
-      goBack.style.display = 'none'
-    }
-  })
-  goBack.addEventListener('click', function () {
-    window.scroll(0, 0)
-  })
-})
-```
+   
+   ```html
+   <!-- 焦点图模块 -->
+   <div class="focus">
+     <ul>
+       <li><img src="upload/focus3.jpg" alt="" /></li>
+       <li><img src="upload/focus1.jpg" alt="" /></li>
+       <li><img src="upload/focus2.jpg" alt="" /></li>
+       <li><img src="upload/focus3.jpg" alt="" /></li>
+       <li><img src="upload/focus1.jpg" alt="" /></li>
+     </ul>
+     <!-- 小圆点 -->
+     <ol>
+       <li class="current"></li>
+       <li></li>
+       <li></li>
+     </ol>
+   </div>
+   ```
+   
+   ```js
+   window.addEventListener('load', function () {
+     // 1. 获取元素
+     var focus = document.querySelector('.focus')
+     var ul = focus.children[0]
+     // 获得focus 的宽度
+     var w = focus.offsetWidth
+     var ol = focus.children[1]
+     // 2. 利用定时器自动轮播图图片
+     var index = 0
+     var timer = setInterval(function () {
+       index++
+       var translatex = -index * w
+       ul.style.transition = 'all .3s'
+       ul.style.transform = 'translateX(' + translatex + 'px)'
+     }, 2000)
+     // 等着过渡完成之后，再去判断（监听过渡完成的事件：transitionend）
+     ul.addEventListener('transitionend', function () {
+       // 无缝滚动
+       if (index >= 3) {
+         index = 0
+         // console.log(index);
+         // 去掉过渡效果，这样让的ul快速的跳到目标位置
+         ul.style.transition = 'none'
+         // 利用最新的索引号乘以宽度 去滚动图片
+         var translatex = -index * w
+         ul.style.transform = 'translateX(' + translatex + 'px)'
+       } else if (index < 0) {
+         index = 2
+         ul.style.transition = 'none'
+         // 利用最新的索引号乘以宽度去滚动图片
+         var translatex = -index * w
+         ul.style.transform = 'translateX(' + translatex + 'px)'
+       }
+       // 3. 小圆点跟随变化
+       // 把ol里面li带有current类名的选出来去掉类名 remove
+       ol.querySelector('.current').classList.remove('current')
+       // 让当前索引号的小li，加上 current（add）
+       ol.children[index].classList.add('current')
+     })
+   
+     // 4. 手指滑动轮播图
+     // 触摸元素 touchstart： 获取手指初始坐标
+     var startX = 0
+     var moveX = 0 // 后面会使用这个移动距离所以要定义一个全局变量
+     var flag = false
+     ul.addEventListener('touchstart', function (e) {
+       startX = e.targetTouches[0].pageX
+       // 手指触摸的时候就停止定时器
+       clearInterval(timer)
+     })
+     // 移动手指 touchmove：计算手指的滑动距离，并移动盒子
+     ul.addEventListener('touchmove', function (e) {
+       // 计算移动距离
+       moveX = e.targetTouches[0].pageX - startX
+       // 移动盒子：  盒子原来的位置 + 手指移动的距离
+       var translatex = -index * w + moveX
+       // 手指拖动的时候，不需要动画效果所以要取消过渡效果
+       ul.style.transition = 'none'
+       ul.style.transform = 'translateX(' + translatex + 'px)'
+       flag = true // 如果用户手指移动过再去判断否则不做判断效果
+       e.preventDefault() // 阻止滚动屏幕的行为
+     })
+     // 手指离开，根据移动距离去判断是回弹还是播放上一张下一张
+     ul.addEventListener('touchend', function (e) {
+       if (flag) {
+         // (1) 如果移动距离大于50像素就播放上一张或者下一张
+         if (Math.abs(moveX) > 50) {
+           // 如果是右滑就是 播放上一张 moveX 是正值
+           if (moveX > 0) {
+             index--
+           } else {
+             // 如果是左滑就是 播放下一张 moveX 是负值
+             index++
+           }
+           var translatex = -index * w
+           ul.style.transition = 'all .3s'
+           ul.style.transform = 'translateX(' + translatex + 'px)'
+         } else {
+           // (2) 如果移动距离小于50像素就回弹
+           var translatex = -index * w
+           ul.style.transition = 'all .1s'
+           ul.style.transform = 'translateX(' + translatex + 'px)'
+         }
+       }
+       // 手指离开的时候就重新开启定时器
+       clearInterval(timer)
+       timer = setInterval(function () {
+         index++
+         var translatex = -index * w
+         ul.style.transition = 'all .3s'
+         ul.style.transform = 'translateX(' + translatex + 'px)'
+       }, 2000)
+     })
+   
+     // 返回顶部模块制作
+     var goBack = document.querySelector('.goBack')
+     var nav = document.querySelector('nav')
+     window.addEventListener('scroll', function () {
+       if (window.pageYOffset >= nav.offsetTop) {
+         goBack.style.display = 'block'
+       } else {
+         goBack.style.display = 'none'
+       }
+     })
+     goBack.addEventListener('click', function () {
+       window.scroll(0, 0)
+     })
+   })
+   ```
 
 ##### 3.4.8.4 视频插件
 
@@ -11534,8 +11553,6 @@ window.addEventListener('load', function () {
      <li>我们都是好孩子</li>
      <li>我们都是好孩子</li>
    </ul>
-   
-   
    <script>
      $(function () {
        $('div').on({

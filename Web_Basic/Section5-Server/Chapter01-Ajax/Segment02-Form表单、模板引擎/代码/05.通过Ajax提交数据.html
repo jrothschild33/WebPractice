@@ -15,13 +15,13 @@
     </form>
     <script>
       // 写法1
-      /* $(function () {
-                $('#form1').submit(function (e) {
-                    e.preventDefault();
-                    var data = $(this).serialize();
-                    console.log(data);
-                });
-            }); */
+      $(function () {
+        $('#form1').submit(function (e) {
+          e.preventDefault()
+          var data = $(this).serialize()
+          console.log(data)
+        })
+      })
       // 写法2
       $(function () {
         $('#form1').on('submit', function (e) {

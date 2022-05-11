@@ -8,8 +8,8 @@ const fs = require('fs')
 // fs.readFile(__dirname + '/files/1.txt')
 
 fs.readFile(path.join(__dirname, './files/1.txt'), 'utf8', function (err, dataStr) {
-    if (err) {
-        return console.log(err.message)
-    }
-    console.log(dataStr)
+  if (err) {
+    return console.log(err.message)
+  }
+  console.log(dataStr)
 })

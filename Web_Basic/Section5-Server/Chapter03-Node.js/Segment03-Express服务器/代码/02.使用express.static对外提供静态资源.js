@@ -8,5 +8,5 @@ app.use(express.static('clock'))
 app.use('/api', express.static('files'))
 
 app.listen(80, () => {
-    console.log('express server running at http://127.0.0.1')
+  console.log('express server running at http://127.0.0.1')
 })

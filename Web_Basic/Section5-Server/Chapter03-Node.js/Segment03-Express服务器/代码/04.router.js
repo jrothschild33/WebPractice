@@ -6,10 +6,10 @@ const router = express.Router()
 
 // 3. 挂载具体的路由
 router.get('/user/list', (req, res) => {
-    res.send('Get user list.')
+  res.send('Get user list.')
 })
 router.post('/user/add', (req, res) => {
-    res.send('Add new user.')
+  res.send('Add new user.')
 })
 
 // 4. 向外导出路由对象

@@ -2592,6 +2592,66 @@
    console.log(fext)	// .html
    ```
 
+5. 案例：时钟，将html文件中的css和js分拆出单独的文件
+
+   ```js
+   // 1.1 导入 fs 模块
+   const fs = require('fs')
+   // 1.2 导入 path 模块
+   const path = require('path')
+   
+   // 1.3 定义正则表达式，分别匹配 <style></style> 和 <script></script> 标签
+   const regStyle = /<style>[\s\S]*<\/style>/
+   const regScript = /<script>[\s\S]*<\/script>/
+   
+   // 2.1 调用 fs.readFile() 方法读取文件
+   fs.readFile(path.join(__dirname, '/clock/clock.html'), 'utf8', function (err, dataStr) {
+     // 2.2 读取 HTML 文件失败
+     if (err) return console.log('读取HTML文件失败！' + err.message)
+     // 2.3 读取文件成功后，调用对应的三个方法，分别拆解出 css, js, html 文件
+     resolveCSS(dataStr)
+     resolveJS(dataStr)
+     resolveHTML(dataStr)
+   })
+   
+   // 3.1 定义处理 css 样式的方法
+   function resolveCSS(htmlStr) {
+     // 3.2 使用正则提取需要的内容
+     const r1 = regStyle.exec(htmlStr)
+     // 3.3 将提取出来的样式字符串，进行字符串的 replace 替换操作
+     const newCSS = r1[0].replace('<style>', '').replace('</style>', '')
+     // 3.4 调用 fs.writeFile() 方法，将提取的样式，写入到 clock 目录中 index.css 的文件里面
+     fs.writeFile(path.join(__dirname, '/clock/index.css'), newCSS, function (err) {
+       if (err) return console.log('写入 CSS 样式失败！' + err.message)
+       console.log('写入样式文件成功！')
+     })
+   }
+   
+   // 4.1 定义处理 js 脚本的方法
+   function resolveJS(htmlStr) {
+     // 4.2 通过正则，提取对应的 <script></script> 标签内容
+     const r2 = regScript.exec(htmlStr)
+     // 4.3 将提取出来的内容，做进一步的处理
+     const newJS = r2[0].replace('<script>', '').replace('</script>', '')
+     // 4.4 将处理的结果，写入到 clock 目录中的 index.js 文件里面
+     fs.writeFile(path.join(__dirname, '/clock/index.js'), newJS, function (err) {
+       if (err) return console.log('写入 JavaScript 脚本失败！' + err.message)
+       console.log('写入 JS 脚本成功！')
+     })
+   }
+   
+   // 5.1 定义处理 HTML 结构的方法
+   function resolveHTML(htmlStr) {
+     // 5.2 将字符串调用 replace 方法，把内嵌的 style 和 script 标签，替换为外联的 link 和 script 标签
+     const newHTML = htmlStr.replace(regStyle, '<link rel="stylesheet" href="./index.css" />').replace(regScript, '<script src="./index.js"></script>')
+     // 5.3 写入 index.html 这个文件
+     fs.writeFile(path.join(__dirname, '/clock/index.html'), newHTML, function (err) {
+       if (err) return console.log('写入 HTML 文件失败！' + err.message)
+       console.log('写入 HTML 页面成功！')
+     })
+   }
+   ```
+
 ------
 
 #### 3.2.3 Http模块
@@ -2625,15 +2685,17 @@
    3）启动服务器 listen()：`server.listen(8080,function (){...})`
 
    ```js
+   // 1. 导入 http 模块
    const http = require('http')
+   // 2. 创建 web 服务器实例
    const server = http.createServer()
-   
+   // 3. 为服务器实例绑定 request 事件，监听客户端的请求
    server.on('request', (req, res) => {
      // 定义一个字符串，包含中文的内容
      const str = `您请求的 URL 地址是 ${req.url}，请求的 method 类型为 ${req.method}`
      // 调用 res.setHeader() 方法，设置 Content-Type 响应头，解决中文乱码的问题
      res.setHeader('Content-Type', 'text/html; charset=utf-8')
-     // res.end() 将内容响应给客户端
+     // 调用 res.end() 将内容响应给客户端
      res.end(str)
    })
    
@@ -2724,6 +2786,7 @@
        // 4.2 读取失败，向客户端响应固定的“错误消息”
        if (err) return res.end('404 Not found.')
        // 4.3 读取成功，将读取成功的内容，响应给客户端
+       res.setHeader('Content-Type', 'text/js; charset=utf-8')	// 防止中文乱码
        res.end(dataStr)
      })
    })
@@ -2812,6 +2875,26 @@
 
    4）注意：require() 模块时，得到的永远是 module.exports 指向的对象；为了防止混乱，不要在同一个模块中同时使用 exports 和 module.exports
 
+   ```js
+   // 在一个自定义模块中，默认情况下， module.exports = {}
+   const age = 20
+   // 向 module.exports 对象上挂载 username 属性
+   module.exports.username = 'zs'
+   // 向 module.exports 对象上挂载 sayHello 方法
+   module.exports.sayHello = function () {
+     console.log('Hello!')
+   }
+   module.exports.age = age
+   
+   // 让 module.exports 指向一个全新的对象
+   module.exports = {
+     nickname: '小黑',
+     sayHi() {
+       console.log('Hi!')
+     },
+   }
+   ```
+
 5. 模块化规范：遵循 CommonJS 模块化规范，规定了模块的特性和各模块之间如何相互依赖
 
    1）每个模块内部，module 变量代表当前模块
@@ -2826,6 +2909,14 @@
 
 #### 3.4.0 npm常用包
 
+1. [moment](https://www.npmjs.com/package/moment)：格式化时间
+
+   ```js
+   const moment = require('moment')
+   const dt = moment().format('YYYY-MM-DD HH:mm:ss')
+   console.log(dt)
+   ```
+   
 1. [i5ting_toc](https://github.com/i5ting/i5ting_ztree_toc)：可以把 md 文档转为 html 页面的小工具
 
    ```js
@@ -3297,8 +3388,9 @@
    const app = express()
    
    // 在这里，调用 express.static() 方法，快速的对外提供静态资源
-   app.use('/files', express.static('files'))
    app.use(express.static('clock'))
+   // 可以选择挂载文件夹前缀
+   app.use('/api', express.static('files'))
    
    // 3. 启动 web 服务器
    app.listen(80, () => {
@@ -3307,7 +3399,7 @@
    ```
 
 
-#### 3.5.4 路由 Router
+#### 3.5.4 路由Router
 
 1. 定义：客户端的请求与服务器处理函数之间的映射关系
 2. 构成：`app.method(path, handler)`：请求的类型、请求的 URL 地址、处理函数，
@@ -3379,7 +3471,7 @@
    })
    ```
 
-#### 3.5.5 中间件 Middleware
+#### 3.5.5 中间件Middleware
 
 ##### 3.5.5.1 中间件简介
 
@@ -3387,18 +3479,7 @@
 
 2. 调用流程：当一个请求到达 Express 的服务器之后，可以连续调用多个中间件，从而对这次请求进行预处理
 
-3. 格式：`app.get('/url',function(req, res, next) {...next()}`
-
-   ```js
-   // 定义一个最简单的中间件函数
-   const mw = function (req, res, next) {
-     console.log('这是最简单的中间件函数')
-     // 把流转关系，转交给下一个中间件或路由
-     next()
-   }
-   // 将 mw 注册为全局生效的中间件
-   app.use(mw)
-   ```
+3. 格式：`app.use('/url',function(req, res, next) {...next()}`
 
 4. 区别：中间件函数的形参列表中必须包含 `next` 参数，而路由处理函数中只包含 req 和 res
 
@@ -3414,6 +3495,7 @@
 
    ```js
    const express = require('express')
+   const moment = require('moment')
    const app = express()
    
    // 这是定义全局中间件的简化形式
@@ -3421,15 +3503,16 @@
      // 获取到请求到达服务器的时间
      const time = Date.now()
      // 为 req 对象，挂载自定义属性，从而把时间共享给后面的所有路由
-     req.startTime = time
+     req.pureTime = time
+     req.startTime = moment().format('YYYY-MM-DD HH:mm:ss')
      next()
    })
    
    app.get('/', (req, res) => {
-     res.send('Home page.' + req.startTime)
+     res.send('Home page. ' + req.startTime + ` => pure time : ${req.pureTime}`)
    })
    app.get('/user', (req, res) => {
-     res.send('User page.' + req.startTime)
+     res.send('User page. ' + req.startTime + ` => pure time : ${req.pureTime}`)
    })
    
    app.listen(80, () => {
@@ -3476,6 +3559,30 @@
 
    2）定义多个全局中间件：可用 app.use() 连续定义多个全局中间件，按照中间件定义的先后顺序依次进行调用
 
+   ```js
+   const express = require('express')
+   const app = express()
+   
+   // 定义第一个全局中间件
+   app.use((req, res, next) => {
+     console.log('调用了第1个全局中间件')
+     next()
+   })
+   // 定义第二个全局中间件
+   app.use((req, res, next) => {
+     console.log('调用了第2个全局中间件')
+     next()
+   })
+   // 定义一个路由
+   app.get('/user', (req, res) => {
+     res.send('User page.')
+   })
+   
+   app.listen(80, () => {
+     console.log('http://127.0.0.1')
+   })
+   ```
+
 2. 局部生效的中间件：不使用 app.use() 定义的中间件，仅在指定位置调用，其他请求不调用
 
    1）语法：`app.get(url,中间件函数名,(req, res) =>{...}`
@@ -3509,8 +3616,8 @@
 
    2）定义多个局部中间件：
 
-   * 语法1：`app.get( url, 中间件函数名1, 中间件函数名2, (req, res) =>{...}`
-   * 语法2：`app.get( url, [中间件函数名1, 中间件函数名2], (req, res) =>{...}`
+   * 语法1：`app.get(url, 中间件函数名1, 中间件函数名2, (req, res) =>{...}`
+   * 语法2：`app.get(url, [中间件函数名1, 中间件函数名2], (req, res) =>{...}`
 
    ```js
    // 导入 express 模块
@@ -3545,6 +3652,7 @@
 ##### 3.5.5.4 中间件分类
 
 1. 应用级别的中间件：通过 `app.use()` 或 `app.get()` 或 `app.post()`，绑定到 app 实例上的中间件
+
 2. 路由级别的中间件：绑定到 `express.Router()` 实例上的中间件，与应用级别中间件无区别
 
 3. 错误级别的中间件：专门用来捕获整个项目中发生的异常错误，从而防止项目异常崩溃的问题，如`throw new Error('服务器内部发生了错误！')`
@@ -3593,11 +3701,66 @@
    * 写法：`express.urlencoded({extended: false})`
    * 测试：postman->【post请求】->body->x-www-form-urlencoded
 
+   ```js
+   // 导入 express 模块
+   const express = require('express')
+   // 创建 express 的服务器实例
+   const app = express()
+   
+   // 注意：除了错误级别的中间件，其他的中间件，必须在路由之前进行配置
+   // 通过 express.json() 这个中间件，解析表单中的 JSON 格式的数据
+   app.use(express.json())
+   // 通过 express.urlencoded() 这个中间件，来解析 表单中的 url-encoded 格式的数据
+   app.use(express.urlencoded({ extended: false }))
+   
+   app.post('/user', (req, res) => {
+     // 在服务器，可以使用 req.body 这个属性，来接收客户端发送过来的请求体数据
+     // 默认情况下，如果不配置解析表单数据的中间件，则 req.body 默认等于 undefined
+     console.log(req.body)
+     res.send('user: ok')
+   })
+   
+   app.post('/book', (req, res) => {
+     // 在服务器端，可以通过 req.body 来获取 JSON 格式的表单数据和 url-encoded 格式的数据
+     console.log(req.body)
+     res.send('book: ok')
+   })
+   
+   // 调用 app.listen 方法，指定端口号并启动web服务器
+   app.listen(80, function () {
+     console.log('Express server running at http://127.0.0.1')
+   })
+   ```
+
 5. 第三方的中间件
 
    1）定义：非 Express 官方内置的，由第三方开发出来的中间件
 
    2）案例：`body-parser`，在express@4.16.0之前代替express.urlencoded的作用
+
+   ```js
+   // 导入 express 模块
+   const express = require('express')
+   // 创建 express 的服务器实例
+   const app = express()
+   
+   // 1. 导入解析表单数据的中间件 body-parser
+   const parser = require('body-parser')
+   // 2. 使用 app.use() 注册中间件
+   app.use(parser.urlencoded({ extended: false }))
+   // app.use(express.urlencoded({ extended: false }))	// 对比最新写法
+   
+   app.post('/user', (req, res) => {
+     // 如果没有配置任何解析表单数据的中间件，则 req.body 默认等于 undefined
+     console.log(req.body)
+     res.send('ok')
+   })
+   
+   // 调用 app.listen 方法，指定端口号并启动web服务器
+   app.listen(80, function () {
+     console.log('Express server running at http://127.0.0.1')
+   })
+   ```
 
 6. 自定义中间件：`bodyParser`
 
@@ -3643,7 +3806,7 @@
    2）分模块写法
 
    ```js
-   // 中间件.js
+   // 中间件：custom-body-parser.js
    // 导入 Node.js 内置的 querystring 模块
    const qs = require('querystring')
    
@@ -3700,6 +3863,7 @@
 1. 导入模块
 
    ```js
+   // 路由文件：apiRouter.js
    const express = require('express')
    const router = express.Router()
    ```

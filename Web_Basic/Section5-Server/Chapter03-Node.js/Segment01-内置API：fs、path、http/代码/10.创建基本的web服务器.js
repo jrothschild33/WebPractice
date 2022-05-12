@@ -7,6 +7,6 @@ server.on('request', function (req, res) {
   console.log('Someone visit our web server.')
 })
 // 4. 启动服务器
-server.listen(8080, function () {  
+server.listen(8080, function () {
   console.log('server running at http://127.0.0.1:8080')
 })

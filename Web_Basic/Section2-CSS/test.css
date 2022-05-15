@@ -1,5 +1,0 @@
-@no=15；@media screen and (min-width: 320px) {
-  html {
-    font-size: 320px / @no;
-  }
-}

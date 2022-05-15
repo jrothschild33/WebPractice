@@ -13,5 +13,5 @@
   color: green;
 }
 .nav::before {
-  content: "";
+  content: '';
 }

@@ -604,6 +604,26 @@
 
    5）注意：x和y之间没有逗号，是空格！
 
+   ```html
+   <style>
+     div {
+       width: 500px;
+       height: 500px;
+       border: 2px solid red;
+       background: url(images/dog.jpg) no-repeat;
+       /* 1. 像素单位px：宽、高，只写一个则默认是宽度，高度随着等比例缩放 */
+       background-size: 500px 200px;
+       background-size: 500px;
+       /* 2. 百分比单位%：相对于父级盒子拉伸 */
+       background-size: 50%;
+       /* 3. cover：等比例拉伸铺满，可能有部分背景图显示不全 */
+       background-size: cover;
+       /* 4. contain：宽高等比例拉伸，如果宽或高其中一个铺满盒子就不再拉伸，可能有部分空白 */
+       background-size: contain;
+     }
+   </style>
+   ```
+
 7. 复合简写：`background`，默认顺序：颜色、图片地址、平铺、固定、位置 / 缩放
 
    ```css
@@ -615,6 +635,20 @@
    1）方位名词：`top`(默认)、`bottom`、`left`、`right`，以及它们的组合使用
 
    2）注意：必须添加浏览器私有前缀
+   
+   ```html
+   <style>
+     div {
+       width: 600px;
+       height: 200px;
+       /* 背景渐变必须添加浏览器私有前缀 */
+       /* background: -webkit-linear-gradient(left, red, blue); */
+       /* background: -webkit-linear-gradient(red, blue); */
+       background: -webkit-linear-gradient(top left, red, blue);
+     }
+   </style>
+   <div></div>
+   ```
 
 ------
 
@@ -1060,51 +1094,107 @@
 ### 3.1 盒子模型 box-sizing
 
 1. `content-box`（默认）：盒子大小 = width+padding+border
+
 2. `border-box`：盒子大小 = width（无需再担心边框、内边距撑大盒子）
+
    * 注意：此时使用`line-height=height`值不一定能居中对齐了，需要将`line-height`设置为`height减去边框后的大小`
-   
+
    ```html
    <style>
-     * {
-       margin: 0;
-       padding: 0;
-       box-sizing: border-box;
-     }
-     div {
+     div:nth-child(1) {
+       /* 传统盒子模型：盒子大小 = width + border + padding */
        width: 200px;
        height: 200px;
        background-color: pink;
-       border: 20px solid red;
-       padding: 15px;
+       padding: 10px;
+       border: 10px solid red;
        box-sizing: content-box;
      }
-     p {
+     div:nth-child(2) {
+       /* CSS3盒子模型：盒子大小 = width */
+       /* padding 和 border 不会撑大盒子 */
+       box-sizing: border-box;
        width: 200px;
        height: 200px;
-       background-color: pink;
-       border: 20px solid red;
-       padding: 15px;
-       /* css3 盒子模型  盒子最终的大小就是 width  200 的大小 */
-       box-sizing: border-box;
+       background-color: purple;
+       padding: 10px;
+       border: 10px solid blue;
      }
    </style>
-   <div>小猪乔治</div>
-   <p>小猪佩奇</p>
+   <div></div>
+   <div></div>
    ```
 
 ### 3.2 图片滤镜 filter
 
 1. `blur(5px)`：图片模糊，括号中填写像素大小，越大越模糊
 
+   ```html
+   <style>
+     img {
+       /* blur是一个函数：括号里面数值越大，图片越模糊，注意数值要加px单位 */
+       filter: blur(15px);
+     }
+     img:hover {
+       filter: blur(0);
+     }
+   </style>
+   <img src="images/pink.jpg" alt="" />
+   ```
+
 ### 3.3 计算函数 calc()
 
 1. 宽度计算：`width:calc(100%-30)`，子元素比父元素宽度小30px
+
+   ```html
+   <style>
+     .father {
+       width: 300px;
+       height: 200px;
+       background-color: pink;
+     }
+     .son {
+       /* width: calc(150px + 30px); */
+       width: calc(100% - 30px);
+       height: 30px;
+       background-color: skyblue;
+     }
+   </style>
+   <!-- 子盒子宽度永远比父盒子小30像素 -->
+   <div class="father">
+     <div class="son"></div>
+   </div>
+   ```
 
 ### 3.4 过渡效果 transition
 
 1. 作用：可以不用Flash或JS的情况下制作元素样式变换的效果，常与`:hover`配合使用
 
 2. 书写位置：谁做过渡给谁加，要写在原来的元素上！
+
+   ```html
+   <style>
+     div {
+       width: 200px;
+       height: 100px;
+       background-color: pink;
+       /* transition: 变化的属性、花费时间、运动曲线、何时开始; */
+       transition: width .5s ease 0s, height .5s ease 1s;
+       /* 如果想要写多个属性，利用逗号进行分割 */
+       transition: width .5s, height .5s;
+       /* 如果想要多个属性都变化，属性写all就可以了 */
+       transition: height .5s ease 1s;
+       /* 谁做过渡，给谁加 */
+       transition: all 0.5s;
+     }
+     div:hover {
+       width: 400px;
+       height: 200px;
+       background-color: skyblue;
+     }
+   </style>
+   <div></div>
+   ```
 
 3. 属性：添加多个属性可用逗号分隔，按顺序写
 
@@ -1114,13 +1204,37 @@
 
    3）运动曲线：
 
-   * 逐渐变慢：ease（默认）
-   * 匀速：linear
-   * 加速：ease-in
-   * 减速：ease-out
-   * 先加速再减速：ease-in-out
+   * 逐渐变慢：`ease`（默认）
+   * 匀速：`linear`
+   * 加速：`ease-in`
+   * 减速：`ease-out`
+   * 先加速再减速：`ease-in-out`
 
    4）何时开始：延迟触发时间，如 .5s，可省略
+
+   ```html
+   <!--案例：进度条-->
+   <style>
+     .bar {
+       width: 150px;
+       height: 15px;
+       border: 1px solid red;
+       border-radius: 7px;
+       padding: 1px;
+     }
+     .bar_in {
+       width: 50%;
+       height: 100%;
+       background-color: red;
+       border-radius: 7px 0 0 7px;
+       /* 谁做过渡给谁加 */
+       transition: all 0.7s;
+     }
+     .bar:hover .bar_in {
+       width: 100%;
+     }
+   </style>
+   ```
 
 ### 3.5 2D转换 transform
 
@@ -1128,29 +1242,199 @@
 
    1）单位：px 或 百分比%（相对于自身）
 
-   2）沿轴移动：translateX(n)、translateY(n)
+   2）沿轴移动：`translateX(n)`、`translateY(n)`
 
-   3）水平居中：绝对定位50%，位移-50%
+   ```html
+   <style>
+     div {
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+       margin-top: 30px;
+       /* transform: translate(x, y); */
+       transform: translate(100px, 100px);
+       /* 1. 如果只移动x坐标 */
+       transform: translate(100px, 0);
+       transform: translateX(100px);
+       /* 2. 如果只移动y坐标 */
+       transform: translate(0, 100px);
+       transform: translateY(100px); 
+     }
+     div:first-child {
+       transition: all 0.5s;
+     }
+     div:first-child:hover {
+       transform: translate(0, -10px);
+       background-color: rebeccapurple;
+     }
+     div:last-child {
+       background-color: purple;
+     }
+   </style>
+   <div></div>
+   <div></div>
+   ```
+
+   3）水平垂直居中：绝对定位-50%，位移-50%
+
+   ```html
+   <style>
+     div {
+       position: relative;
+       width: 500px;
+       height: 500px;
+       background-color: pink;
+       /* 1. tranlate参数可以用 % */
+       /* 2. 如果参数是 %，移动的距离是盒子自身的宽度或高度 */
+       /* 这里的50%就是 50px，因为盒子的宽度是 100px */
+       transform: translateX(50%);
+     }
+     p {
+       position: absolute;
+       top: 50%;
+       left: 50%;
+       width: 200px;
+       height: 200px;
+       background-color: purple;
+       /* translate(-50%, -50%)：盒子往左右各走自己的一半  */
+       transform: translate(-50%, -50%);
+     }
+     span {
+       /* translate 对于行内元素是无效的 */
+       transform: translate(300px, 300px);
+     }
+   </style>
+   <div>
+     <p></p>
+   </div>
+   ```
 
    4）注意：对行内元素无效，比如`<span>`
+
+   ```html
+   <style>
+     span {
+       /* translate 对于行内元素是无效的 */
+       transform: translate(300px, 300px);
+     }
+   </style>
+   <span>123</span>
+   ```
 
 2. 旋转：`rotate(n deg)`
 
    1）单位：deg，正数顺时针，负数逆时针
 
+   ```html
+   <style>
+     img {
+       width: 150px;
+       border-radius: 50%;
+       border: 5px solid pink;
+       /* 过渡写到本身上，谁做动画给谁加 */
+       transition: all 0.3s;
+     }
+     img:hover {
+       /* 顺时针旋转360度 */
+       transform: rotate(360deg);
+     }
+   </style>
+   <img src="media/pic.jpg" alt="" />
+   ```
+
    2）应用：制作CSS三角形，div旋转45度，只给底部、右侧边框
+
+   ```html
+   <style>
+     div {
+       position: relative;
+       width: 249px;
+       height: 35px;
+       border: 1px solid #000;
+     }
+     div::after {
+       content: '';
+       position: absolute;
+       top: 8px;
+       right: 15px;
+       width: 10px;
+       height: 10px;
+       border-right: 1px solid #000;
+       border-bottom: 1px solid #000;
+       transform: rotate(45deg);
+       transition: all 0.2s;
+     }
+     /* 鼠标经过div，里面的三角旋转 */
+     div:hover::after {
+       transform: rotate(225deg);
+     }
+   </style>
+   <div></div>
+   ```
 
 3. 中心点：`transform-origin:x y`
 
-   1）像素：px
+   1）像素：px（x和y之间没有逗号，是空格！）
 
    2）方位名词：left、right、top、bottom、center
 
-   3）百分比：50% 50%（默认）
+   3）百分比：50% 50%（默认，等价于center center）
+
+   ```html
+   <style>
+     div {
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+       margin: 100px auto;
+       transition: all 1s;
+       /* 1. 方位名词 */
+       transform-origin: left bottom;
+       /* 2. 默认50% 50%，等价于center center */
+       transform-origin: 50% 50%;
+       /* 3. 可以是px 像素 */
+       transform-origin: 50px 50px;
+     }
+     div:hover {
+       transform: rotate(360deg);
+     }
+   </style>
+   <div></div>
+   ```
 
    4）应用：制作鼠标移动从底部旋转出现的效果
 
-   5）注意：x和y之间没有逗号，是空格！
+   ```html
+   <style>
+     div {
+       float: left;
+       overflow: hidden;
+       width: 200px;
+       height: 200px;
+       margin: 10px;
+       border: 1px solid pink;
+     }
+     div::before {
+       display: block;
+       content: '黑马';
+       text-align: center;
+       line-height: 200px;
+       width: 100%;
+       height: 100%;
+       background-color: hotpink;
+       transform: rotate(180deg);
+       transform-origin: left bottom;
+       transition: all 0.4s;
+     }
+     /* 鼠标经过div，里面的before 复原 */
+     div:hover::before {
+       transform: rotate(0deg);
+     }
+   </style>
+   <div></div>
+   <div></div>
+   <div></div>
+   ```
 
 4. 缩放：`scale(x,y)`
 
@@ -1160,8 +1444,103 @@
 
    3）可以设置缩放中心点，如果写了宽高则以最新数值为参考，且不影响其他盒子位置
 
+   ```html
+   <style>
+     div {
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+       margin: 100px auto;
+       /* 缩放中心点，如果写了宽高则以最新数值为参考 */
+       transform-origin: left bottom;
+     }
+     div:hover {
+       /* 1. 参数无单位，代表倍数：transform: scale(x, y) */
+       transform: scale(2, 2);
+       /* 2. 修改宽度为原来的2倍，高度不变 */
+       transform: scale(2, 1);
+       /* 3. 等比例缩放：同时修改宽度和高度 */
+       transform: scale(2);
+       /* 4. 缩放：参数小于1 */
+       transform: scale(0.5, 0.5);
+       transform: scale(0.5);
+       /* 5. scale 的优势：不会影响其他的盒子，而且可以设置缩放的中心点 */
+       width: 300px;
+       height: 300px;
+       transform: scale(2);
+     }
+   </style>
+   ```
+
+   ```html
+   <!--案例：图片放大-->
+   <style>
+     div {
+       overflow: hidden;
+       float: left;
+       margin: 10px;
+     }
+     div img {
+       transition: all 0.4s;
+     }
+     div img:hover {
+       transform: scale(1.1);
+     }
+   </style>
+   <div>
+     <a href="#"><img src="media/scale.jpg" alt="" /></a>
+   </div>
+   ```
+
+   ```html
+   <!--案例：分页按钮-->
+   <style>
+     li {
+       float: left;
+       width: 30px;
+       height: 30px;
+       border: 1px solid pink;
+       margin: 10px;
+       text-align: center;
+       line-height: 30px;
+       list-style: none;
+       border-radius: 50%;
+       cursor: pointer;
+       transition: all 0.4s;
+     }
+     li:hover {
+       transform: scale(1.2);
+     }
+   </style>
+   <ul>
+     <li>1</li>
+     <li>2</li>
+     <li>3</li>
+   </ul>
+   ```
+
 5. 复合简写：`transform: translate(x,y) rotatae(n deg) scale(n)`
+
    * 注意：书写顺序会影响效果，有位移的时候必须先写位移
+
+   ```html
+   <style>
+     div {
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+       transition: all 0.5s;
+     }
+     div:hover {
+       /* 以下两种效果完全不同 */
+       transform: translate(150px, 50px) rotate(180deg);
+       transform: rotate(180deg) translate(150px, 50px);
+       
+       /* 同时有位移和其他属性，需要把位移放到最前面 */
+       transform: translate(1200px, 0px) rotate(180deg) scale(1.2);
+     }
+   </style>
+   ```
 
 ### 3.5 3D转换 transform
 
@@ -1179,6 +1558,23 @@
 
    2）x、y、z不能省略，没有就写0
 
+   ```html
+   <style>
+     body {
+       /* 透视写到被观察元素的父盒子上面 */
+       perspective: 200px;
+     }
+     div {
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+       transform: translateX(100px) translateY(100px) translateZ(100px); 
+       /* 简写方法 */
+       transform: translate3d(100px, 100px, 100px);
+     }
+   </style>
+   ```
+
 4. 3D旋转：`rotate3d（x,y,z,deg）`
 
    1）x,y,z用：0/1 代表是否选中，并合成矢量，例：rotate3d(1, 1, 0, 45deg)
@@ -1189,11 +1585,258 @@
 
    4）Z轴旋转：类似2D旋转效果
 
+   ```html
+   <style>
+     body {
+       perspective: 500px;
+     }
+     img {
+       display: block;
+       margin: 100px auto;
+       transition: all 1s;
+     }
+     img:hover {
+       /* transform: rotateZ(180deg); */
+       /* transform: rotate3d(x,y,z,deg); */
+       /* transform: rotate3d(1, 0, 0, 45deg); */
+       /* transform: rotate3d(0, 1, 0, 45deg); */
+       transform: rotate3d(1, 1, 0, 45deg);
+     }
+   </style>
+   <img src="media/pig.jpg" alt="" />
+   ```
+
 5. 3D呈现：`trasnform-style`
 
    1）preserve-3d：让子元素保持3D立体空间环境
 
    2）flat：默认，子元素不开启3D立体空间环境
+   
+   ```html
+   <style>
+     body {
+       perspective: 500px;
+     }
+     .box {
+       position: relative;
+       width: 200px;
+       height: 200px;
+       margin: 100px auto;
+       transition: all 2s;
+       /* 让子元素保持3d立体空间环境 */
+       transform-style: preserve-3d;
+     }
+     .box:hover {
+       transform: rotateY(60deg);
+     }
+     .box div {
+       position: absolute;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       background-color: pink;
+     }
+     .box div:last-child {
+       background-color: purple;
+       transform: rotateX(60deg);
+     }
+   </style>
+   <div class="box">
+     <div></div>
+     <div></div>
+   </div>
+   ```
+
+6. 案例：两面反转的盒子
+
+   ```html
+   <style>
+     body {
+       perspective: 400px;
+     }
+     .box {
+       position: relative;
+       width: 300px;
+       height: 300px;
+       margin: 100px auto;
+       transition: all 0.4s;
+       /* 让背面的盒子保留立体空间 */
+       transform-style: preserve-3d;
+     }
+     .box:hover {
+       transform: rotateY(180deg);
+     }
+     .front,
+     .back {
+       position: absolute;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       border-radius: 50%;
+       font-size: 30px;
+       color: #fff;
+       text-align: center;
+       line-height: 300px;
+     }
+     .front {
+       background-color: pink;
+       z-index: 1;
+     }
+     .back {
+       background-color: purple;
+       /* 背靠背旋转 */
+       transform: rotateY(180deg);
+     }
+   </style>
+   <div class="box">
+     <div class="front">黑马程序员</div>
+     <div class="back">pink老师这里等你</div>
+   </div>
+   ```
+
+7. 案例：3D导航
+
+   ```html
+   <style>
+     * {
+       margin: 0;
+       padding: 0;
+     }
+     ul {
+       margin: 100px;
+     }
+     ul li {
+       float: left;
+       margin: 0 5px;
+       width: 120px;
+       height: 35px;
+       list-style: none;
+       text-align: center;
+       line-height: 35px;
+       color: white;
+       /* 子盒子都有透视效果 */
+       perspective: 500px;
+     }
+     .box {
+       position: relative;
+       width: 100%;
+       height: 100%;
+       transform-style: preserve-3d;
+       transition: all 0.4s;
+     }
+     .box:hover {
+       transform: rotateX(90deg);
+     }
+     .front,
+     .bottom {
+       position: absolute;
+       left: 0;
+       top: 0;
+       width: 100%;
+       height: 100%;
+     }
+     .front {
+       background-color: pink;
+       color: purple;
+       z-index: 1;
+       /* 注意：如果在正面的盒子不往前移动，则旋转效果会像T型一样，一定要保持中心点在立方体中间 */
+       transform: translateZ(17.5px);
+     }
+     .bottom {
+       background-color: purple;
+       /* x轴一定是负值 */
+       /* 如果有移动或者其他样式，必须先写移动 */
+       transform: translateY(17.5px) rotateX(-90deg);
+     }
+   </style>
+   <ul>
+     <li>
+       <div class="box">
+         <div class="front">黑马程序员</div>
+         <div class="bottom">pink老师等你</div>
+       </div>
+     </li>
+     <li>
+       <div class="box">
+         <div class="front">黑马程序员</div>
+         <div class="bottom">pink老师等你</div>
+       </div>
+     </li>
+   </ul>
+   ```
+
+8. 案例：旋转木马
+
+   ```html
+   <style>
+     body {
+       perspective: 1000px;
+     }
+     section {
+       position: relative;
+       width: 300px;
+       height: 200px;
+       margin: 150px auto;
+       transform-style: preserve-3d;
+       /* 添加动画效果 */
+       animation: rotate 10s linear infinite;
+       background: url(media/pig.jpg) no-repeat;
+     }
+     section:hover {
+       /* 鼠标放入section 停止动画 */
+       animation-play-state: paused;
+     }
+     @keyframes rotate {
+       0% {
+         transform: rotateY(0);
+       }
+       100% {
+         transform: rotateY(360deg);
+       }
+     }
+     section div {
+       position: absolute;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       background: url(media/dog.jpg) no-repeat;
+     }
+     section div:nth-child(1) {
+       transform: rotateY(0) translateZ(300px);
+     }
+     section div:nth-child(2) {
+       /* 先旋转、再移动距离 */
+       transform: rotateY(60deg) translateZ(300px);
+     }
+     section div:nth-child(3) {
+       /* 先旋转、再移动距离 */
+       transform: rotateY(120deg) translateZ(300px);
+     }
+     section div:nth-child(4) {
+       /* 先旋转、再移动距离 */
+       transform: rotateY(180deg) translateZ(300px);
+     }
+     section div:nth-child(5) {
+       /* 先旋转、再移动距离 */
+       transform: rotateY(240deg) translateZ(300px);
+     }
+     section div:nth-child(6) {
+       /* 先旋转、再移动距离 */
+       transform: rotateY(300deg) translateZ(300px);
+     }
+   </style>
+   <section>
+     <div></div>
+     <div></div>
+     <div></div>
+     <div></div>
+     <div></div>
+     <div></div>
+   </section>
+   ```
 
 ### 3.6 轮播图 swiper
 
@@ -1210,6 +1853,49 @@
    1）`@keyframes 动画名称 { 0% { 开始状态的效果 } 100% {结束状态的效果}}`
 
    2）`@keyframes 动画名称 { from { 开始状态的效果 } to {结束状态的效果}}`
+
+   ```html
+   <style>
+     /* from to：等价于0%和100% */
+     /* @keyframes move {
+       from {
+         transform: translate(0, 0);
+       }
+       to {
+         transform: translate(1000px, 0);
+       }
+     } */
+     /* 动画序列 */
+     /* 1. 可以做多个状态的变化 keyframe 关键帧 */
+     /* 2. 里面的百分比要是整数 */
+     /* 3. 里面的百分比就是总的时间 */
+     @keyframes move {
+       0% {
+         transform: translate(0, 0);
+       }
+       25% {
+         transform: translate(1000px, 0);
+       }
+       50% {
+         transform: translate(1000px, 500px);
+       }
+       75% {
+         transform: translate(0, 500px);
+       }
+       100% {
+         transform: translate(0, 0);
+       }
+     }
+     div {
+       width: 100px;
+       height: 100px;
+       background-color: pink;
+       animation-name: move;
+       animation-duration: 10s;
+     }
+   </style>
+   <div></div>
+   ```
 
 2. 调用：至少写动画名称、动画时间2个属性，同一个元素中多个动画可以一起调用，用逗号隔开即可
 
@@ -1234,10 +1920,78 @@
 
 4. 播放状态：`animation-play-state: paused/running`
 
-5. 复合简写：动画名称，持续时间，运动曲线，延迟时间，重复次数，反方向播放，结束后状态
+   ```html
+   <style>
+     @keyframes move {
+       0% {
+         transform: translate(0, 0);
+       }
+       100% {
+         transform: translate(500px, 500px);
+       }
+     }
+     div {
+       width: 100px;
+       height: 100px;
+       background-color: pink;
+       border-radius: 50%;
+       box-shadow: 1px 1px 1px;
+       /* 动画名称 */
+       animation-name: move;
+       /* 持续时间 */
+       animation-duration: 1s;
+       /* 运动曲线 */
+       animation-timing-function: ease-in-out;
+       /* 何时开始 */
+       animation-delay: 1s;
+       /* 重复次数 */
+       animation-iteration-count: infinite;
+       /* 是否反方向播放 */
+       animation-direction: alternate;
+       /* 动画结束后的状态 */
+       animation-fill-mode: forwards;
+     }
+     div:hover {
+       /* 鼠标经过停止动画，鼠标离开就继续动画 */
+       animation-play-state: paused;
+     }
+   </style>
+   <div></div>
+   ```
+
+5. 复合简写：动画名称(必填)，持续时间(必填)，运动曲线，延迟时间，重复次数，反方向播放，结束后状态
 
    ```css
    animation: name duration timing-function delay iteration-count direction fill-mode; 
+   ```
+
+   ```html
+   <style>
+     @keyframes move {
+       0% {
+         transform: translate(0, 0);
+       }
+       100% {
+         transform: translate(500px, 500px);
+       }
+     }
+     div {
+       width: 100px;
+       height: 100px;
+       background-color: pink;
+       border-radius: 50%;
+       box-shadow: 1px 1px 1px;
+       /* 复合简写：动画名称，持续时间，运动曲线，延迟时间，重复次数，反方向播放，结束后状态 */
+       animation: name duration timing-function delay iteration-count direction fill-mode;
+       animation: move 2s linear 0s 1 alternate forwards;
+       animation: move 2s linear alternate forwards;
+     }
+     div:hover {
+       /* 鼠标经过停止动画，鼠标离开就继续动画 */
+       animation-play-state: paused;
+     }
+   </style>
+   <div></div>
    ```
 
 6. 案例：无限无缝滚动效果（竖向）
@@ -1269,6 +2023,183 @@
    .marquee-view .marquee {
      animation: move 15s linear infinite;
    }
+   ```
+
+7. 案例：大数据热点图
+
+   ```html
+   <style>
+     body {
+       background-color: #333;
+     }
+     .map {
+       position: relative;
+       width: 747px;
+       height: 616px;
+       background: url(media/map.png) no-repeat;
+       margin: 0 auto;
+     }
+     .city {
+       position: absolute;
+       top: 227px;
+       right: 193px;
+       color: #fff;
+     }
+     .tb {
+       top: 500px;
+       right: 80px;
+     }
+     .gz {
+       top: 539px;
+       right: 190px;
+     }
+     .dotted {
+       width: 8px;
+       height: 8px;
+       background-color: #09f;
+       border-radius: 50%;
+     }
+     .city div[class^='pulse'] {
+       /* 保证小波纹在父盒子里面水平垂直居中，放大之后就会中心向四周发散 */
+       position: absolute;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+       width: 8px;
+       height: 8px;
+       box-shadow: 0 0 12px #009dfd;
+       border-radius: 50%;
+       animation: pulse 1.2s linear infinite;
+     }
+     .city div.pulse2 {
+       animation-delay: 0.4s;
+     }
+     .city div.pulse3 {
+       animation-delay: 0.8s;
+     }
+     @keyframes pulse {
+       0% {
+       }
+       70% {
+         width: 40px;
+         height: 40px;
+         opacity: 1;
+       }
+       100% {
+         width: 70px;
+         height: 70px;
+         opacity: 0;
+       }
+     }
+   </style>
+   <div class="map">
+     <div class="city">
+       <div class="dotted"></div>
+       <div class="pulse1"></div>
+       <div class="pulse2"></div>
+       <div class="pulse3"></div>
+     </div>
+     <div class="city tb">
+       <div class="dotted"></div>
+       <div class="pulse1"></div>
+       <div class="pulse2"></div>
+       <div class="pulse3"></div>
+     </div>
+     <div class="city gz">
+       <div class="dotted"></div>
+       <div class="pulse1"></div>
+       <div class="pulse2"></div>
+       <div class="pulse3"></div>
+     </div>
+   </div>
+   ```
+
+8. 案例：无限奔跑的大熊
+
+   ```html
+   <style>
+     body {
+       background-color: #ccc;
+     }
+     .box {
+       position: relative;
+       margin-top: 150px;
+       height: 350px;
+       width: 100%;
+     }
+     .am {
+       position: absolute;
+       width: 100%;
+     }
+     .bg2_big {
+       height: 350px;
+       opacity: 0.6;
+       background: url(media/bg2.png) repeat;
+       background-size: auto 100%;
+       animation: bg2_move 500s linear infinite;
+     }
+     .bg2 {
+       top: 70px;
+       height: 250px;
+       background: url(media/bg2.png) repeat;
+       background-size: auto 100%;
+       animation: bg2_move 200s linear infinite;
+     }
+     @keyframes bg2_move {
+       0% {
+         background-position: 0 0;
+       }
+       100% {
+         background-position: -3840px 0;
+       }
+     }
+     .bg1 {
+       top: 130px;
+       height: 200px;
+       background: url(media/bg1.png) repeat;
+       background-size: auto 100%;
+       animation: bg1_move 60s linear infinite;
+     }
+     @keyframes bg1_move {
+       0% {
+         background-position: 0 0;
+       }
+       100% {
+         background-position: -3840px 0;
+       }
+     }
+     .bear {
+       top: 200px;
+       width: 200px;
+       height: 100px;
+       background: url(media/bear.png) no-repeat;
+       /* 元素可以添加多个动画，用逗号分隔 */
+       animation: bear 0.4s steps(8) infinite, move 2s forwards;
+     }
+     @keyframes bear {
+       0% {
+         background-position: 0 0;
+       }
+       100% {
+         background-position: -1600px 0;
+       }
+     }
+     @keyframes move {
+       0% {
+         left: 0;
+       }
+       100% {
+         left: 50%;
+         transform: translateX(-50%);
+       }
+     }
+   </style>
+   <div class="box">
+     <div class="am bg2_big"></div>
+     <div class="am bg2"></div>
+     <div class="am bg1"></div>
+     <div class="am bear"></div>
+   </div>
    ```
 
 ------
@@ -1536,6 +2467,7 @@
 ### 5.5 结构伪类选择器
 
 1. 匹配父元素中的第一个子元素：`E：first-child`
+
 2. 匹配父元素中最后一个E元素：`E：last-child`
 
 3. 匹配父元素中第n个子元素E：`E：nth-child(n)`
@@ -1550,48 +2482,187 @@
    * 2n：选中偶数
    * 2n+1：选中奇数
    * 5n：选中5的倍数
-   * n+5：选中从第5个开始到最后
-   * -n+5：选中前5个
+   * n+3：选中从第3个开始到最后
+   * -n+3：选中前3个
 
    4）执行的时候首先看 `:nth-child(n)`中的n，即先把所有父元素中的子元素排序，之后回去看前面的E是否能对上，如果不匹配则语法无效
 
+   ```css
+   /* 1. 选择ul里面的第一个孩子 */
+   ul li:first-child { background-color: pink; }
+   /* 2. 选择ul里面的最后一个孩子 */
+   ul li:last-child { background-color: pink; }
+   /* 3. 选择ul里面的第2个孩子 */
+   ul li:nth-child(2) { background-color: skyblue; }
+   /* 4.把所有的偶数even的孩子选出来 */
+   ul li:nth-child(even) { background-color: #ccc; }
+   /* 5.把所有的奇数odd的孩子选出来 */
+   ul li:nth-child(odd) { background-color: gray;}
+   /* 6.nth-child(n)：选中所有孩子 */
+   ol li:nth-child(n) { background-color: pink; }
+   /* 7.nth-child(2n)：选中偶数的孩子 */
+   ol li:nth-child(2n) { background-color: pink; }
+   /* 8.nth-child(2n+1)：选中奇数的孩子 */
+   ol li:nth-child(2n + 1) { background-color: skyblue; }
+   /* 9.nth-child(5n)：选中5的倍数 */
+   ol li:nth-child(5n) { background-color: pink; }
+   /* 10.nth-child(n+3)：选中从第3个开始到最后 */
+   ol li:nth-child(n + 3) { background-color: pink;}
+   /* 11.nth-child(-n+3)：选中前3个 */
+   ol li:nth-child(-n + 3) { background-color: pink;}
+   ```
+
 4. 指定类型E的第一个：`E：first-of-type`
+
 5. 指定类型E的最后一个：`E：last-of-type`
 
 6. 指定类型E的第n个：`E：nth-of-type(n)`
    * 执行的时候首先看E，即选中了哪个子元素，之后再去看后面的`:nth-child(n)`中的n，判断是E中的第n个元素
+   
+   ```html
+   <style>
+     ul li:first-of-type {
+       background-color: pink;
+     }
+     ul li:last-of-type {
+       background-color: pink;
+     }
+     ul li:nth-of-type(even) {
+       background-color: skyblue;
+     }
+     /* nth-child 会把所有的盒子都排列序号 */
+     /* 执行的时候首先看 :nth-child(1)，之后回去看前面 div */
+     section div:nth-child(1) {
+       background-color: red;
+     }
+     /* nth-of-type 会把指定元素的盒子排列序号 */
+     /* 执行的时候首先看div指定的元素，之后回去看 :nth-of-type(1) 第几个孩子 */
+     /* 权重计算：2个元素选择器+1个结构伪类选择器，1+1+10=12 */
+     section div:nth-of-type(1) {
+       background-color: blue;
+     }
+   </style>
+   <ul>
+     <li>我是第1个孩子</li>
+     <li>我是第2个孩子</li>
+     <li>我是第3个孩子</li>
+     <li>我是第4个孩子</li>
+     <li>我是第5个孩子</li>
+     <li>我是第6个孩子</li>
+     <li>我是第7个孩子</li>
+     <li>我是第8个孩子</li>
+   </ul>
+   <!-- 区别 -->
+   <section>
+     <p>光头强</p>
+     <div>熊大</div>
+     <div>熊二</div>
+   </section>
+   ```
 
 ### 5.6 伪元素选择器
 
-1. 语法：`element::before/after{content:XXX；....}`（必须有content属性）
+1. 语法：`element::before/after{ content:XXX；....}`（必须有content属性）
+
 2. 权重：1，与元素选择器一起写的话权重变为2
+
 3. 作用：利用CSS创建新标签元素，而不需要HTML标签，简化HTML结构，在文档树中找不到
+
 4. 注意：有行内元素属性，如果想设置宽高需要转换，或添加浮动、定位
+
+   ```html
+   <style>
+     div {
+       width: 200px;
+       height: 200px;
+       background-color: pink;
+     }
+     /* div::before 权重是2 */
+     div::before {
+       /* content必须要写 */
+       content: '我';
+       /* 伪元素有行内元素的属性，如果想设置宽高，需要转换为行业块元素 */
+       /* display: inline-block;
+       width: 30px;
+       height: 40px;
+       background-color: purple; */
+     }
+     div::after {
+       content: '小猪佩奇';
+     }
+   </style>
+   <div>是</div>
+   ```
 
 5. 应用1：伪元素字体图标
 
    ```css
-   div::after {
-     position: absolute;
-     top: 10px;
-     right: 10px;
-     font-family: 'icomoon';
-     content: '\e91e';
-     color: red;
-     font-size: 18px;
-   }
+   <style>
+     @font-face {
+       font-family: 'icomoon';
+       src: url('fonts/icomoon.eot?1lv3na');
+       src: url('fonts/icomoon.eot?1lv3na#iefix') format('embedded-opentype'), url('fonts/icomoon.ttf?1lv3na') 
+   format('truetype'), url('fonts/icomoon.woff?1lv3na') format('woff'), url('fonts/icomoon.svg?
+   1lv3na#icomoon') format('svg');
+       font-weight: normal;
+       font-style: normal;
+       font-display: block;
+     }
+     div {
+       position: relative;
+       width: 200px;
+       height: 35px;
+       border: 1px solid red;
+     }
+     div::after {
+       position: absolute;
+       top: 10px;
+       right: 10px;
+       font-family: 'icomoon';
+       /* content: ''; */
+       content: '\e91e';
+       color: red;
+       font-size: 18px;
+     }
+   </style>
+   <div></div>
    ```
 
-6. 应用2：播放缩略图遮罩
+6. 应用2：播放缩略图遮罩（伪元素版）
 
    ```css
-   .tudou::before {
-     content: '';
-     display: none;
-   }
-   .tudou:hover::before {
-     display: block;
-   }
+   <style>
+     .tudou {
+       position: relative;
+       width: 444px;
+       height: 320px;
+       background-color: pink;
+       margin: 30px auto;
+     }
+     .tudou img {
+       width: 100%;
+       height: 100%;
+     }
+     .tudou::before {
+       content: '';
+       /* 隐藏遮罩层 */
+       display: none;
+       position: absolute;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       background: rgba(0, 0, 0, 0.4) url(images/arr.png) no-repeat center;
+     }
+     /* 当鼠标经过土豆这个盒子，就让里面before遮罩层显示出来 */
+     .tudou:hover::before {
+       /* 显示元素 */
+       display: block;
+     }
+   </style>
+   <div class="tudou">
+     <img src="images/tudou.jpg" alt="" />
+   </div>
    ```
 
 ------
@@ -2499,6 +3570,8 @@
 
 2. `block`：转换为块级元素、或显示元素；与hover等属性配合，可以做出很多效果
 
+3. 案例：播放缩略图遮罩（隐藏布局版）
+
    ```html
    <style>
      .tudou {
@@ -3056,7 +4129,23 @@
 
 3. 方法：手机需要`50*50`的图片，准备`100*100`的图片设置宽高缩小为`50*50`，背景图另外需要用`background-size`设置
 
-4. 工具：cutterman iOS/安卓
+   ```html
+   <style>
+     /* 2倍图：准备的图片比实际需要的大小大2倍*/
+     /* 需要一个50*50像素（css像素）的图片，直接放到iphone8里会放大2倍（即100* 100）就会模糊 */
+     /* 放一个100* 100图片，然后手动的把这个图片缩小为 50* 50（css像素） */
+     img:nth-child(2) {
+       width: 50px;
+       height: 50px;
+     }
+   </style>
+   <!-- 模糊的 -->
+   <img src="images/apple50.jpg" alt="" />
+   <!-- 2倍图 -->
+   <img src="images/apple100.jpg" alt="" />
+   ```
+
+4. 工具：[cutterman](http://www.cutterman.cn/zh)
 
 5. 二倍精灵图：
 
@@ -3079,7 +4168,7 @@
    }
    ```
 
-3. 输入框`<input>`：去除iOS默认样式
+3. 输入框`<input>`：去除iOS默认样式，才能给按钮和输入框自定义样式
 
    ```css
    input {
@@ -3125,6 +4214,38 @@
    width: xxx %
    ```
 
+3. 案例
+
+   ```html
+   <style>
+     * {
+       margin: 0;
+       padding: 0;
+     }
+     section {
+       width: 100%;
+       max-width: 980px;
+       min-width: 320px;
+       margin: 0 auto;
+     }
+     section div {
+       float: left;
+       width: 50%;
+       height: 400px;
+     }
+     section div:nth-child(1) {
+       background-color: pink;
+     }
+     section div:nth-child(2) {
+       background-color: purple;
+     }
+   </style>
+   <section>
+     <div></div>
+     <div></div>
+   </section>
+   ```
+
 ------
 
 ### 9.3 flex布局
@@ -3151,6 +4272,35 @@
 
    4）column-reverse：从下到上
 
+   ```html
+   <style>
+     div {
+       /* 给父级添加flex属性 */
+       display: flex;
+       width: 800px;
+       height: 300px;
+       background-color: pink;
+       /* 默认主轴是x轴，y轴为侧轴 */
+       flex-direction: row;
+       /* 翻转 */
+       flex-direction: row-reverse;
+       /* 主轴设置为y轴，x轴就成了侧轴 */
+       flex-direction: column;
+     }
+     div span {
+       width: 150px;
+       height: 100px;
+       background-color: purple;
+       margin: 1px;
+     }
+   </style>
+   <div>
+     <span>1</span>
+     <span>2</span>
+     <span>3</span>
+   </div>
+   ```
+
 3. `justify-content`：主轴上子元素的排列方式
 
    1）flex-start：从头部开始（默认）
@@ -3163,13 +4313,71 @@
 
    5）space-between：先分布两边，再平分剩余空间
 
+   ```html
+   <style>
+     div {
+       display: flex;
+       width: 800px;
+       height: 300px;
+       background-color: pink;
+       /* 设置x轴为主轴 */
+       flex-direction: row;
+       /* 设置主轴上子元素的排列方式 */
+       justify-content: flex-start;	/* 从头部开始（默认）*/
+       justify-content: flex-end;		/* 从尾部开始 */
+       justify-content: center;		/* 居中对齐 */
+       justify-content: space-around; 	/* 平分剩余空间 */
+       justify-content: space-between;	/* 先分布两边，再平分剩余空间 */
+     }
+     div span {
+       width: 150px;
+       height: 100px;
+       background-color: purple;
+     }
+   </style>
+   <div>
+     <span>1</span>
+     <span>2</span>
+     <span>3</span>
+     <span>4</span>
+   </div>
+   ```
+
 4. `flex-wrap`：子元素是否换行
 
    1）no-wrap：不换行（默认），如果装不开，会自动缩小宽度
 
    2）wrap：换行
 
-5. `align-items`：侧轴上子元素排列方式（单行）
+   ```html
+   <style>
+     div {
+       display: flex;
+       width: 600px;
+       height: 400px;
+       background-color: pink;
+       /* flex布局中，默认子元素不换行，如果装不开会缩小子元素的宽度 */
+       /* flex-wrap: nowrap; */
+       flex-wrap: wrap;
+     }
+     div span {
+       width: 150px;
+       height: 100px;
+       background-color: purple;
+       color: #fff;
+       margin: 10px;
+     }
+   </style>
+   <div>
+     <span>1</span>
+     <span>2</span>
+     <span>3</span>
+     <span>4</span>
+     <span>5</span>
+   </div>
+   ```
+
+5. `align-items`：侧轴上子元素排列方式（单行，flex-wrap: no-warp 不换行）
 
    1）stretch：拉伸（默认），但主轴沿行/列排列时子盒子不要给高度/宽度
 
@@ -3179,7 +4387,38 @@
 
    4）flex-end：从下岛上
 
-6. `align-content`：侧轴上子元素排列方式（多行）
+   ```html
+   <style>
+     div {
+       display: flex;
+       width: 800px;
+       height: 400px;
+       background-color: pink;
+       /* 主轴是 x 轴*/
+       flex-direction: row;
+       /* 主轴子元素的排列方式：居中 */
+       justify-content: center;
+       /* 侧轴子元素排列方式：拉伸，但子盒子不要给高度 */
+       align-items: stretch;
+       /* 侧轴子元素排列方式：挤在一起居中（垂直居中） */
+       /* align-items: center; */
+     }
+     div span {
+       width: 150px;
+       /* height: 100px; */
+       background-color: purple;
+       color: #fff;
+       margin: 10px;
+     }
+   </style>
+   <div>
+     <span>1</span>
+     <span>2</span>
+     <span>3</span>
+   </div>
+   ```
+
+6. `align-content`：侧轴上子元素排列方式（多行，flex-wrap: warp 换行）
 
    1）flex-start：从头部开始（默认）
 
@@ -3193,10 +4432,62 @@
 
    6）stretch：平分父元素高度
 
+   ```html
+   <style>
+     div {
+       display: flex;
+       width: 800px;
+       height: 400px;
+       background-color: pink;
+       /* 子元素换行 */
+       flex-wrap: wrap;
+       /* 因为有了换行，此时侧轴上子元素对齐方式用 align-content */
+       /* 从头部开始（默认） */
+       align-content: flex-start;
+       /* 在侧轴居中对齐 */
+       align-content: center;
+       /* 先分布两边，再平分剩余空间 */
+       align-content: space-between;
+       /* 平分剩余空间 */
+       align-content: space-around;
+     }
+     div span {
+       width: 150px;
+       height: 100px;
+       background-color: purple;
+       color: #fff;
+       margin: 10px;
+     }
+   </style>
+   ```
+
 7. `flex-flow`：复合简写，即同时设置 `flex-direction` 和 `flex-wrap`
 
    ```css
-   flex-flow: column wrap
+   <style>
+     div {
+       display: flex;
+       width: 600px;
+       height: 300px;
+       background-color: pink;
+       /* flex-direction: column; */
+       /* flex-wrap: wrap; */
+       /* 复合简写：设置主轴方向、是否换行 */
+       flex-flow: column wrap;
+     }
+     div span {
+       width: 150px;
+       height: 100px;
+       background-color: purple;
+     }
+   </style>
+   <div>
+     <span>1</span>
+     <span>2</span>
+     <span>3</span>
+     <span>4</span>
+     <span>5</span>
+   </div>
    ```
 
 #### 9.3.3 flex子元素
@@ -3206,6 +4497,56 @@
    1）如果单元素为1表示占领所有剩余空间（所有元素全是1的话表示均分空间）
 
    2）可以写成百分比%，相对父元素而言
+
+   ```html
+   <style>
+     section {
+       display: flex;
+       width: 60%;
+       height: 150px;
+       background-color: pink;
+       margin: 0 auto;
+     }
+     section div:nth-child(1) {
+       width: 100px;
+       height: 150px;
+       background-color: red;
+     }
+     section div:nth-child(2) {
+       flex: 1;
+       background-color: green;
+     }
+     section div:nth-child(3) {
+       width: 100px;
+       height: 150px;
+       background-color: blue;
+     }
+     p {
+       display: flex;
+       width: 60%;
+       height: 150px;
+       background-color: pink;
+       margin: 100px auto;
+     }
+     p span {
+       flex: 1;
+     }
+     p span:nth-child(2) {
+       flex: 2;
+       background-color: purple;
+     }
+   </style>
+   <section>
+     <div></div>
+     <div></div>
+     <div></div>
+   </section>
+   <p>
+     <span>1</span>
+     <span>2</span>
+     <span>3</span>
+   </p>
+   ```
 
 2. `align-self`：控制子项在侧轴上的排列方式，允许单个元素与其他元素不同的排列方式，可覆盖align-items属性
 
@@ -3222,6 +4563,36 @@
 3. `order`：定义项目的排列顺序，数值越小排列越靠前，默认为0
 
    1）与z-index不同之处：order是排列次序，如1、2盒子左右排列可以改成2、1盒子左右排列
+   
+   ```html
+   <style>
+     div {
+       display: flex;
+       width: 80%;
+       height: 300px;
+       background-color: pink;
+     }
+     div span {
+       width: 150px;
+       height: 100px;
+       background-color: purple;
+       margin-right: 5px;
+     }
+     div span:nth-child(2) {
+       /* 默认是0，-1比0小所以在前面 */
+       order: -1;
+     }
+     div span:nth-child(3) {
+       /* 让3号子盒子沿着侧轴底侧对齐 */
+       align-self: flex-end;
+     }
+   </style>
+   <div>
+     <span>1</span>
+     <span>2</span>
+     <span>3</span>
+   </div>
+   ```
 
 ------
 
@@ -3232,11 +4603,39 @@
 #### 9.4.1 rem单位
 
 1. rem：全称`root em`，是相对单位，类似于em，em是父元素字体大小，但rem是根元素html元素字体大小
+
 2. 例：html设置font-size=12px，非根元素设置width=2rem，换成px为24px
+
+   ```html
+   <style>
+     html {
+       font-size: 12px;
+     }
+     div {
+       font-size: 12px;
+       width: 15rem;
+       height: 15rem;
+       background-color: purple;
+     }
+     p {
+       /* 1. em 相对于父元素的字体大小来说的 */
+       width: 10em;
+       height: 10em;
+       /* 2. rem 相对于html元素字体大小来说的 */
+       width: 10rem;
+       height: 10rem;
+       background-color: pink;
+       /* 3.rem的优点：可以通过修改html的文字大小来改变页面中元素的大小 */
+     }
+   </style>
+   <div>
+     <p></p>
+   </div>
+   ```
 
 #### 9.4.2 媒体查询
 
-1. 用途：针对不同的屏幕尺寸设置不同样式
+1. 用途：针对不同的屏幕尺寸设置不同样式，最好的方法是按从小到大的尺寸来设置
 
 2. 语法：`@media 媒体类型 and/not/only (媒体特性){...}`
 
@@ -3258,24 +4657,73 @@
    * min-width：最大宽度
    * max-width：最小宽度
 
-3. 案例：如果在显示屏上且宽度小于等于800px时，背景色为粉色（大于800px则为白色了）
+3. 案例：根据不同窗口尺寸，变更页面背景颜色
 
    ```css
-   @media screen and (max-width: 800px) {
+   /* 小于540px：页面背景变为蓝色 */
+   @media screen and (max-width: 539px) {
      body {
-       background-color: pink;
+       background-color: blue;
+     }
+   }
+   /* 540px-970px：页面背景变为绿色 */
+   @media screen and (min-width: 540px) and (max-width: 969px) {
+     body {
+       background-color: green;
+     }
+   }
+   /* 大于等于970px：页面背景变为红色 */
+   @media screen and (min-width: 970px) {
+     body {
+       background-color: red;
      }
    }
    ```
 
-4. 引入资源：
+4. 案例：配合rem，根据窗口尺寸调整元素大小
+
+   ```html
+   <style>
+     * {
+       margin: 0;
+       padding: 0;
+     }
+     @media screen and (min-width: 320px) {
+       html {
+         font-size: 50px;
+       }
+     }
+     @media screen and (min-width: 640px) {
+       html {
+         font-size: 100px;
+       }
+     }
+     .top {
+       height: 1rem;
+       font-size: 0.5rem;
+       background-color: green;
+       color: #fff;
+       text-align: center;
+       line-height: 1rem;
+     }
+   </style>
+   <div class="top">购物车</div>s
+   ```
+
+5. 引入资源：
 
    1）原理：根据屏幕大小引入不同css文件进行适配
 
    2）语法：`<link rel="stylesheet" media="mediatype and|not|only (media feature)" href="stylesheet.css">`
 
    ```html
-   <link rel="stylesheet" href="style320.css" media="screen and (min-width: 320px)">
+   <style>
+     /* 当屏幕大于等于640px，让div一行显示2个 */
+     /* 当屏幕小于640px，让div一行显示一个 */
+     /* 引入资源：针对于不同的屏幕尺寸，调用不同的css文件 */
+   </style>
+   <link rel="stylesheet" href="style320.css" media="screen and (min-width: 320px)" />
+   <link rel="stylesheet" href="style640.css" media="screen and (min-width: 640px)" />
    ```
 
 #### 9.4.3 less语言
@@ -3301,19 +4749,34 @@
 
    1）直接在父选择器里面写子选择器，不用再单独另起一行
 
-   ```less
-   .header {
-     width: 50px;
-     a {
-       color: red;
-     }
-   }
-   ```
-
    2）如果有伪类、交集选择器、 伪元素选择器，内层选择器：
 
    * 内层选择器前没有&号，被解析为父选择器的后代
    * 如果有&号，解析为父元素自身或父元素伪类：`&:hover`、`&::before`
+
+   ```less
+   .header {
+     width: 200px;
+     height: 200px;
+     background-color: pink;
+     // 1. less嵌套 子元素的样式直接写到父元素里面就好了
+     a {
+       color: red;
+       // 2. 如果有伪类、交集选择器、 伪元素选择器 我们内层选择器的前面需要加&
+       &:hover {
+         color: blue;
+       }
+     }
+   }
+   .nav {
+     .logo {
+       color: green;
+     }
+     &::before {
+       content: '';
+     }
+   }
+   ```
 
 4. less运算：数字、颜色、变量都可以参与运算（加减乘除）
 
@@ -3324,6 +4787,24 @@
    3）两个数参与运算  如果只有一个数有单位，则最后的结果就以这个单位为准
 
    4）两个数参与运算，如果2个数都有单位，而且不一样的单位，最后的结果以第一个单位为准
+   
+   ```less
+   @baseFont: 50px;
+   html {
+     font-size: @baseFont;
+   }
+   @border: 5px + 5;
+   div {
+     width: 200px - 50;
+     height: (200px + 50px) * 2;
+     border: @border solid red;
+     background-color: #666 - #222;
+   }
+   img {
+     width: 82rem / @baseFont;
+     height: 82rem / @baseFont;
+   }
+   ```
 
 #### 9.4.4 适配方案
 
@@ -3331,9 +4812,27 @@
 
    1）常见屏幕尺寸：750px（大多数适用）
 
-   2）例：把屏幕划分为15等份（也可以是20、10份），每份为50px，设为字体大小，如果屏幕为320px则设置为21.33px
+   2）html里的文字大小：把屏幕划分为15等份（也可以是20、10份），每份为50px，设为字体大小，如果屏幕为320px则设置为21.33px
 
-   3）计算：页面元素 rem = 页面元素px /（屏幕宽度/划分份数）= 页面元素px / HTML字体大小
+   3）页面元素 rem ：页面元素px /（屏幕宽度/划分份数）= 页面元素px / HTML字体大小
+
+   ```css
+   @media screen and (min-width: 320px) {
+     html {
+       font-size: 21.33px;
+     }
+   }
+   @media screen and (min-width: 750px) {
+     html {
+       font-size: 50px;
+     }
+   }
+   div {
+     width: 2rem;
+     height: 2rem;
+     background-color: pink;
+   }
+   ```
 
 2. 方案2：flexible.js+rem（主流）
 
@@ -3348,6 +4847,7 @@
    5）注意：需要限定屏幕宽度最大为750px
 
    ```less
+   /* 如果屏幕超过了750px，就按750px设计稿来，不让页面超过750px */
    @media screen and (min-width: 750px) {
      html {
        font-size: 75px !important;
@@ -3355,23 +4855,9 @@
    }
    ```
 
-#### 9.4.5 文件布局
+#### 9.4.5 文件结构
 
-1. index.less：
-
-   1）引入common文件：@import "common"
-
-   2）body指定宽度width: 份数rem，默认15rem
-
-   3）指定基础字体大小：@baseFont: 50px;
-
-   4）所有涉及大小的属性，先在750px分辨率下测量px大小，再转换为rem形式
-
-   ```less
-   width: 40 rem / @baseFont;
-   ```
-
-2. common.less
+1. common.less
 
    1）常见尺寸：320、360、375、384、400、414、424、480、540、720、750px
 
@@ -3386,6 +4872,52 @@
        font-size: 320px / @no;
      }
    }
+   @media screen and (min-width: 360px) {
+     html {
+       font-size: 360px / @no;
+     }
+   }
+   /* 按上面规律一直写到750px */
+   @media screen and (min-width: 750px) {
+     html {
+       font-size: 750px / @no;
+     }
+   }
+   ```
+
+2. index.less：
+
+   1）引入common文件：@import "common"
+
+   2）body指定宽度width: 份数rem，默认15rem
+
+   3）指定基础字体大小：@baseFont: 50px;
+
+   4）所有涉及大小的属性，先在750px分辨率下测量px大小，再转换为rem形式
+
+   ```less
+   // @import：可以把一个样式文件导入到另外一个样式文件里面
+   @import 'common';
+   @baseFont: 50;
+   nav {
+     width: 750rem / @baseFont;
+     a {
+       float: left;
+       width: 150rem / @baseFont;
+       height: 140rem / @baseFont;
+       text-align: center;
+       img {
+         display: block;
+         width: 82rem / @baseFont;
+         height: 82rem / @baseFont;
+         margin: 10rem / @baseFont auto 0;
+       }
+       span {
+         font-size: 25rem / @baseFont;
+         color: #333;
+       }
+     }
+   }
    ```
 
 ### 9.5 响应式布局
@@ -3395,9 +4927,91 @@
 #### 9.5.1 屏幕尺寸
 
 1. 超小屏幕（手机）：<767px，宽度：100%
+
 2. 小屏设备（平板）：768px-991px，宽度：750px
+
 3. 中屏设备（显示器）：992px-1200px，宽度：970px
+
 4. 大屏设备（大显示器）：>=1201px，宽度：1170px
+
+   ```html
+   <style>
+     .container {
+       height: 150px;
+       background-color: pink;
+       margin: 0 auto;
+     }
+     /* 1. 超小屏幕下  小于 768  布局容器的宽度为 100% */
+     @media screen and (max-width: 767px) {
+       .container {
+         width: 100%;
+       }
+     }
+     /* 2. 小屏幕下  大于等于768  布局容器改为 750px */
+     @media screen and (min-width: 768px) {
+       .container {
+         width: 750px;
+       }
+     }
+     /* 3. 中等屏幕下 大于等于 992px   布局容器修改为 970px */
+     @media screen and (min-width: 992px) {
+       .container {
+         width: 970px;
+       }
+     }
+     /* 4. 大屏幕下 大于等于1200 布局容器修改为 1170 */
+     @media screen and (min-width: 1200px) {
+       .container {
+         width: 1170px;
+       }
+     }
+   </style>
+   <!-- 响应式开发里面，首先需要一个布局容器 -->
+   <div class="container"></div>
+   ```
+
+   ```html
+   <!--案例：响应式布局-->
+   <style>
+     * {
+       margin: 0;
+       padding: 0;
+     }
+     ul {
+       list-style: none;
+     }
+     .container {
+       width: 750px;
+       margin: 0 auto;
+     }
+     .container ul li {
+       float: left;
+       width: 93.75px;
+       height: 30px;
+       background-color: green;
+     }
+     @media screen and (max-width: 767px) {
+       .container {
+         width: 100%;
+       }
+       .container ul li {
+         width: 33.33%;
+       }
+     }
+   </style>
+   <div class="container">
+     <ul>
+       <li>导航栏</li>
+       <li>导航栏</li>
+       <li>导航栏</li>
+       <li>导航栏</li>
+       <li>导航栏</li>
+       <li>导航栏</li>
+       <li>导航栏</li>
+       <li>导航栏</li>
+     </ul>
+   </div>
+   ```
 
 #### 9.5.2 Bootstrap框架
 
@@ -3419,6 +5033,16 @@
 
 3. `container-fluid`类：流式布局，百分百宽度；适合单独做移动端开发
 
+   ```html
+   <!--[if lt IE 9]>
+     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+   <![endif]-->
+   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+   <div class="container">123</div>
+   <div class="container-fluid">123</div>
+   ```
+
 ##### 9.5.2.2 栅格系统 Grid
 
 1. 定义：布局模式，将页面划分成等宽的列，通过列数定义布局，默认划分成12列
@@ -3436,10 +5060,44 @@
    4）全适配
 
    ```html
-   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">1</div>
-   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">2</div>
-   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">3</div>
-   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">4</div>
+   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+   <style>
+     [class^='col'] {
+       border: 1px solid #ccc;
+     }
+     .row:nth-child(1) {
+       background-color: pink;
+     }
+   </style>
+   <div class="container">
+     <div class="row">
+       <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">1</div>
+       <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">2</div>
+       <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">3</div>
+       <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">4</div>
+     </div>
+     <!-- 如果孩子的份数相加等于12，则孩子能占满整个的container的宽度 -->
+     <div class="row">
+       <div class="col-lg-6">1</div>
+       <div class="col-lg-2">2</div>
+       <div class="col-lg-2">3</div>
+       <div class="col-lg-2">4</div>
+     </div>
+     <!-- 如果孩子的份数相加小于12，则占不满整个container的宽度（会有空白） -->
+     <div class="row">
+       <div class="col-lg-6">1</div>
+       <div class="col-lg-2">2</div>
+       <div class="col-lg-2">3</div>
+       <div class="col-lg-1">4</div>
+     </div>
+     <!-- 如果孩子的份数相加大于 12，则多于的那一列会另起一行显示 -->
+     <div class="row">
+       <div class="col-lg-6">1</div>
+       <div class="col-lg-2">2</div>
+       <div class="col-lg-2">3</div>
+       <div class="col-lg-3">4</div>
+     </div>
+   </div>
    ```
 
 4. 列嵌套：
@@ -3449,15 +5107,25 @@
    2）如果不写row直接放子列，则有内边距，无法顶边排列
 
    ```html
-   <div class="row">
-     <div class="col-md-4">
-       <div class="row">
-         <div class="col-md-4">a</div>
-         <div class="col-md-8">b</div>
+   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+   <style>
+     .row > div {
+       height: 50px;
+       background-color: pink;
+     }
+   </style>
+   <div class="container">
+     <div class="row">
+       <div class="col-md-4">
+         <!-- 列嵌套最好加1个行row，这样可以取消父元素的padding值，而且高度自动和父级一样高 -->
+         <div class="row">
+           <div class="col-md-4">a</div>
+           <div class="col-md-8">b</div>
+         </div>
        </div>
+       <div class="col-md-4">2</div>
+       <div class="col-md-4">3</div>
      </div>
-     <div class="col-md-4">2</div>
-     <div class="col-md-4">3</div>
    </div>
    ```
 
@@ -3467,11 +5135,48 @@
 
    2）如果是多个盒子，确保偏移量+盒子所占份数=12
 
+   ```html
+   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+   <style>
+     .row div {
+       height: 50px;
+       background-color: pink;
+     }
+   </style>
+   <div class="container">
+     <div class="row">
+       <div class="col-md-3">左侧</div>
+       <!-- 偏移的份数=12，两个盒子的份数=6 -->
+       <div class="col-md-3 col-md-offset-6">右侧</div>
+     </div>
+     <div class="row">
+       <!-- 如果只有一个盒子，那么偏移 = (12 - 8) /2 -->
+       <div class="col-md-8 col-md-offset-2">中间盒子</div>
+     </div>
+   </div>
+   ```
+
 6. 列排序
 
    1）左移：`col-md-pull-数值`
 
    2）右移：`col-md-push-数值`
+
+   ```html
+   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+   <style>
+     .row div {
+       height: 50px;
+       background-color: pink;
+     }
+   </style>
+   <div class="container">
+     <div class="row">
+       <div class="col-md-4 col-md-push-8">左侧</div>
+       <div class="col-md-8 col-md-pull-4">右侧</div>
+     </div>
+   </div>
+   ```
 
 7. 响应式工具：针对不用设备展示/隐藏页面内容
 
@@ -3480,7 +5185,30 @@
    2）显示：`visible-xs`、`visible-sm`、`visible-md`、`visible-lg`
 
    ```html
-   <div class="col-xs-3 hidden-md hidden-xs"> example </div>
+   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+   <style>
+     .row div {
+       height: 300px;
+       background-color: purple;
+     }
+     .row div:nth-child(3) {
+       background-color: pink;
+     }
+     span {
+       font-size: 50px;
+       color: #fff;
+     }
+   </style>
+   <div class="container">
+     <div class="row">
+       <div class="col-xs-3">
+         <span class="visible-lg">我会显示哦</span>
+       </div>
+       <div class="col-xs-3">2</div>
+       <div class="col-xs-3 hidden-md hidden-xs">我会变魔术哦</div>
+       <div class="col-xs-3">4</div>
+     </div>
+   </div>
    ```
 
 ------
@@ -3501,4 +5229,22 @@
 
    3）工具：像素大厨
 
-   4）插件：px2vw
+   4）插件：`px2vw`
+   
+   ```html
+   <style>
+     div {
+       width: 13.3333vw;
+       height: 13.3333vw;
+       background-color: pink;
+       font-size: 5.3333vw;
+       white-space: nowrap;
+       overflow: hidden;
+       text-overflow: ellipsis;
+     }
+   </style>
+   <div>pink老师真帅</div>
+   ```
+
+------
+

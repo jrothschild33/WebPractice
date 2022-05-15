@@ -6,66 +6,66 @@ html {
 }
 @media screen and (min-width: 320px) {
   html {
-    font-size: 21.33333333px;
+    font-size: 320px / 15;
   }
 }
 @media screen and (min-width: 360px) {
   html {
-    font-size: 24px;
+    font-size: 360px / 15;
   }
 }
 @media screen and (min-width: 375px) {
   html {
-    font-size: 25px;
+    font-size: 375px / 15;
   }
 }
 @media screen and (min-width: 384px) {
   html {
-    font-size: 25.6px;
+    font-size: 384px / 15;
   }
 }
 @media screen and (min-width: 400px) {
   html {
-    font-size: 26.66666667px;
+    font-size: 400px / 15;
   }
 }
 @media screen and (min-width: 414px) {
   html {
-    font-size: 27.6px;
+    font-size: 414px / 15;
   }
 }
 @media screen and (min-width: 424px) {
   html {
-    font-size: 28.26666667px;
+    font-size: 424px / 15;
   }
 }
 @media screen and (min-width: 480px) {
   html {
-    font-size: 32px;
+    font-size: 480px / 15;
   }
 }
 @media screen and (min-width: 540px) {
   html {
-    font-size: 36px;
+    font-size: 540px / 15;
   }
 }
 @media screen and (min-width: 720px) {
   html {
-    font-size: 48px;
+    font-size: 720px / 15;
   }
 }
 @media screen and (min-width: 750px) {
   html {
-    font-size: 50px;
+    font-size: 750px / 15;
   }
 }
 body {
   min-width: 320px;
   width: 15rem;
   margin: 0 auto;
-  line-height:  1.5;
-  font-family:  Arial,Helvetica;
-  background:  #F2F2F2;
+  line-height: 1.5;
+  font-family: Arial, Helvetica;
+  background: #f2f2f2;
 }
 .search-content {
   display: flex;
@@ -74,15 +74,15 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 15rem;
-  height: 1.76rem;
-  background-color: #FFC001;
+  height: 88rem / 50;
+  background-color: #ffc001;
 }
 .search-content .classify {
-  width: 0.88rem;
-  height: 1.4rem;
-  margin: 0.22rem 0.5rem 0.14rem 0.48rem;
+  width: 44rem / 50;
+  height: 70rem / 50;
+  margin: 11rem / 50 25rem / 50 7rem / 50 24rem / 50;
   background: url(../images/classify.png) no-repeat;
-  background-size: 0.88rem 1.4rem;
+  background-size: 44rem / 50 70rem / 50;
 }
 .search-content .search {
   flex: 1;
@@ -91,26 +91,26 @@ body {
   outline: none;
   width: 100%;
   border: 0;
-  height: 1.32rem;
-  border-radius: 0.66rem;
-  background-color: #FFF2CC;
-  margin-top: 0.24rem;
-  font-size: 0.5rem;
-  padding-left: 1.1rem;
+  height: 66rem / 50;
+  border-radius: 33rem / 50;
+  background-color: #fff2cc;
+  margin-top: 12rem / 50;
+  font-size: 25rem / 50;
+  padding-left: 55rem / 50;
   color: #757575;
 }
 .search-content .login {
-  width: 1.5rem;
-  height: 1.4rem;
-  line-height: 1.4rem;
-  margin: 0.2rem;
-  font-size: 0.5rem;
+  width: 75rem / 50;
+  height: 70rem / 50;
+  line-height: 70rem / 50;
+  margin: 10rem / 50;
+  font-size: 25rem / 50;
   text-align: center;
   color: #fff;
 }
 .banner {
-  width: 15rem;
-  height: 7.36rem;
+  width: 750rem / 50;
+  height: 368rem / 50;
 }
 .banner img {
   width: 100%;
@@ -126,21 +126,21 @@ body {
   width: 100%;
 }
 nav {
-  width: 15rem;
+  width: 750rem / 50;
 }
 nav a {
   float: left;
-  width: 3rem;
-  height: 2.8rem;
+  width: 150rem / 50;
+  height: 140rem / 50;
   text-align: center;
 }
 nav a img {
   display: block;
-  width: 1.64rem;
-  height: 1.64rem;
-  margin: 0.2rem auto 0;
+  width: 82rem / 50;
+  height: 82rem / 50;
+  margin: 10rem / 50 auto 0;
 }
 nav a span {
-  font-size: 0.5rem;
+  font-size: 25rem / 50;
   color: #333;
 }

@@ -100,7 +100,7 @@
 > * HTTP 请求：客户端发起的请求
 > * HTTP 请求消息（请求报文）：客户端发送到服务器的消息
 
-![HTTP请求消息结构](.\src\HTTP请求消息结构.png)
+![HTTP请求消息结构](./src/HTTP请求消息结构.png)
 
 1. 请求行（request line）
 
@@ -143,7 +143,7 @@
 > HTTP响应消息（响应报文）：服务器响应给客户端的消息内容
 >
 
-![HTTP响应](.\src\HTTP响应.png)
+![HTTP响应](./src/HTTP响应.png)
 
 1. 状态行
 
@@ -1927,7 +1927,7 @@
 
 #### 2.3.1 常用命令
 
-![git工作流](D:\MyProjects\Website\Tutoring\Web_Basic\Section5-Server\src\git工作流.png)
+![git工作流](./src/git工作流.png)
 
 ##### 2.3.1.1 获取仓库
 
@@ -2013,7 +2013,7 @@
 
 #### 2.3.2 修改文件
 
-![git修改文件](D:\MyProjects\Website\Tutoring\Web_Basic\Section5-Server\src\git修改文件.png)
+![git修改文件](./src/git修改文件.png)
 
 ##### 2.3.2.1 修改已提交文件
 
@@ -2042,7 +2042,7 @@
 
 ##### 2.3.2.4 撤销修改
 
-![git撤销修改](D:\MyProjects\Website\Tutoring\Web_Basic\Section5-Server\src\git撤销修改.png)
+![git撤销修改](./src/git撤销修改.png)
 
 1. 命令：
 
@@ -2255,7 +2255,7 @@
 
 ### 2.5 Git分支
 
-![git分支](D:\MyProjects\Website\Tutoring\Web_Basic\Section5-Server\src\git分支.png)
+![git分支](./src/git分支.png)
 
 1. 作用：多人协作开发时，为了防止互相干扰，提高协同开发的体验，建议每个开发者都基于分支进行项目功能的开发
 2. 功能分支：专门用来开发新功能的分支，临时从 master 主分支上分叉出来，当新功能开发且测试完毕后，最终需要合并到 master 主分支上
@@ -2383,8 +2383,8 @@
 
    |                环境                |                             图解                             |
    | :--------------------------------: | :----------------------------------------------------------: |
-   | 浏览器：JavaScript 的前端运行环境  | ![JavaScript 的前端运行环境](D:\MyProjects\Website\Tutoring\Web_Basic\Section5-Server\src\JavaScript 的前端运行环境.png) |
-   | Node.js：JavaScript 的后端运行环境 | ![JavaScript 的后端运行环境](D:\MyProjects\Website\Tutoring\Web_Basic\Section5-Server\src\JavaScript 的后端运行环境.png) |
+   | 浏览器：JavaScript 的前端运行环境  | ![JavaScript 的前端运行环境](./src/JavaScript 的前端运行环境.png) |
+   | Node.js：JavaScript 的后端运行环境 | ![JavaScript 的后端运行环境](./src/JavaScript 的后端运行环境.png) |
 
 5. 工具：
 
@@ -2861,7 +2861,7 @@
 
 4. 向外共享模块作用域中的成员：
 
-   ![向外共享模块作用域中的成员](D:\MyProjects\Website\Tutoring\Web_Basic\Section5-Server\src\向外共享模块作用域中的成员.png)
+   ![向外共享模块作用域中的成员](./src/向外共享模块作用域中的成员.png)
 
    1）`module` 对象：在每个 .js 自定义模块中都有，里面存储了和当前模块有关信息
 
@@ -4517,7 +4517,7 @@
 
 ##### 3.8.1.2 Session认证
 
-![session认证机制](D:\MyProjects\Website\Tutoring\Web_Basic\Section5-Server\src\session认证机制.png)
+![session认证机制](./src/session认证机制.png)
 
 1. 适用场景：当前端请求后端接口【不存在跨域问题】的时候，推荐使用 Session 身份认证机制
 
@@ -4646,7 +4646,7 @@
 
 ##### 3.8.2.2 JWT认证
 
-![JWT认证机制](D:\MyProjects\Website\Tutoring\Web_Basic\Section5-Server\src\JWT认证机制.png)
+![JWT认证机制](./src/JWT认证机制.png)
 
 1. 适用场景：当前端需要跨域请求后端接口的时候，推荐使用 JWT 认证机制
 2. 流程：用户的信息通过 Token 字符串的形式，保存在客户端浏览器中；服务器通过还原 Token 字符串的形式来认证用户的身份
@@ -4791,4 +4791,4 @@
    })
    ```
 
-   
+------

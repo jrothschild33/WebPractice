@@ -802,7 +802,7 @@
 
 3. 边框切图：`border-image-slice`
 
-   ![边框切图：border-image-slice](D:\MyProjects\Website\Tutoring\Web_Basic\Section2-CSS\src\边框切图：border-image-slice.png)
+   ![边框切图：border-image-slice](./src/边框切图：border-image-slice.png)
 
    1）原理：把四个角切出去（类似九宫格），中间部分可以铺排、拉抻、环绕
 
@@ -2331,7 +2331,7 @@
 
    2）`ol li a`：针对有序列表中子项目中的`<a>`
 
-   3）`.nav li a`：针对nav类选择器中子项目中的<a>
+   3）`.nav li a`：针对nav类选择器中子项目中的`<a>`
 
    4）`.nav .bg`：针对nav类选择器中的bg伪类，只能在nav的子项目中应用
 
@@ -5247,4 +5247,3 @@
    ```
 
 ------
-

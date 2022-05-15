@@ -1594,7 +1594,7 @@
    })
    ```
 
-   ![遍历数组-reduce](D:\MyProjects\Website\Tutoring\Web_Basic\Section4-JavaScript\src\遍历数组-reduce.png)
+   ![遍历数组-reduce](./src/遍历数组-reduce.png)
 
 4. 案例：找出两个数组之间的补集（在currentArr但不在arr中的元素）
 
@@ -2097,7 +2097,7 @@
 
    3）函数也属于对象：`f instanceof Object`
 
-   ![Function构造函数](D:\MyProjects\Website\Tutoring\Web_Basic\Section4-JavaScript\src\Function构造函数.png)
+   ![Function构造函数](./src/Function构造函数.png)
 
    
 
@@ -3792,7 +3792,7 @@
 
 ##### 2.10.8.4 原型链
 
-![原型链](D:\MyProjects\Website\Tutoring\Web_Basic\Section4-JavaScript\src\原型链.png)
+![原型链](./src/原型链.png)
 
 1. 只要是对象就有`__proto__`原型，指向原型对象【Object.prototype】
 
@@ -11696,6 +11696,3 @@
 5. Bootstrap插件：[https://v3.bootcss.com/javascript/](https://v3.bootcss.com/javascript/)
 
 ------
-
-## 第5章 Ajax
-

@@ -437,7 +437,7 @@
 
 ## 第7章 多媒体标签
 
-#### 7.1 音频 audio
+### 7.1 音频 audio
 
 1. 格式：MP3(主流)、Wav、Ogg
 
@@ -451,7 +451,7 @@
    <audio src="media/music.mp3" autoplay="autoplay" controls="controls"></audio>
    ```
 
-#### 7.2 视频 vedio
+### 7.2 视频 vedio
 
 1. 格式：MP4(主流)、WebM、Ogg
 
@@ -504,3 +504,4 @@
    <a href="/xx.html" target="fm"></a>
    ```
 
+------

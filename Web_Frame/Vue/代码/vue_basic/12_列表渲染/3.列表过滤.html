@@ -63,6 +63,7 @@
 				computed:{
 					filPerons(){
 						return this.persons.filter((p)=>{
+							// 注意：所有字符串中都包含空字符串''，且索引值在第0位
 							return p.name.indexOf(this.keyWord) !== -1
 						})
 					}

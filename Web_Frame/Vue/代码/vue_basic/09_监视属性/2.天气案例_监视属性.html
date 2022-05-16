@@ -41,15 +41,15 @@
         },
       },
       // 监视属性
-      /* watch:{
-				isHot:{
-					immediate:true, //初始化时让handler调用一下（默认是false）
-					//handler什么时候调用？当isHot发生改变时。
-					handler(newValue,oldValue){
-						console.log('isHot被修改了',newValue,oldValue)
-					}
-				}
-			} */
+      /* watch: {
+        isHot: {
+          immediate: true, //初始化时让handler调用一下（默认是false）
+          //handler什么时候调用？当isHot发生改变时。
+          handler(newValue, oldValue) {
+            console.log('isHot被修改了', newValue, oldValue)
+          },
+        },
+      }, */
     })
     // 必须创建实例才能用
     vm.$watch('isHot', {

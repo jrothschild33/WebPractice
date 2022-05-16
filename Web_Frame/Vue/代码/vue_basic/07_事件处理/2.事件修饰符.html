@@ -75,6 +75,7 @@
       <!-- 事件：scroll：滚动条，鼠标和键盘都可以操作；wheel：只有鼠标滚轮才能操作 -->
       <!-- 效果：如果不加passive，会等待demo函数计算完毕后，滚动条才会移动，加上passive可以不用等demo计算完，滚动条便可以移动 -->
       <!-- 注意：也并非所有动作都收到passive的影响，scroll不加passive也一样优先被滚动 -->
+      <!-- <ul @wheel="demo" class="list"> -->
       <ul @wheel.passive="demo" class="list">
         <li>1</li>
         <li>2</li>

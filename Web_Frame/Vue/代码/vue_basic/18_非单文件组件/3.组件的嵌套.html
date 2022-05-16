@@ -47,7 +47,7 @@
           address: '北京',
         }
       },
-      //注册组件（局部）
+      // 注册组件（局部）：由于在template中使用了student，必须注册
       components: {
         student,
       },
@@ -71,6 +71,7 @@
 					<school></school>
 				</div>
 			`,
+      // 注册组件（局部）：由于在template中使用了student、hello，必须注册
       components: {
         school,
         hello,
@@ -81,7 +82,7 @@
     new Vue({
       template: '<app></app>',
       el: '#root',
-      //注册组件（局部）
+      // 注册组件（局部）：由于嵌套组件已经相互在内部注册，直接注册最终的app即可
       components: { app },
     })
   </script>

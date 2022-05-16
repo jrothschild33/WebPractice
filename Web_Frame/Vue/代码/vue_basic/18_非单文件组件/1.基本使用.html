@@ -37,10 +37,13 @@
       <hr />
       <!-- 第三步：编写组件标签 -->
       <student></student>
+      <hr />
     </div>
 
     <div id="root2">
       <hello></hello>
+      <!-- 由于student组件是在root中局部注册的，在root2中无效 -->
+      <student></student>
     </div>
   </body>
 

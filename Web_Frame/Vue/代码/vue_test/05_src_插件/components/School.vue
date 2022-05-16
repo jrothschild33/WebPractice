@@ -1,7 +1,9 @@
 <template>
 	<div>
+		<!--全局过滤器-->
 		<h2>学校名称：{{name | mySlice}}</h2>
 		<h2>学校地址：{{address}}</h2>
+		<!--全局方法-->
 		<button @click="test">点我测试一个hello方法</button>
 	</div>
 </template>

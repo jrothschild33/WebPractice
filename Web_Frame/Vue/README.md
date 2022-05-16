@@ -2581,3 +2581,996 @@
 
 ## 第2章 Vue-CLI
 
+### 2.1 初始化脚手架
+
+> 官网：[https://cli.vuejs.org/zh/](https://cli.vuejs.org/zh/)
+
+#### 2.1.1 脚手架版本
+
+1. vue.js：完整版的Vue，包含核心功能+模板解析器
+
+2. vue.runtime.xxx.js：运行版的Vue，只包含核心功能；没有模板解析器
+
+* 不能使用template配置项，需要使用`render`函数接收到的`createElement`函数去指定具体内容
+
+  ```js
+  render(createElement) { return createElement(APP) }
+  // 简写
+  render: h => h(APP)
+  ```
+
+#### 2.1.2 使用步骤
+
+1. 全局安装
+
+   ```cmd
+   npm i @vue/cli -g
+   ```
+
+2. 创建项目：
+
+   ```cmd
+   vue create projectName
+   ```
+
+3. 启动项目：
+
+   ```cmd
+   npm run serve
+   ```
+
+4. 提示：vue inspect > 自定义输出文件名.js，可以查看到Vue脚手架的默认配置
+
+   ```cmd
+   vue inspect > config.js
+   ```
+
+#### 2.1.3 项目文件结构
+
+| 类别     | 文件              | 备注                                                         |
+| :------- | :---------------- | :----------------------------------------------------------- |
+| 第三方库 | node_modules/     | 第三方库                                                     |
+| 第三方库 | package.json      | 应用包配置文件                                               |
+| 第三方库 | package-lock.json | 包版本控制文件                                               |
+| public/  | favicon.ico       | 页签图标                                                     |
+| public/  | index.html        | 主页面，在此文件中引入第三方样式，路径用<%= BASE_URL %>css/xxx.css |
+| public/  | 其他资源文件夹    | 若想引入第三方样式，建立css文件夹，存放css文件               |
+| src/     | assets/           | 存放静态资源，如logo.png                                     |
+| src/     | components/       | 存放组件，如HelloWorld.vue                                   |
+| src/     | App.vue           | 汇总所有组件                                                 |
+| src/     | main.js           | 入口文件                                                     |
+| 其他文件 | .gitignore        | git版本管制忽略的配置                                        |
+| 其他文件 | babel.config.js   | babel的配置文件                                              |
+| 其他文件 | README.md         | 应用描述文件                                                 |
+| 其他文件 | vue.config.js     | 脚手架个性化定制文件                                         |
+
+1. 组件：src/components/School.vue
+
+   ```vue
+   <template>
+     <div class="demo">
+       <h2>学校名称：{{name}}</h2>
+       <h2>学校地址：{{address}}</h2>
+       <button @click="showName">点我提示学校名</button>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'School',
+     data() {
+       return {
+         name: '尚硅谷',
+         address: '北京昌平'
+       }
+     },
+     methods: {
+       showName() {
+         alert(this.name)
+       }
+     }
+   }
+   </script>
+   
+   <style>
+   .demo {
+     background-color: orange;
+   }
+   </style>
+   ```
+
+2. 组件：src/components/Student.vue
+
+   ```vue
+   <template>
+     <div>
+       <h2>学生姓名：{{name}}</h2>
+       <h2>学生年龄：{{age}}</h2>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'Student',
+     data() {
+       return {
+         name: '张三',
+         age: 18
+       }
+     }
+   }
+   </script>
+   ```
+
+3. 汇总组件：src/App.vue
+
+   ```vue
+    <template>
+     <div>
+       <img src="./assets/logo.png" alt="logo" />
+       <School></School>
+       <Student></Student>
+     </div>
+   </template>
+   
+   <script>
+   //引入组件
+   import School from './components/School'
+   import Student from './components/Student'
+   
+   export default {
+     name: 'App',
+     components: {
+       School,
+       Student
+     }
+   }
+   </script>
+   ```
+
+4. 入口文件：src/main.js
+
+   ```js
+   //引入Vue
+   import Vue from 'vue'
+   //引入App组件，它是所有组件的父组件
+   import App from './App.vue'
+   //关闭vue的生产提示
+   Vue.config.productionTip = false
+   
+   //创建Vue实例对象vm
+   new Vue({
+     el: '#app',
+     // render函数：将App组件放入容器中
+     // render(createElement) {
+     //   return createElement(APP)
+     // },
+     // 简写：h代表createElement
+     render: (h) => h(App),
+   })
+   ```
+
+5. 主页面：public/index.html
+
+   ```html
+   <head>
+     <meta charset="utf-8" />
+     <!-- 针对IE浏览器的一个特殊配置，含义是让IE浏览器以最高的渲染级别渲染页面 -->
+     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+     <!-- 开启移动端的理想视口 -->
+     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+     <!-- 配置页签图标 -->
+     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+     <!-- 引入第三方样式 -->
+     <link rel="stylesheet" href="<%= BASE_URL %>css/bootstrap.css" />
+     <!-- 配置网页标题 -->
+     <title>硅谷系统</title>
+   </head>
+   <body>
+     <!-- 当浏览器不支持js时noscript中的元素就会被渲染 -->
+     <noscript>
+       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+     </noscript>
+     <!-- 容器 -->
+     <div id="app"></div>
+     <!-- built files will be auto injected -->
+   </body>
+   ```
+
+------
+
+### 2.2 ref属性
+
+1. 作用：相当于id，类似于`document.getElementById('id') `
+
+2. 使用：`this.$refs.refName`
+
+   ```vue
+   <template>
+     <div>
+       <!-- ref相当于id，类似于document.getElementById('id') -->
+       <!-- <h1 v-text="msg" id="title"></h1> -->
+       <h1 v-text="msg" ref="title"></h1>
+       <button ref="btn" @click="showDOM">点我输出上方的DOM元素</button>
+       <School ref="sch" />
+     </div>
+   </template>
+   <script>
+   //引入School组件
+   import School from './components/School'
+   
+   export default {
+     name: 'App',
+     components: { School },
+     data() {
+       return {
+         msg: '欢迎学习Vue！'
+       }
+     },
+     methods: {
+       showDOM() {
+         // console.log(document.getElementById('title')) // 等价于id写法
+         console.log(this.$refs.title) //真实DOM元素
+         console.log(this.$refs.btn)   //真实DOM元素
+         console.log(this.$refs.sch)   //School组件的实例对象（vc），这里如果用id无法获取vc
+       }
+     }
+   }
+   </script>
+   ```
+
+------
+
+### 2.3 混入 mixin
+
+> 作用：可以把多个组件共用的配置提取成一个混入对象
+
+1. 注意：
+
+   1）如果data中的属性名与mixins中的冲突，以data中的为准
+
+   2）如果mixin.js有mounted()，生命周期钩子不会冲突，全都加载一遍（先加载组件身上的）
+
+   3）关于mounted()加载次数的问题：看Vue开发工具中一共有几层，就加载几遍
+
+2. 创建：`minin.js`，`export const XXX = { data:{...}, methods:{...} }`
+
+   ```js
+   // 分别暴露写法，引入时要用 import {hunhe,hunhe2,...} from './mixin.js'
+   export const hunhe = {
+     methods: {
+       showName() {
+         alert(this.name)
+       },
+     },
+     mounted() {
+       console.log('挂载minxin中的mounted！')
+     },
+   }
+   export const hunhe2 = {
+     data() {
+       return {
+         x: 100,
+         y: 200,
+       }
+     },
+   }
+   ```
+
+3. 全局混入：`main.js`，所有vm、vc身上都有了
+
+   1）导入：`import {xxx} from '../mixin'`
+
+   2）挂载：`Vue.mixin(xxx)`
+
+   ```js
+   //引入Vue
+   import Vue from 'vue'
+   //引入App
+   import App from './App.vue'
+   import { hunhe, hunhe2 } from './mixin'
+   //关闭Vue的生产提示
+   Vue.config.productionTip = false
+   
+   // 全局混合，所有vm、vc身上都有了
+   Vue.mixin(hunhe)
+   Vue.mixin(hunhe2)
+   
+   //创建vm
+   new Vue({
+     el: '#app',
+     render: (h) => h(App),
+   })
+   ```
+
+4. 局部混入：组件.vue
+
+   1）导入：`import {xxx} from '../mixin'`
+
+   2）挂载：`export default {..., mixins:[xxx]}`
+
+   ```vue
+   <!--School.vue-->
+   <template>
+     <div>
+       <h2 @click="showName">学校名称：{{name}}</h2>
+       <h2>学校地址：{{address}}</h2>
+     </div>
+   </template>
+   
+   <script>
+   //局部混入
+   import {hunhe,hunhe2} from '../mixin'
+   
+   export default {
+     name: 'School',
+     data() {
+       return {
+         name: '尚硅谷',
+         address: '北京',
+         x: 666
+         // 如果data中的属性名与mixins中的冲突，以data中的为准
+       }
+     },
+     //挂载混入
+     mixins:[hunhe,hunhe2],
+     // 注意：即使mixin.js有mounted，但生命周期钩子不会冲突，全都加载一遍
+     mounted() {
+       console.log('这里是内部挂载！')
+     }
+   }
+   </script>
+   ```
+
+   ```vue
+   <!--Student.vue-->
+   <template>
+     <div>
+       <h2 @click="showName">学生姓名：{{name}}</h2>
+       <h2>学生性别：{{sex}}</h2>
+     </div>
+   </template>
+   
+   <script>
+   //局部混入
+   import {hunhe,hunhe2} from '../mixin'
+   
+   export default {
+     name: 'Student',
+     data() {
+       return {
+         name: '张三',
+         sex: '男'
+       }
+     },
+     //挂载混入
+     mixins:[hunhe,hunhe2]
+   }
+   </script>
+   ```
+
+------
+
+### 2.4 插件 plugins
+
+> 作用：用于增强Vue，包含`install`方法的一个对象，`install`的第一个参数是`Vue`，第二个以后的参数是插件使用者传递的数据
+
+1. 创建 plugins.js：`export default { install(Vue, arg1, arg2, arg3) {...} }`
+
+2. 传入Vue后，可以在内部创建各种全局指令
+
+   1）全局过滤器：`Vue.filter()`
+
+   2）全局指令：`Vue.directive()`
+
+   3）全局混入：`Vue.mixin()`
+
+   4）全局方法：`Vue.prototype.xxx`
+
+   * `Vue.prototype.$myMethod = function () {...}`
+   * `Vue.prototype.$myProperty = xxxx`
+
+   ```js
+   // plugins.js
+   export default {
+     // 插件第一个参数默认是Vue,后面可以自定义需要传入的参数
+     install(Vue, x, y, z) {
+       console.log(x, y, z)
+       //全局过滤器
+       Vue.filter('mySlice', function(value) {
+         return value.slice(0, 4)
+       })
+       //全局指令
+       Vue.directive('fbind', {
+         //指令与元素成功绑定时（一上来）
+         bind(element, binding) {
+           element.value = binding.value
+         },
+         //指令所在元素被插入页面时
+         inserted(element) {
+           element.focus()
+         },
+         //指令所在的模板被重新解析时
+         update(element, binding) {
+           element.value = binding.value
+         },
+       })
+       //定义全局混入
+       Vue.mixin({
+         data() {
+           return {
+             x: 100,
+             y: 200,
+           }
+         },
+       })
+       //给Vue原型上添加一个方法（vm和vc就都能用了）
+       Vue.prototype.hello = () => {
+         alert('你好啊')
+       }
+     },
+   }
+   ```
+
+3. 使用：main.js
+
+   1）导入：`import plugins from './plugins'`
+
+   2）应用：`Vue.use(plugins, arg1, arg2, arg3)`
+
+   ```js
+   // main.js
+   // 引入Vue
+   import Vue from 'vue'
+   // 引入App
+   import App from './App.vue'
+   // 引入插件
+   import plugins from './plugins'
+   // 关闭Vue的生产提示
+   Vue.config.productionTip = false
+   
+   // 应用（使用）插件
+   Vue.use(plugins,1,2,3)
+   // 创建vm
+   new Vue({
+   	el:'#app',
+   	render: h => h(App)
+   })
+   ```
+
+4. 剩余文件
+
+   1）组件：components/School.vue
+
+   ```vue
+   <template>
+   	<div>
+           <!--全局过滤器-->
+   		<h2>学校名称：{{name | mySlice}}</h2>
+   		<h2>学校地址：{{address}}</h2>
+           <!--全局方法-->
+   		<button @click="test">点我测试一个hello方法</button>
+   	</div>
+   </template>
+   
+   <script>
+   	export default {
+   		name:'School',
+   		data() {
+   			return {
+   				name:'尚硅谷atguigu',
+   				address:'北京',
+   			}
+   		},
+   		methods: {
+   			test(){
+   				this.hello()
+   			}
+   		},
+   	}
+   </script>
+   ```
+
+   2）组件：components/Student.vue
+
+   ```vue
+   <template>
+   	<div>
+   		<h2>学生姓名：{{name}}</h2>
+   		<h2>学生性别：{{sex}}</h2>
+           <!--全局指令-->
+   		<input type="text" v-fbind:value="name">
+   	</div>
+   </template>
+   
+   <script>
+   	export default {
+   		name:'Student',
+   		data() {
+   			return {
+   				name:'张三',
+   				sex:'男'
+   			}
+   		},
+   	}
+   </script>
+   ```
+
+   3）汇总组件：src/App.vue
+
+   ```vue
+   <template>
+   	<div>
+   		<School/>
+   		<hr>
+   		<Student/>
+   	</div>
+   </template>
+   
+   <script>
+   	import School from './components/School'
+   	import Student from './components/Student'
+   
+   	export default {
+   		name:'App',
+   		components:{School,Student}
+   	}
+   </script>
+   ```
+
+------
+
+### 2.5 scoped样式
+
+> 作用：让样式在局部生效，防止不同组件之间的css样式名称冲突
+
+1. 使用：除了App.vue中的style，其他组件的style都要加`scoped`
+
+2. 参数：`lang`
+
+   1）默认：`lang="css"`
+
+   2）可以指定样式语言，如：`lang="less"`
+
+   3）由于webpeck版本是4.46.0，需要安装 `less-loader@7` 版本才行
+
+3. 文件代码
+
+   1）组件：components/School.vue
+
+   ```vue
+   <template>
+     <div class="demo">
+       <h2 class="title">学校名称：{{name}}</h2>
+       <h2>学校地址：{{address}}</h2>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'School',
+     data() {
+       return {
+         name: '尚硅谷atguigu',
+         address: '北京'
+       }
+     }
+   }
+   </script>
+   <!--scope作用：防止不同组件之间的css样式名称冲突-->
+   <style scoped>
+   .demo {
+     background-color: skyblue;
+   }
+   </style>
+   ```
+
+   2）组件：components/Student.vue
+
+   ```vue
+   <template>
+     <div class="demo">
+       <h2 class="title">学生姓名：{{name}}</h2>
+       <h2 class="atguigu">学生性别：{{sex}}</h2>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'Student',
+     data() {
+       return {
+         name: '张三',
+         sex: '男'
+       }
+     }
+   }
+   </script>
+   <!--可以指定style用哪种语言进行定义，如果使用less，需要安装less-loader-->
+   <style lang="less" scoped>
+   .demo {
+     background-color: pink;
+     .atguigu {
+       font-size: 40px;
+     }
+   }
+   </style>
+   ```
+
+   3）汇总组件：src/App.vue，App的style不要加scope，会导致样式冲突！
+
+   ```vue
+   <template>
+     <div>
+       <h1 class="title">你好啊</h1>
+       <School />
+       <Student />
+     </div>
+   </template>
+   
+   <script>
+   import Student from './components/Student'
+   import School from './components/School'
+   
+   export default {
+     name: 'App',
+     components: { School, Student }
+   }
+   </script>
+   
+   <!--注意：App的style不要加scope，会导致样式冲突-->
+   <!--错误写法-->
+   <style scoped>
+   .title {
+     color: red;
+   }
+   </style>
+   ```
+
+------
+
+### 2.6 本地与会话储存
+
+1. 本地储存语法：(会话储存改为`sessionStorage`即可)
+
+   1）储存数据：`localStorage.setItem('key', 'value')`
+
+   2）读取数据：`localStorage.getItem('key')`，获取不到数据返回null
+
+   3）删除数据：`localStorage.removeItem('key')`
+
+   4）清空数据：`localStorage.clear()`
+
+2. vue在data中设置：
+
+   1）读取本地储存中的数据：`localStorage.getItem()`
+
+   2）如果本地无数据，要设置为空数组，否则为null
+
+   ```vue
+   data() {
+     return {
+       todos: JSON.parse(localStorage.getItem('todos')) || []
+     }
+   },
+   ```
+
+3. watch监视数据：`localStorage.setItem()`，当数据改变时，需要实时更新
+
+   ```vue
+   watch: {
+     todos: {
+       // 必须用深度监视，否则勾选后checked属性不发生变化
+       deep: true,
+       handler(value) {
+         localStorage.setItem('todos', JSON.stringify(value))
+       }
+     }
+   }
+   ```
+
+------
+
+### 2.7 组件间通信
+
+#### 2.7.1 任意组件间通信
+
+##### 2.7.1.1 全局事件总线 GlobalEventBus
+
+> 一种组件间通信的方式，适用于任意组件间通信。
+
+1. 安装：main.js
+
+   1）方法1：麻烦，不常用
+
+   ```js
+   //安装全局事件总线
+   const Demo = Vue.extend({})
+   const d = new Demo()
+   Vue.prototype.x = d
+   ```
+
+   2）方法2：常用方法
+
+   ```js
+   new Vue({
+     el: '#app',
+     render: (h) => h(App),
+     beforeCreate() {
+       Vue.prototype.$bus = this //安装全局事件总线
+     },
+   })
+   ```
+
+2. 接收数据：`$bus.$on`，A组件想接收数据，则在A组件中给$bus绑定自定义事件，事件的回调留在A组件自身
+
+   1）定义处理接收到数据的函数：`methods: { demo(data){...}}`
+
+   2）挂载全局事件
+
+   * 方法1：`mounted() { this.$bus.$on('xxx', this.demo)}`
+   * 方法2：`mounted() { this.x.$on('xxx', this.demo)}`
+
+3. 提供数据：`$bus.$emit`
+
+   * 语法：`methods: { sendData函数() { this.$bus.$emit('xxx', 数据) }`
+
+4. 解绑事件：`$bus.$off`
+
+   * 语法：`beforeDestroy() {this.$bus.$off('xxx') }`
+   * 作用：在销毁vc之前取消事件挂载，释放名称给其他人用
+
+5. 案例：
+
+   1）组件：
+
+------
+
+#### 2.7.2 父传子
+
+##### 2.7.2.1 props配置
+
+1. 传递数据：在App.vue中配置
+
+   1）例：`<Student name="李四" sex="女" :age="18" />`
+
+   2）注意：默认传递字符串，如果是数字要在age前加冒号
+
+2. 接收数据：在子组件中配置
+
+   1）第一种方式（只接收）：`props:['name','age','sex']`
+
+   2）第二种方式（限制类型）：`props:{name:String, age:Number, sex:String}`
+
+   3）第三种方式（限制类型、限制必要性、指定默认值）
+
+   * type：类型，如String、Number
+   * required：布尔值，是否必须输入
+   * default：仅required为false时生效，指定默认值
+
+   ```vue
+   props: {
+     name: {
+       type: String, // 类型是字符串
+       required: true // 是必要的
+     },
+     age: {
+       type: Number,
+       default: 99 // 默认值，如果不传入age为默认值
+     },
+     sex: {
+       type: String,
+       required: true
+     }
+   ```
+
+3. 注意：
+
+   1）props中的属性优先级高于data中的属性
+
+   2）接收到的属性尽量不要修改！如果非要修改，在data中定义一个其他名称的变量，如：myAge: this.age
+
+   3）props是只读的，Vue底层会监测你对props的修改，如果进行了修改，就会发出警告
+
+##### 2.7.2.2 插槽 slot
+
+> 作用：让父组件可以向子组件指定位置插入html结构
+
+1. 默认插槽：
+
+   1）父组件 App.vue：在子组件标签中写本应在子组件vue文件中写的内容
+
+   ```vue
+   <template>
+     <div class="container">
+       <Category title="美食">
+         <!-- 在父组件中写的子组件标签，里面如果再写内容，需要在子组件vue文件中配置<slot>指定插入位置 -->
+         <img src="https://s3.ax1x.com/2021/01/16/srJlq0.jpg" alt />
+       </Category>
+   
+       <Category title="游戏">
+         <ul>
+           <li v-for="(g,index) in games" :key="index">{{g}}</li>
+         </ul>
+       </Category>
+   
+       <Category title="电影">
+         <video controls src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"></video>
+       </Category>
+     </div>
+   </template>
+   
+   <script>
+   import Category from './components/Category'
+   export default {
+     name: 'App',
+     components: { Category },
+     data() {
+       return {
+         foods: ['火锅', '烧烤', '小龙虾', '牛排'],
+         games: ['红色警戒', '穿越火线', '劲舞团', '超级玛丽'],
+         films: ['《教父》', '《拆弹专家》', '《你好，李焕英》', '《尚硅谷》']
+       }
+     }
+   }
+   </script>
+   
+   <style scoped>
+   .container {
+     display: flex;
+     justify-content: space-around;
+   }
+   </style>
+   ```
+
+   2）子组件 Category.vue：用`<slot>`标签指定插入内容的位置
+
+   ```vue
+   <template>
+     <div class="category">
+       <h3>{{title}}分类</h3>
+       <!-- 定义一个插槽（挖个坑，等着组件的使用者进行填充） -->
+       <slot>我是一些默认值，当使用者没有传递具体结构时，我会出现</slot>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'Category',
+     props: ['title']
+   }
+   </script>
+   
+   <style scoped>
+   .category {
+     background-color: skyblue;
+     width: 200px;
+     height: 300px;
+   }
+   h3 {
+     text-align: center;
+     background-color: orange;
+   }
+   video {
+     width: 100%;
+   }
+   img {
+     width: 100%;
+   }
+   </style>
+   ```
+
+2. 具名插槽：name
+
+   1）父组件 App.vue：在子组件标签里写的内容标签，带上 `slot="xxx"` 的属性
+
+   ```vue
+   <template>
+     <div class="container">
+       <Category title="美食" >
+         <img slot="center" src="https://s3.ax1x.com/2021/01/16/srJlq0.jpg" alt="">
+         <a slot="footer" href="http://www.atguigu.com">更多美食</a>
+       </Category>
+   
+       <Category title="游戏" >
+         <ul slot="center">
+           <li v-for="(g,index) in games" :key="index">{{g}}</li>
+         </ul>
+         <div class="foot" slot="footer">
+           <a href="http://www.atguigu.com">单机游戏</a>
+           <a href="http://www.atguigu.com">网络游戏</a>
+         </div>
+       </Category>
+   
+       <Category title="电影">
+         <video slot="center" controls src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"></video>
+         <template v-slot:footer>
+           <div class="foot">
+             <a href="http://www.atguigu.com">经典</a>
+             <a href="http://www.atguigu.com">热门</a>
+             <a href="http://www.atguigu.com">推荐</a>
+           </div>
+           <h4>欢迎前来观影</h4>
+         </template>
+       </Category>
+     </div>
+   </template>
+   
+   <script>
+     import Category from './components/Category'
+     export default {
+       name:'App',
+       components:{ Category },
+       data() {
+         return {
+           foods:['火锅','烧烤','小龙虾','牛排'],
+           games:['红色警戒','穿越火线','劲舞团','超级玛丽'],
+           films:['《教父》','《拆弹专家》','《你好，李焕英》','《尚硅谷》']
+         }
+       },
+     }
+   </script>
+   
+   <style scoped>
+     .container,.foot{
+       display: flex;
+       justify-content: space-around;
+     }
+     h4{
+       text-align: center;
+     }
+   </style>
+   ```
+
+   2）子组件 Category.vue：在`<slot>`标签中指定 `name="xxx"`，区别插入内容的位置
+
+   ```vue
+   <template>
+     <div class="category">
+       <h3>{{title}}分类</h3>
+       <!-- 定义一个插槽（挖个坑，等着组件的使用者进行填充） -->
+       <slot name="center">我是一些默认值，当使用者没有传递具体结构时，我会出现1</slot>
+       <slot name="footer">我是一些默认值，当使用者没有传递具体结构时，我会出现2</slot>
+     </div>
+   </template>
+   
+   <script>
+     export default {
+       name:'Category',
+       props:['title']
+     }
+   </script>
+   
+   <style scoped>
+     .category{
+       background-color: skyblue;
+       width: 200px;
+       height: 300px;
+     }
+     h3{
+       text-align: center;
+       background-color: orange;
+     }
+     video{
+       width: 100%;
+     }
+     img{
+       width: 100%;
+     }
+   </style>
+   ```
+
+   3）注意：可以用`<template>`包裹多内容标签，用 `v-slot:xxx` 指定名称
+
+   ```vue
+   <template v-slot:footer>
+   	<div class="foot">
+   		<a href="http://www.atguigu.com">经典</a>
+   		<a href="http://www.atguigu.com">热门</a>
+   		<a href="http://www.atguigu.com">推荐</a>
+   	</div>
+   	<h4>欢迎前来观影</h4>
+   </template>
+   ```
+
+   

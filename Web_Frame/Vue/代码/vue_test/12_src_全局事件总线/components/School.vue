@@ -15,7 +15,7 @@ export default {
     }
   },
   mounted() {
-    // console.log('School',this)
+    // 全局事件总线：接收数据
     /* this.x.$on('hello',(data)=>{
 				console.log('我是School组件，收到了数据',data)
 			}) */

@@ -6462,7 +6462,7 @@ var data = [
 <li>源数组：array</li>
 </ul>
 <p>2）案例：</p>
-<pre class="prettyprint linenums:0"><code class="lang-js">[0, 1, 2, 3, 4].reduce((accumulator, currentValue, currentIndex, array) =&gt; {
+<pre class="prettyprint linenums:0"><code class="lang-js">[1, 2, 3, 4].reduce((accumulator, currentValue, currentIndex, array) =&gt; {
   accumulator + currentValue
 })
 </code></pre>
@@ -19516,7 +19516,6 @@ $(document).ready(function(){
     $('#readme').css(css_conf)
     
     var conf = eval(jquery_ztree_toc_opts);
-    // $('#tree').ztree_toc(conf);
     setTimeout(function(){
     	$('#tree').ztree_toc(conf);
     },100)

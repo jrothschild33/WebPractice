@@ -22,6 +22,7 @@ export default {
   methods: {
     sendStudentName() {
       // this.$bus.$emit('hello',this.name)
+      // 消息订阅与发布：提供数据
       pubsub.publish('hello', 666)
     }
   }

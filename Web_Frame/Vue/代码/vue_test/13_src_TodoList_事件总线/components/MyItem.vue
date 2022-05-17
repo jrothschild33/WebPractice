@@ -18,16 +18,20 @@ export default {
   methods: {
     //勾选or取消勾选
     handleCheck(id) {
-      //通知App组件将对应的todo对象的done值取反
+      // 子传父通信（旧方法）：通知App组件将对应的todo对象的done值取反
       // this.checkTodo(id)
+
+      // 全局事件总线：this.$bus.$emit 挂载函数
       this.$bus.$emit('checkTodo', id)
     },
     //删除
     handleDelete(id) {
       // Window.confirm(): 返回布尔值，https://developer.mozilla.org/zh-CN/docs/Web/API/Window/confirm
       if (confirm('确定删除吗？')) {
-        //通知App组件将对应的todo对象删除
+        // 子传父通信（旧方法）：通知App组件将对应的todo对象删除
         // this.deleteTodo(id)
+
+        // 全局事件总线：this.$bus.$emit 挂载函数
         this.$bus.$emit('deleteTodo', id)
       }
     }
@@ -46,7 +50,7 @@ li {
 }
 
 li label {
-  float: left;
+  /* float: left; */
   cursor: pointer;
 }
 

@@ -11,9 +11,9 @@ Vue.use(vueResource)
 
 //创建vm
 new Vue({
-	el:'#app',
-	render: h => h(App),
-	beforeCreate() {
-		Vue.prototype.$bus = this
-	},
+  el: '#app',
+  render: (h) => h(App),
+  beforeCreate() {
+    Vue.prototype.$bus = this
+  },
 })

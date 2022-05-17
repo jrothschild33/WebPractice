@@ -69,11 +69,13 @@ export default {
   },
   mounted() {
     this.$bus.$on('checkTodo', this.checkTodo)
+    // 挂载updateTodo
     this.$bus.$on('updateTodo', this.updateTodo)
     this.pubId = pubsub.subscribe('deleteTodo', this.deleteTodo)
   },
   beforeDestroy() {
     this.$bus.$off('checkTodo')
+    // 解绑updateTodo
     this.$bus.$off('updateTodo')
     pubsub.unsubscribe(this.pubId)
   }

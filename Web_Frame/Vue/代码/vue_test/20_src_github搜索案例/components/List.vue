@@ -40,7 +40,7 @@ export default {
 
 <style scoped>
 .album {
-  min-height: 50rem; /* Can be removed; just added for demo purposes */
+  min-height: 50rem;
   padding-top: 3rem;
   padding-bottom: 3rem;
   background-color: #f7f7f7;

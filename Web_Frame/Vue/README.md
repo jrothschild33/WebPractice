@@ -3284,6 +3284,10 @@
    1）方法1：麻烦，不常用
 
    ```js
+   import Vue from 'vue'
+   import App from './App.vue'
+   Vue.config.productionTip = false
+   
    //安装全局事件总线
    const Demo = Vue.extend({})
    const d = new Demo()
@@ -3293,6 +3297,10 @@
    2）方法2：常用方法
 
    ```js
+   import Vue from 'vue'
+   import App from './App.vue'
+   Vue.config.productionTip = false
+   
    new Vue({
      el: '#app',
      render: (h) => h(App),
@@ -3306,10 +3314,7 @@
 
    1）定义处理接收到数据的函数：`methods: { demo(data){...}}`
 
-   2）挂载全局事件
-
-   * 方法1：`mounted() { this.$bus.$on('xxx', this.demo)}`
-   * 方法2：`mounted() { this.x.$on('xxx', this.demo)}`
+   2）挂载全局事件：`mounted() { this.$bus.$on('xxx', this.demo)}`
 
 3. 提供数据：`$bus.$emit`
 
@@ -3320,9 +3325,315 @@
    * 语法：`beforeDestroy() {this.$bus.$off('xxx') }`
    * 作用：在销毁vc之前取消事件挂载，释放名称给其他人用
 
-5. 案例：
+5. 完整案例代码：
 
-   1）组件：
+   1）组件：Student.vue，提供数据：`$bus.$emit`
+   
+   ```vue
+   <template>
+     <div class="student">
+       <h2>学生姓名：{{name}}</h2>
+       <h2>学生性别：{{sex}}</h2>
+       <button @click="sendStudentName">把学生名给School组件</button>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'Student',
+     data() {
+       return {
+         name: '张三',
+         sex: '男'
+       }
+     },
+     mounted() {
+     },
+     methods: {
+       sendStudentName() {
+         // 全局事件总线：提供数据
+         this.$bus.$emit('hello', this.name)
+       }
+     }
+   }
+   </script>
+   
+   <style lang="less" scoped>
+   .student {
+     background-color: pink;
+     padding: 5px;
+     margin-top: 30px;
+   }
+   </style>
+   ```
+   
+   2）组件：School.vue，接收数据：`$bus.$on`、解绑事件：`$bus.$off`
+   
+   ```vue
+   <template>
+     <div class="school">
+       <h2>学校名称：{{name}}</h2>
+       <h2>学校地址：{{address}}</h2>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'School',
+     data() {
+       return {
+         name: '尚硅谷',
+         address: '北京'
+       }
+     },
+     mounted() {
+       // 全局事件总线：接收数据
+       this.$bus.$on('hello', data => {
+         console.log('我是School组件，收到了数据', data)
+       })
+     },
+     // 全局事件总线：解绑事件
+     beforeDestroy() {
+       // 注意：要在销毁vc之前取消事件hello的挂载，释放hello名称给其他人用
+       this.$bus.$off('hello')
+     }
+   }
+   </script>
+   
+   <style scoped>
+   .school {
+     background-color: skyblue;
+     padding: 5px;
+   }
+   </style>
+   ```
+   
+   3）汇总组件：App.vue，与正常无区别
+   
+   ```vue
+   <template>
+   	<div class="app">
+   		<h1>{{msg}}</h1>
+   		<School/>
+   		<Student/>
+   	</div>
+   </template>
+   
+   <script>
+   	import Student from './components/Student'
+   	import School from './components/School'
+   
+   	export default {
+   		name:'App',
+   		components:{School,Student},
+   		data() {
+   			return {
+   				msg:'你好啊！',
+   			}
+   		}
+   	}
+   </script>
+   
+   <style scoped>
+   	.app{
+   		background-color: gray;
+   		padding: 5px;
+   	}
+   </style>
+   ```
+
+##### 2.7.1.2 消息订阅与发布 pubsub
+
+> 一种组件间通信的方式，适用于任意组件间通信。
+
+1. 安装与引入
+
+   ```cmd
+   npm i pubsub-js
+   ```
+
+   ```js
+   import pubsub from 'pubsub-js'
+   ```
+
+2. 接收数据（订阅）：`pubsub.subscribe`
+
+   1）A组件接收数据，在A组件订阅消息，回调留在A组件自身
+
+   2）挂载pubId：`this.pubId = pubsub.subscribe('函数名',this.函数)`
+
+   3）原理：每次pubsub时会生成不同的id，根据id号才能取消订阅
+
+   4）接收由`pubsub.publish`提供的数据，第一个参数默认是`msgName`, 第二个参数才是数据，如果不想要第一个参数，要用“`_`”占位，否则报错
+
+   ```js
+   // 接收数据组件
+   deleteTodo(_, id) {
+     this.todos = this.todos.filter(todo => todo.id !== id)
+   },
+   
+   // 提供数据组件
+   pubsub.publish('deleteTodo',id)
+   ```
+   
+3. 提供数据（发布）：`pubsub.publish('函数名', 数据)`
+
+   1）定义提供数据的函数：`methods: { sendData函数() { pubsub.publish('函数名', 数据) }`
+
+4. 取消订阅：`pubsub.unsubscribe(唯一对应的id值)`
+
+   1）语法：`beforeDestroy() { pubsub.unsubscribe(this.pubId) }`
+
+5. 完整案例代码：
+
+   1）子组件：Student.vue，提供数据：`pubsub.publish`
+
+   ```vue
+   <template>
+     <div class="student">
+       <h2>学生姓名：{{name}}</h2>
+       <h2>学生性别：{{sex}}</h2>
+       <button @click="sendStudentName">把学生名给School组件</button>
+     </div>
+   </template>
+   
+   <script>
+   import pubsub from 'pubsub-js'
+   export default {
+     name: 'Student',
+     data() {
+       return {
+         name: '张三',
+         sex: '男'
+       }
+     },
+     mounted() {
+     },
+     methods: {
+       sendStudentName() {
+         // 全局事件总线：提供数据
+         // this.$bus.$emit('hello',this.name)
+         
+         // 消息订阅与发布：提供数据
+         pubsub.publish('hello', 666)
+       }
+     }
+   }
+   </script>
+   
+   <style lang="less" scoped>
+   .student {
+     background-color: pink;
+     padding: 5px;
+     margin-top: 30px;
+   }
+   </style>
+   ```
+   
+   2）子组件：School.vue，接收数据：`pubsub.subscribe`、取消订阅：`pubsub.unsubscribe`
+   
+   ```vue
+   <template>
+     <div class="school">
+       <h2>学校名称：{{name}}</h2>
+       <h2>学校地址：{{address}}</h2>
+     </div>
+   </template>
+   
+   <script>
+   // 第三方插件：pubsub-js（所有框架可用，包括angular、react）
+   import pubsub from 'pubsub-js'
+   export default {
+     name: 'School',
+     data() {
+       return {
+         name: '尚硅谷',
+         address: '北京'
+       }
+     },
+     mounted() {
+       // 全局事件总线：接收数据
+       /* this.$bus.$on('hello',(data)=>{
+   		  console.log('我是School组件，收到了数据',data)
+   	   }) */
+       
+   	// 消息订阅与发布：接收数据
+       // 每次pubsub时会生成不同的id，根据id号才能取消订阅，所以要挂到this上
+       this.pubId = pubsub.subscribe('hello', (msgName, data) => {
+         // 注意：如果是箭头函数，this指向vc；如果是正常函数，this是undefined
+         console.log(this)
+         // 参数：msgName：消息名称；data：数据
+         console.log('有人发布了hello消息，hello消息的回调执行了', msgName, data)
+       })
+     },
+     beforeDestroy() {
+       // 全局事件总线：解绑事件
+       // this.$bus.$off('hello')
+       
+       // 消息订阅与发布：取消订阅
+       pubsub.unsubscribe(this.pubId)
+     }
+   }
+   </script>
+   
+   <style scoped>
+   .school {
+     background-color: skyblue;
+     padding: 5px;
+   }
+   </style>
+   ```
+   
+   3）汇总组件：App.vue，与正常无区别
+   
+   ```vue
+   <template>
+     <div class="app">
+       <h1>{{msg}}</h1>
+       <School />
+       <Student />
+     </div>
+   </template>
+   
+   <script>
+   import Student from './components/Student'
+   import School from './components/School'
+   
+   export default {
+     name: 'App',
+     components: { School, Student },
+     data() {
+       return {
+         msg: '你好啊！'
+       }
+     }
+   }
+   </script>
+   
+   <style scoped>
+   .app {
+     background-color: gray;
+     padding: 5px;
+   }
+   </style>
+   ```
+   
+   4）入口文件：main.js，与正常无区别
+   
+   ```js
+   //引入Vue
+   import Vue from 'vue'
+   //引入App
+   import App from './App.vue'
+   //关闭Vue的生产提示
+   Vue.config.productionTip = false
+   
+   //创建vm
+   new Vue({
+   	el:'#app',
+   	render: h => h(App),
+   })
+   ```
 
 ------
 
@@ -3336,6 +3647,25 @@
 
    2）注意：默认传递字符串，如果是数字要在age前加冒号
 
+   ```vue
+   <template>
+     <div>
+       <!-- 这里如果age是数字，需要用v-bind绑定，这样的话直接解析引号里面的内容 -->
+       <Student name="李四" sex="女" :age="18" />
+     </div>
+   </template>
+   
+   <script>
+   import Student from './components/Student'
+   
+   export default {
+     name: 'App',
+     components: { Student }
+   }
+   </script>
+   
+   ```
+
 2. 接收数据：在子组件中配置
 
    1）第一种方式（只接收）：`props:['name','age','sex']`
@@ -3344,24 +3674,67 @@
 
    3）第三种方式（限制类型、限制必要性、指定默认值）
 
-   * type：类型，如String、Number
-   * required：布尔值，是否必须输入
-   * default：仅required为false时生效，指定默认值
+   * `type`：类型，如String、Number
+   * `required`：布尔值，是否必须输入
+   * `default`：仅required为false时生效，指定默认值
 
    ```vue
-   props: {
-     name: {
-       type: String, // 类型是字符串
-       required: true // 是必要的
+   <template>
+     <div>
+       <h1>{{msg}}</h1>
+       <h2>学生姓名：{{name}}</h2>
+       <h2>学生性别：{{sex}}</h2>
+       <!--这里没有直接使用接收到的age，而是在data中定义了myAge进行进一步加工-->
+       <h2>学生年龄：{{myAge+1}}</h2>
+       <button @click="updateAge">尝试修改收到的年龄</button>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'Student',
+     data() {
+       return {
+         msg: '我是一个尚硅谷的学生',
+         // props中的属性优先级高于data中的属性
+         // 注意：接收到的属性尽量不要修改！如果非要修改，在data中定义一个其他名称的变量，如：myAge: this.age
+         myAge: this.age
+       }
      },
-     age: {
-       type: Number,
-       default: 99 // 默认值，如果不传入age为默认值
+   
+     methods: {
+       updateAge() {
+         this.myAge++
+       }
      },
-     sex: {
-       type: String,
-       required: true
+     
+     // 1. 第一种方式（只接收）
+     // props:['name','age','sex']
+   
+     // 2. 第二种方式（限制类型）
+     /* props:{
+   		name:String,
+   		age:Number,
+   		sex:String
+   	} */
+   
+     // 3. 第三种方式（限制类型、限制必要性、指定默认值）
+     props: {
+       name: {
+         type: String, // name的类型是字符串
+         required: true // name是必要的
+       },
+       age: {
+         type: Number,
+         default: 99 // 默认值，如果不传入age为默认值
+       },
+       sex: {
+         type: String,
+         required: true
+       }
      }
+   }
+   </script>
    ```
 
 3. 注意：
@@ -3376,9 +3749,9 @@
 
 > 作用：让父组件可以向子组件指定位置插入html结构
 
-1. 默认插槽：
+###### 2.7.2.2.1 默认插槽
 
-   1）父组件 App.vue：在子组件标签中写本应在子组件vue文件中写的内容
+1. 父组件 App.vue：在子组件标签中写本应在子组件vue文件中写的内容
 
    ```vue
    <template>
@@ -3423,7 +3796,7 @@
    </style>
    ```
 
-   2）子组件 Category.vue：用`<slot>`标签指定插入内容的位置
+2. 子组件 Category.vue：用`<slot>`标签指定插入内容的位置
 
    ```vue
    <template>
@@ -3460,9 +3833,9 @@
    </style>
    ```
 
-2. 具名插槽：name
+###### 2.7.2.2.2 具名插槽 name
 
-   1）父组件 App.vue：在子组件标签里写的内容标签，带上 `slot="xxx"` 的属性
+1. 父组件 App.vue：在子组件标签里写的内容标签，带上 `slot="xxx"` 的属性
 
    ```vue
    <template>
@@ -3522,7 +3895,7 @@
    </style>
    ```
 
-   2）子组件 Category.vue：在`<slot>`标签中指定 `name="xxx"`，区别插入内容的位置
+2. 子组件 Category.vue：在`<slot>`标签中指定 `name="xxx"`，区别插入内容的位置
 
    ```vue
    <template>
@@ -3560,7 +3933,7 @@
    </style>
    ```
 
-   3）注意：可以用`<template>`包裹多内容标签，用 `v-slot:xxx` 指定名称
+3. 注意：可以用`<template>`包裹多内容标签，用 `v-slot:xxx` 指定名称
 
    ```vue
    <template v-slot:footer>
@@ -3573,4 +3946,1052 @@
    </template>
    ```
 
+###### 2.7.2.2.3 作用域插槽 scope
+
+1. 核心：数据在子组件，根据数据生成的结构在父组件
+
+2. 父组件：在子组件标签中用`<template>`包裹内容，并指定 `scope`
+
+   1）方式1：`scope="自定义名称"`，如atguigu，用atguigu.xxx或atguigu.yyy显示数据
+
+   2）方式2：`scope` 或 `slot-scope="{xxx}"`，解构赋值，直接用xxx显示数据
+
+   ```vue
+   <template>
+     <div class="container">
+       <Category title="游戏">
+         <!--方法1-->
+         <template scope="atguigu">
+           <ul>
+             <li v-for="(g,index) in atguigu.games" :key="index">{{g}}</li>
+           </ul>
+         </template>
+       </Category>
    
+       <Category title="游戏">
+         <!--方法2-->
+         <template scope="{games}">
+           <ol>
+             <li style="color:red" v-for="(g,index) in games" :key="index">{{g}}</li>
+           </ol>
+         </template>
+       </Category>
+   
+       <Category title="游戏">
+         <!--方法2-->
+         <template slot-scope="{games}">
+           <h4 v-for="(g,index) in games" :key="index">{{g}}</h4>
+         </template>
+       </Category>
+     </div>
+   </template>
+   
+   <script>
+   import Category from './components/Category'
+   export default {
+     name: 'App',
+     components: { Category }
+   }
+   </script>
+   
+   <style scoped>
+   .container,
+   .foot {
+     display: flex;
+     justify-content: space-around;
+   }
+   h4 {
+     text-align: center;
+   }
+   </style>
+   ```
+
+3. 子组件：在`<slot>`中定义 `:xxx="data1", yyy="data2"`，指定作用域和数据
+
+   ```vue
+   <template>
+     <div class="category">
+       <h3>{{title}}分类</h3>
+       <!--指定作用域、数据-->
+       <slot :games="games" msg="hello">我是默认的一些内容</slot>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'Category',
+     props: ['title'],
+     data() {
+       return {
+         games: ['红色警戒', '穿越火线', '劲舞团', '超级玛丽']
+       }
+     }
+   }
+   </script>
+   
+   <style scoped>
+   .category {
+     background-color: skyblue;
+     width: 200px;
+     height: 300px;
+   }
+   h3 {
+     text-align: center;
+     background-color: orange;
+   }
+   video {
+     width: 100%;
+   }
+   img {
+     width: 100%;
+   }
+   </style>
+   ```
+
+------
+
+#### 2.7.3 子传父
+
+##### 2.7.3.1 props配置
+
+1. 原理：父组件给子组件传递一个函数，用“`：传递参数名="funcionName"`”绑定，在子组件中用`this.funcionName()`将参数传递给父组件
+
+2. 父组件：App.vue
+
+   1）语法：`<MyList :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo" />`
+
+   2）需要在父组件中定义数据todos、函数checkTodo、deleteTodo
+
+   ```vue
+   <template>
+     <div id="root">
+       <div class="todo-container">
+         <div class="todo-wrap">
+           <!-- 传参：addTodo(在MyHeader中配置props)，传入函数addTodo -->
+           <!-- MyHeader功能：添加ToDo -->
+           <MyHeader :addTodo="addTodo" />
+           <!-- MyList功能：勾选、删除ToDo -->
+           <MyList :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo" />
+           <!-- MyFooter功能：全选、清除已完成ToDo -->
+           <MyFooter :todos="todos" :checkAllTodo="checkAllTodo" :clearAllTodo="clearAllTodo" />
+         </div>
+       </div>
+     </div>
+   </template>
+   
+   <script>
+   // 这里之所以没引入MyItem，是因为MyList中已经引入了
+   import MyHeader from './components/MyHeader'
+   import MyList from './components/MyList'
+   import MyFooter from './components/MyFooter.vue'
+   
+   export default {
+     name: 'App',
+     components: { MyHeader, MyList, MyFooter },
+     data() {
+       return {
+         //由于todos是MyHeader组件和MyFooter组件都在使用，所以放在App中（状态提升）
+         todos: [
+           { id: '001', title: '抽烟', done: true },
+           { id: '002', title: '喝酒', done: false },
+           { id: '003', title: '开车', done: true }
+         ]
+       }
+     },
+     methods: {
+       // 添加
+       addTodo(todoObj) {
+         this.todos.unshift(todoObj)
+       },
+       // 勾选
+       checkTodo(id) {
+         this.todos.forEach(todo => {
+           if (todo.id === id) todo.done = !todo.done
+         })
+       },
+       // 删除
+       deleteTodo(id) {
+         // filter不会改变原数组，只是返回新数组，虽然都叫todos，但是已经不一样了，只要保证id不出问题，不会改变原todos
+         this.todos = this.todos.filter(todo => todo.id !== id)
+       },
+       // 全选
+       checkAllTodo(done) {
+         this.todos.forEach(todo => {
+           todo.done = done
+         })
+       },
+       // 清除已完成
+       clearAllTodo() {
+         this.todos = this.todos.filter(todo => {
+           return !todo.done
+         })
+       }
+     }
+   }
+   </script>
+   ```
+
+3. 子组件：MyList.vue
+
+   1）接收数据：`props: ['todos', 'checkTodo', 'deleteTodo']`，接收父组件传递的todoObj数据、checkTodo函数、deleteTodo函数
+
+   2）注意：MyList也是MyItem的父组件，从App.vue接收到的数据可以进一步传递给孙组件
+
+   ```vue
+   <template>
+     <ul class="todo-main">
+       <!-- 给MyItem传递数据：todoObj、checkTodo、deleteTodo -->
+       <MyItem
+         v-for="todoObj in todos"
+         :key="todoObj.id"
+         :todo="todoObj"
+         :checkTodo="checkTodo"
+         :deleteTodo="deleteTodo"
+       />
+     </ul>
+   </template>
+   
+   <script>
+   import MyItem from './MyItem'
+   
+   export default {
+     name: 'MyList',
+     components: { MyItem },
+     //声明接收App传递过来的数据，其中todos是自己用的，checkTodo和deleteTodo是给子组件MyItem用的
+     props: ['todos', 'checkTodo', 'deleteTodo']
+   }
+   </script>
+   
+   <style scoped>
+   .todo-main {
+     margin-left: 0px;
+     border: 1px solid #ddd;
+     border-radius: 2px;
+     padding: 0px;
+   }
+   
+   .todo-empty {
+     height: 40px;
+     line-height: 40px;
+     border: 1px solid #ddd;
+     border-radius: 2px;
+     padding-left: 5px;
+     margin-top: 10px;
+   }
+   </style>
+   ```
+
+4. 孙组件：MyItem.vue
+
+   1）接收数据：props: ['todo', 'checkTodo', 'deleteTodo']
+
+   2）注意：这里的todo是todos中的逐条数据
+
+   3）使用父组件的方法：this.传递过来的函数名，将子组件中的参数传给父组件，由父组件进行处理
+
+   ```vue
+   <template>
+     <li>
+       <label>
+         <input type="checkbox" :checked="todo.done" @change="handleCheck(todo.id)" />
+         <!-- 如下代码也能实现功能，但是不太推荐，因为有点违反原则，因为修改了props -->
+         <!-- <input type="checkbox" v-model="todo.done"/> -->
+         <span>{{todo.title}}</span>
+       </label>
+       <button class="btn btn-danger" @click="handleDelete(todo.id)">删除</button>
+     </li>
+   </template>
+   
+   <script>
+   export default {
+     name: 'MyItem',
+     // 声明接收todo、checkTodo、deleteTodo
+     // 这里的todo接受的是单条数据todoObj
+     props: ['todo', 'checkTodo', 'deleteTodo'],
+     methods: {
+       // 勾选/取消勾选
+       handleCheck(id) {
+         // 通知父组件App将对应的todo对象的done值取反
+         this.checkTodo(id)
+       },
+       // 删除
+       handleDelete(id) {
+         if (confirm('确定删除吗？')) {
+           // 通知父组件App将对应的todo对象删除
+           this.deleteTodo(id)
+         }
+       }
+     }
+   }
+   </script>
+   ```
+
+##### 2.7.3.2 自定义事件
+
+> 适用于子组件传递数据给父组件，事件回调函数留在父组件中。
+
+1. 绑定事件：父组件App.vue
+
+   1）方法1：使用`@`或`v-on`
+
+   ```html
+   <Student @自定义事件名称="functionName"/>
+   ```
+
+   2）方法2：使用`ref`
+
+   ```html
+   <Student ref="ref名称" />
+   ```
+
+   * 需要在mounted()中绑定事件
+
+     ```js
+     this.$refs.ref名称.$on('自定义事件名称', this.functionName)
+     // 也可以绑定一次性事件
+     this.$refs.ref名称.$once('自定义事件名称', this.functionName)
+     ```
+
+   * 优点：灵活性强，可以实现计时器效果、多重事件效果，而方法一无法实现
+   * 回调函数要么配置在methods中，要么用箭头函数，否则this指向会出问题
+   * 用ref绑定自定义事件时，会把@后全部看成自定义事件，包括原生JS中的click，如果想使用原生JS事件，需要加`native`
+
+   ```html
+   <!--App.vue-->
+   <template>
+     <div class="app">
+       <h1>{{msg}}，学生姓名是:{{studentName}}</h1>
+       <School :getSchoolName="getSchoolName" />
+       
+       <!-- 第1种写法：使用@或v-on -->
+       <!-- <Student @atguigu="getStudentName" @demo="m1"/> -->
+       <!-- 可以只触发一次 -->
+       <!-- <Student @atguigu.once="getStudentName" @demo="m1"/> -->
+         
+       <!-- 第2种写法：使用ref -->
+       <!-- 注意：此方法会将@后的事件全部看做自定义事件，如果想绑定原生JS事件（如click），需要加.native -->
+       <Student ref="student" @click.native="show" />
+     </div>
+   </template>
+   
+   <script>
+   import Student from './components/Student'
+   import School from './components/School'
+   
+   export default {
+     name: 'App',
+     components: { School, Student },
+     data() {
+       return {
+         msg: '你好啊！',
+         studentName: ''
+       }
+     },
+     methods: {
+       getSchoolName(name) {
+         console.log('App收到了学校名：', name)
+       },
+       getStudentName(name, ...params) {
+         console.log('App收到了学生名：', name, params)
+         this.studentName = name
+       },
+       m1() {
+         console.log('demo事件被触发了！')
+       },
+       show() {
+         alert(123)
+       }
+     },
+     // 第2种写法：使用ref，需要挂载
+     mounted() {
+       this.$refs.student.$on('atguigu', this.getStudentName) //绑定自定义事件
+       // this.$refs.student.$once('atguigu',this.getStudentName) //绑定自定义事件（一次性）
+     }
+   
+     // 方法2的优点：灵活性强，可以实现计时器效果、多重事件效果，而方法一无法实现
+     /* mounted() {
+       setTimeout(() => {
+         this.$refs.student.$on('atguigu', this.getStudentName) //绑定自定义事件
+       }, 3000)
+     } */
+   }
+   </script>
+   
+   <style scoped>
+   .app {
+     background-color: gray;
+     padding: 5px;
+   }
+   </style>
+   ```
+
+2. 触发事件：子组件，`this.$emit('自定义事件名称', 数据/多参数）`
+
+3. 解绑事件：子组件
+
+   1）解绑单个事件：`this.$off('自定义事件名称')`
+
+   2）解绑多个事件：`this.$off(['自定义事件名称1','自定义事件名称2'])`
+
+   3）解绑所有自定义事件：`this.$off()`
+
+4. 销毁实例：子组件，`this.$destroy()`，销毁vc实例后，所有绑定在该实例上的事件均被销毁
+
+   ```vue
+   <!--Student.vue-->
+   <template>
+   	<div class="student">
+   		<h2>学生姓名：{{name}}</h2>
+   		<h2>学生性别：{{sex}}</h2>
+   		<h2>当前求和为：{{number}}</h2>
+   		<button @click="add">点我number++</button>
+   		<button @click="sendStudentlName">把学生名给App</button>
+   		<button @click="unbind">解绑atguigu事件</button>
+   		<button @click="death">销毁当前Student组件的实例(vc)</button>
+   	</div>
+   </template>
+   
+   <script>
+   	export default {
+   		name:'Student',
+   		data() {
+   			return {
+   				name:'张三',
+   				sex:'男',
+   				number:0
+   			}
+   		},
+   		methods: {
+   			add(){
+   				console.log('add回调被调用了')
+   				this.number++
+   			},
+   			sendStudentlName(){
+   				// 触发Student组件实例身上的atguigu事件
+   				this.$emit('atguigu', this.name, 666, 888, 900)
+   			},
+   			unbind(){
+   				this.$off('atguigu') //解绑一个自定义事件
+   				// this.$off(['atguigu','demo']) //解绑多个自定义事件
+   				// this.$off() //解绑所有的自定义事件
+   			},
+   			death(){
+   				this.$destroy() //销毁了当前Student组件的实例，销毁后所有Student实例的自定义事件全都不奏效。
+   			}
+   		},
+   	}
+   </script>
+   
+   <style lang="less" scoped>
+   	.student{
+   		background-color: pink;
+   		padding: 5px;
+   		margin-top: 30px;
+   	}
+   </style>
+   ```
+
+------
+
+### 2.8 nextTick
+
+1. 语法：`this.$nextTick(回调函数)`
+
+2. 作用：在下一次 DOM 更新结束后执行其指定的回调
+
+3. 场景：当改变数据后，要基于更新后的新DOM进行某些操作时，要在nextTick所指定的回调函数中执行
+
+4. 案例：给todo列表添加“编辑”按钮
+
+   ```js
+   // 点击编辑按钮后，输入框才出现，然后才能获取焦点
+   this.$nextTick(function() {this.$refs.inputTitle.focus()})
+   ```
+
+------
+
+### 2.9 过度与动画
+
+#### 2.9.1 css自定义动画
+
+1. 写css样式：
+
+   1）元素进入的样式
+
+   * `v-enter`：进入的起点
+   * `v-enter-active`：进入过程中
+   * `v-enter-to`：进入的终点
+
+   2）元素离开的样式
+
+   * `v-leave`：离开的起点
+   * `v-leave-active`：离开过程中
+   * `v-leave-to`：离开的终点
+
+2. 用`<transition>`包裹要过度的元素，并配置name属性
+
+   * `appear`属性：一打开页面的时候就有动画效果
+
+   ```vue
+   <template>
+     <div>
+       <button @click="isShow = !isShow">显示/隐藏</button>
+       <!-- Vue动画标签 -->
+       <!-- appear属性：代表一打开页面的时候就有动画效果 -->
+       <transition name="hello" appear>
+         <h1 v-show="isShow">你好啊！</h1>
+       </transition>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'Test',
+     data() {
+       return {
+         isShow: true
+       }
+     }
+   }
+   </script>
+   
+   <style scoped>
+   h1 {
+     background-color: orange;
+   }
+   /* 进入效果：v-enter-active */
+   .hello-enter-active {
+     animation: atguigu 0.5s linear;
+   }
+   /* 离开效果：v-enter-active */
+   .hello-leave-active {
+     animation: atguigu 0.5s linear reverse;
+   }
+   @keyframes atguigu {
+     from {
+       transform: translateX(-100%);
+     }
+     to {
+       transform: translateX(0px);
+     }
+   }
+   </style>
+   ```
+
+3. 若有多个元素需要过度，则需要使用：`<transition-group>`，且每个元素都要指定key值
+
+   ```vue
+   <template>
+     <div>
+       <button @click="isShow = !isShow">显示/隐藏</button>
+       <!-- transition-group：可以给多个元素加动画，需要加 key -->
+       <transition-group name="hello" appear>
+         <h1 v-show="!isShow" key="1">你好啊！</h1>
+         <h1 v-show="isShow" key="2">尚硅谷！</h1>
+       </transition-group>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'Test',
+     data() {
+       return {
+         isShow: true
+       }
+     }
+   }
+   </script>
+   
+   <style scoped>
+   h1 {
+     background-color: orange;
+     /* transition: 0.5s linear; */
+   }
+   /* 用过度效果写 */
+   
+   /* 进入的起点、离开的终点 */
+   .hello-enter,
+   .hello-leave-to {
+     transform: translateX(-100%);
+   }
+   /* 动画：时间、运动效果 */
+   .hello-enter-active,
+   .hello-leave-active {
+     transition: 0.5s linear;
+   }
+   /* 进入的终点、离开的起点 */
+   .hello-enter-to,
+   .hello-leave {
+     transform: translateX(0);
+   }
+   </style>
+   ```
+
+#### 2.9.2 animate.css
+
+1. 第三方动画库：[animate.css](https://animate.style/)
+
+2. 安装：
+
+   ```cmd
+   npm install animate.css
+   ```
+
+3. 使用：在`<transition>`标签中指定 `name="animate__animated xxx"`
+
+   ```vue
+   <template>
+     <div>
+       <button @click="isShow = !isShow">显示/隐藏</button>
+       <transition-group
+         appear
+         name="animate__animated animate__bounce"
+         enter-active-class="animate__swing"
+         leave-active-class="animate__backOutUp"
+       >
+         <h1 v-show="!isShow" key="1">你好啊！</h1>
+         <h1 v-show="isShow" key="2">尚硅谷！</h1>
+       </transition-group>
+     </div>
+   </template>
+   
+   <script>
+   // npm上一个非常成型的动画库：animate.css
+   import 'animate.css'
+   export default {
+     name: 'Test',
+     data() {
+       return {
+         isShow: true
+       }
+     }
+   }
+   </script>
+   
+   <style scoped>
+   h1 {
+     background-color: orange;
+   }
+   </style>
+   ```
+
+------
+
+## 第3章 Vue配置代理
+
+> 配置代理服务器：服务器之间通信不受同源策略限制，只有浏览器和服务器之间通信受限
+
+### 3.1 [vue.config.js](https://cli.vuejs.org/zh/config/#devserver-proxy)
+
+> 修改vue.config.js后要重启
+
+#### 3.1.1 配置方法1
+
+1. 语法：`devServer:{ proxy:"代理目标服务器URL" }`
+
+2. 优点：配置简单，请求资源时直接发给前端（`8080`）即可
+
+3. 缺点：不能配置多个代理，不能灵活的控制请求是否走代理
+
+4. 注意：当请求了前端不存在的资源时，请求才会转发给服务器 ，否则会优先匹配public文件夹中的静态资源
+
+   ```js
+   module.exports = {
+     pages: {
+       index: {
+         //入口
+         entry: 'src/main.js',
+       },
+     },
+     lintOnSave: false, //关闭语法检查
+   
+     // 开启代理服务器（方式一）：只能控制单个服务器，且只有public文件夹中找不到资源时才会请求代理服务器
+     devServer: {
+       proxy: 'http://localhost:5000'
+     },
+   ```
+
+#### 3.2.2 配置方法2
+
+1. 语法：`devServer: { proxy: { '/address': { 参数... }, } }`
+
+2. 参数：
+
+   1）`/address`：请求资源的前缀，匹配所有以address开头的请求路径
+
+   2）`target`：代理目标服务器URL
+
+   3）`pathRewrite`：用于重写路径，否则请求服务器URL中会带有/address，路径错误；如：pathRewrite: { '^/address': '' }
+
+   4）`ws`: true；用于支持websocket
+
+   5）`changeOrigin`：布尔值，用于控制请求头中的host值
+
+   * ture(默认)：谎称与服务器同源URL
+   * false：真实URL
+
+3. 优点：可以配置多个代理，且可以灵活的控制请求是否走代理
+
+4. 缺点：配置略微繁琐，请求资源时必须加前缀
+
+   ```js
+   module.exports = {
+     pages: {
+       index: {
+         //入口
+         entry: 'src/main.js',
+       },
+     },
+     lintOnSave: false, //关闭语法检查
+     
+     //开启代理服务器（方式二）
+     devServer: {
+       proxy: {
+         '/atguigu': {
+           target: 'http://localhost:5000',
+           pathRewrite: { '^/atguigu': '' }, // 重写路径，不然后端服务器路径错误
+           // ws: true, //用于支持websocket
+           // changeOrigin: true //用于控制请求头中的host值，如果为false则如实回答，如果是ture(默认)则谎称与服务器同源
+         },
+         '/demo': {
+           target: 'http://localhost:5001',
+           pathRewrite: { '^/demo': '' },
+           // ws: true, //用于支持websocket
+           // changeOrigin: true //用于控制请求头中的host值
+         },
+       },
+     },
+   }
+   ```
+
+------
+
+### 3.2 发送Ajax请求
+
+1. 发送ajax请求的方法
+
+   1）XHR
+
+   2）jQuery
+
+   3）axios：推荐
+
+   4）fetch：兼容性不好
+
+   5）vue-resource：vue插件，用Vue.use(...)
+
+2. 安装：
+
+   ```cmd
+   npm i axios
+   ```
+
+3. 解决跨域问题的方法
+
+   1）CORS：后端开发人员添加响应头
+
+   2）jsonp：只有GET请求
+
+   3）配置代理服务器：服务器之间通信不受同源策略限制，只有浏览器和服务器之间通信受限
+
+4. 前端axios请求写法：父组件App.vue
+
+   ```vue
+   <template>
+     <div>
+       <button @click="getStudents">获取学生信息</button>
+       <button @click="getCars">获取汽车信息</button>
+     </div>
+     <!-- 
+       开启代理服务器：devServer.proxy（需要在vue.config.js中配置）
+       官方文档：https://cli.vuejs.org/zh/config/#devserver-proxy
+     -->
+   </template>
+   
+   <script>
+   import axios from 'axios'
+   export default {
+     name: 'App',
+     methods: {
+       getStudents() {
+         axios.get('http://localhost:8080/atguigu/students').then(
+           response => {
+             console.log('请求成功了', response.data)
+           },
+           error => {
+             console.log('请求失败了', error.message)
+           }
+         )
+       },
+       getCars() {
+         axios.get('http://localhost:8080/demo/cars').then(
+           response => {
+             console.log('请求成功了', response.data)
+           },
+           error => {
+             console.log('请求失败了', error.message)
+           }
+         )
+       }
+     }
+   }
+   </script>
+   ```
+
+------
+
+### 3.3 案例：Github用户搜索
+
+> 使用bootstrap框架搭建，需要在index.html中引入css样式
+>
+> API地址：https://api.github.com/search/users?q=username
+
+#### 3.3.1 使用Axios
+
+1. 子组件：Search.vue，搜索框
+
+   1）全局事件总线：`$bus.$emit`挂载 updateListData，传递 `{ isLoading: true, errMsg: '', users: [], isFirst: false }`
+
+   2）axios发送GET请求
+
+   * 成功：`$bus.$emit`挂载 updateListData，传递 `{ isLoading: false, errMsg: '', users: response.data.items }`
+   * 失败：`$bus.$emit`挂载 updateListData，传递 `{ isLoading: false, errMsg: error.message, users: [] }`
+
+   ```vue
+   <template>
+     <section class="jumbotron">
+       <h3 class="jumbotron-heading">Search Github Users</h3>
+       <div>
+         <input type="text" placeholder="enter the name you search" v-model="keyWord" />&nbsp;
+         <button @click="searchUsers">Search</button>
+       </div>
+     </section>
+   </template>
+   
+   <script>
+   import axios from 'axios'
+   export default {
+     name: 'Search',
+     data() {
+       return {
+         keyWord: ''
+       }
+     },
+     methods: {
+       searchUsers() {
+         // 请求前更新List的数据：正在加载、取消欢迎词
+         this.$bus.$emit('updateListData', { isLoading: true, errMsg: '', users: [], isFirst: false })
+         // 模板字符串
+         axios.get(`https://api.github.com/search/users?q=${this.keyWord}`).then(
+           response => {
+             console.log('请求成功了')
+             //请求成功后更新List的数据
+             this.$bus.$emit('updateListData', { isLoading: false, errMsg: '', users: response.data.items })
+           },
+           error => {
+             //请求后更新List的数据
+             this.$bus.$emit('updateListData', { isLoading: false, errMsg: error.message, users: [] })
+           }
+         )
+       }
+     }
+   }
+   </script>
+   
+   ```
+
+2. 子组件：List.vue，初始化时显示欢迎词，展示搜索结果
+
+   1）data()中创建`info`对象：包含isFirst用于控制欢迎词，以及承接Search.vue传递过来的`updateListData`数据
+
+   * isFirst：true，是否初次展示
+   * isLoading：false，是否加载中
+   * errMsg：错误信息
+   * users：[]，用户数组
+
+   2）全局事件总线`$bus.$on`，接受Search.vue传递过来的`updateListData`数据
+
+   ```vue
+   <template>
+     <div class="row">
+       <!-- 展示用户列表 -->
+       <div v-show="info.users.length" class="card" v-for="user in info.users" :key="user.login">
+         <a :href="user.html_url" target="_blank">
+           <img :src="user.avatar_url" style="width: 100px" />
+         </a>
+         <p class="card-text">{{user.login}}</p>
+       </div>
+       <!-- 展示欢迎词 -->
+       <h1 v-show="info.isFirst">欢迎使用！</h1>
+       <!-- 展示加载中 -->
+       <h1 v-show="info.isLoading">加载中....</h1>
+       <!-- 展示错误信息 -->
+       <h1 v-show="info.errMsg">{{info.errMsg}}</h1>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'List',
+     data() {
+       return {
+         info: {
+           isFirst: true, //是否初次展示
+           isLoading: false, //是否加载中
+           errMsg: '', //错误信息
+           users: []
+         }
+       }
+     },
+     mounted() {
+       this.$bus.$on('updateListData', dataObj => {
+         // 扩展运算符：可以展开对象，如果属性重名，以后面的为主
+         this.info = { ...this.info, ...dataObj }
+       })
+     }
+   }
+   </script>
+   
+   <style scoped>
+   .album {
+     min-height: 50rem;
+     padding-top: 3rem;
+     padding-bottom: 3rem;
+     background-color: #f7f7f7;
+   }
+   
+   .card {
+     float: left;
+     width: 33.333%;
+     padding: 0.75rem;
+     margin-bottom: 2rem;
+     border: 1px solid #efefef;
+     text-align: center;
+   }
+   
+   .card > img {
+     margin-bottom: 0.75rem;
+     border-radius: 100px;
+   }
+   
+   .card-text {
+     font-size: 85%;
+   }
+   </style>
+   ```
+
+3. 父组件：App.vue
+
+   ```vue
+   <template>
+     <!-- 注意：由于index.html中已有<div id="app">，所以要避免重名 -->
+     <div class="container">
+       <Search />
+       <List />
+     </div>
+     <!-- 注意：本项目用到了bootstrap，需要放在public/css/bootstrap.css，然后再index.html中引入 -->
+   </template>
+   
+   <script>
+   import Search from './components/Search'
+   import List from './components/List'
+   export default {
+     name: 'App',
+     components: { Search, List }
+   }
+   </script>
+   ```
+
+4. 入口文件：main.js
+
+   ```js
+   //引入Vue
+   import Vue from 'vue'
+   //引入App
+   import App from './App.vue'
+   //关闭Vue的生产提示
+   Vue.config.productionTip = false
+   
+   //创建vm
+   new Vue({
+     el: '#app',
+     render: (h) => h(App),
+     // 全局事件总线
+     beforeCreate() {
+       Vue.prototype.$bus = this
+     },
+   })
+   ```
+
+#### 3.3.2 使用vue-resource
+
+1. 子组件：Search.vue，将`axios`替换为`this.$http`
+
+   ```vue
+   <template>
+     <section class="jumbotron">
+       <h3 class="jumbotron-heading">Search Github Users</h3>
+       <div>
+         <input type="text" placeholder="enter the name you search" v-model="keyWord" />&nbsp;
+         <button @click="searchUsers">Search</button>
+       </div>
+     </section>
+   </template>
+   
+   <script>
+   export default {
+     name: 'Search',
+     data() {
+       return {
+         keyWord: ''
+       }
+     },
+     methods: {
+       searchUsers() {
+         this.$bus.$emit('updateListData', { isLoading: true, errMsg: '', users: [], isFirst: false })
+         // axios.get(`https://api.github.com/search/users?q=${this.keyWord}`).then(
+         this.$http.get(`https://api.github.com/search/users?q=${this.keyWord}`).then(
+           response => {
+             console.log('请求成功了')
+             this.$bus.$emit('updateListData', { isLoading: false, errMsg: '', users: response.data.items })
+           },
+           error => {
+             this.$bus.$emit('updateListData', { isLoading: false, errMsg: error.message, users: [] })
+           }
+         )
+       }
+     }
+   }
+   </script>
+   
+   ```
+
+2. 入口文件：main.js
+
+   1）引入插件：`import vueResource from 'vue-resource'`
+
+   2）使用插件：`Vue.use(vueResource)`
+
+   ```js
+   import Vue from 'vue'
+   import App from './App.vue'
+   //引入插件
+   import vueResource from 'vue-resource'
+   Vue.config.productionTip = false
+   //使用插件
+   Vue.use(vueResource)
+   
+   new Vue({
+     el: '#app',
+     render: (h) => h(App),
+     beforeCreate() {
+       Vue.prototype.$bus = this
+     },
+   })
+   ```
+
+------
+
+## 第4章 Vuex
+

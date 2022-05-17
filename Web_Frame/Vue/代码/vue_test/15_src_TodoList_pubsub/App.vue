@@ -36,7 +36,7 @@ export default {
         if (todo.id === id) todo.done = !todo.done
       })
     },
-    //删除一个todo（注意：由于使用了pubsub库，第一个参数默认是msgName，但如果不用的话会报错，所以用"_"占位
+    //删除一个todo（注意：由于使用了pubsub库，第一个参数默认是msgName，但如果不用的话会报错，所以用"_"占位）
     deleteTodo(_, id) {
       this.todos = this.todos.filter(todo => todo.id !== id)
     },

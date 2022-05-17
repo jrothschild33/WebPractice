@@ -7351,7 +7351,7 @@
    2）案例：
 
    ```js
-   [0, 1, 2, 3, 4].reduce((accumulator, currentValue, currentIndex, array) => {
+   [1, 2, 3, 4].reduce((accumulator, currentValue, currentIndex, array) => {
      accumulator + currentValue
    })
    ```

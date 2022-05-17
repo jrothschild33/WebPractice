@@ -18,9 +18,9 @@ export default {
   },
   mounted() {
     // console.log('School',this)
-    /* this.$bus.$on('hello',(data)=>{
-				console.log('我是School组件，收到了数据',data)
-			}) */
+    /* this.$bus.$on('hello', data => {
+      console.log('我是School组件，收到了数据', data)
+    }) */
 
     // 每次pubsub时会生成不同的id，根据id号才能取消订阅，所以要挂到this上
     this.pubId = pubsub.subscribe('hello', (msgName, data) => {

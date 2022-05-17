@@ -24,7 +24,7 @@ export default {
     })
   },
   beforeDestroy() {
-    // 注意：这里需要在销毁vc之前取消事件hello的挂载，释放hello名称，给其他人用
+    // 注意：要在销毁vc之前取消事件hello的挂载，释放hello名称给其他人用
     this.$bus.$off('hello')
   }
 }

@@ -7,9 +7,7 @@ module.exports = {
   },
   lintOnSave: false, //关闭语法检查
 
-  // 开启代理服务器（方式一）
-  // 缺点：只能控制单个服务器，且只有public文件夹中找不到资源时才会请求代理服务器
-
+  // 开启代理服务器（方式一）：只能控制单个服务器，且只有public文件夹中找不到资源时才会请求代理服务器
   /* devServer: {
     proxy: 'http://localhost:5000'
   }, */

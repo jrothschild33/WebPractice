@@ -4,7 +4,9 @@
       <input type="checkbox" :checked="todo.done" @change="handleCheck(todo.id)" />
       <!-- 如下代码也能实现功能，但是不太推荐，因为有点违反原则，因为修改了props -->
       <!-- <input type="checkbox" v-model="todo.done"/> -->
+      <!-- 添加显示条件v-show，只有处于非编辑状态时，才会显示span -->
       <span v-show="!todo.isEdit">{{todo.title}}</span>
+      <!-- 新增编辑输入框input，设置显示条件，定义失去焦点即完成编辑的函数，添加ref -->
       <!-- 注意：这里可以使用$event来传递事件参数 -->
       <input
         type="text"
@@ -15,6 +17,7 @@
       />
     </label>
     <button class="btn btn-danger" @click="handleDelete(todo.id)">删除</button>
+    <!-- 新增编辑按钮，设置显示条件，定义点击后编辑函数 -->
     <button v-show="!todo.isEdit" class="btn btn-edit" @click="handleEdit(todo)">编辑</button>
   </li>
 </template>
@@ -28,16 +31,19 @@ export default {
   methods: {
     //勾选or取消勾选
     handleCheck(id) {
-      //通知App组件将对应的todo对象的done值取反
+      // 子传父通信（旧方法）：通知App组件将对应的todo对象的done值取反
       // this.checkTodo(id)
+      // 全局事件总线：this.$bus.$emit 挂载函数
       this.$bus.$emit('checkTodo', id)
     },
     //删除
     handleDelete(id) {
       if (confirm('确定删除吗？')) {
-        //通知App组件将对应的todo对象删除
+        // 子传父通信（旧方法）：通知App组件将对应的todo对象删除
         // this.deleteTodo(id)
-        // this.$bus.$emit('deleteTodo',id)
+        // 全局事件总线：this.$bus.$emit 挂载函数
+        // this.$bus.$emit('deleteTodo', id)
+        // 消息订阅与发布：pubsub.publish
         pubsub.publish('deleteTodo', id)
       }
     },

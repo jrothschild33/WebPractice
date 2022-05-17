@@ -3,8 +3,11 @@
     <div class="todo-container">
       <div class="todo-wrap">
         <!-- 传参：addTodo(在MyHeader中配置props)，传入函数addTodo -->
+        <!-- MyHeader功能：添加ToDo -->
         <MyHeader :addTodo="addTodo" />
+        <!-- MyList功能：勾选、删除ToDo -->
         <MyList :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo" />
+        <!-- MyFooter功能：全选、清除已完成ToDo -->
         <MyFooter :todos="todos" :checkAllTodo="checkAllTodo" :clearAllTodo="clearAllTodo" />
       </div>
     </div>
@@ -12,7 +15,6 @@
 </template>
 
 <script>
-// 注意：组件起名的时候避开HTML中已占用的名称，如：header、footer等
 // 这里之所以没引入MyItem，是因为MyList中已经引入了
 import MyHeader from './components/MyHeader'
 import MyList from './components/MyList'
@@ -32,28 +34,28 @@ export default {
     }
   },
   methods: {
-    //添加一个todo
+    // 添加
     addTodo(todoObj) {
       this.todos.unshift(todoObj)
     },
-    //勾选or取消勾选一个todo
+    // 勾选
     checkTodo(id) {
       this.todos.forEach(todo => {
         if (todo.id === id) todo.done = !todo.done
       })
     },
-    //删除一个todo
+    // 删除
     deleteTodo(id) {
-      // 这里filter不会改变原数组，只是返回新数组，虽然都叫todos，但是已经不一样了，只要保证id不出问题，不会改变原todos
+      // filter不会改变原数组，只是返回新数组，虽然都叫todos，但是已经不一样了，只要保证id不出问题，不会改变原todos
       this.todos = this.todos.filter(todo => todo.id !== id)
     },
-    //全选or取消全选
+    // 全选
     checkAllTodo(done) {
       this.todos.forEach(todo => {
         todo.done = done
       })
     },
-    //清除所有已经完成的todo
+    // 清除已完成
     clearAllTodo() {
       this.todos = this.todos.filter(todo => {
         return !todo.done
@@ -64,7 +66,6 @@ export default {
 </script>
 
 <style>
-/*base*/
 body {
   background: #fff;
 }

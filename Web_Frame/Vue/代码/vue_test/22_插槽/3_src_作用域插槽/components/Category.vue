@@ -8,7 +8,7 @@
 <script>
 export default {
   name: 'Category',
-  props: ['title'],
+  props: ['title'], // 可以承接不同对应的title
   data() {
     return {
       games: ['红色警戒', '穿越火线', '劲舞团', '超级玛丽']

@@ -18,6 +18,7 @@ const actions = {
 	}, */
   jiaOdd(context, value) {
     console.log('actions中的jiaOdd被调用了')
+    console.log(context)
     if (context.state.sum % 2) {
       context.commit('JIA', value)
     }

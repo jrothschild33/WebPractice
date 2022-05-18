@@ -9,6 +9,7 @@
       <ul slot="center">
         <li v-for="(g,index) in games" :key="index">{{g}}</li>
       </ul>
+      <!-- 多内容写法1 -->
       <div class="foot" slot="footer">
         <a href="http://www.atguigu.com">单机游戏</a>
         <a href="http://www.atguigu.com">网络游戏</a>
@@ -17,7 +18,7 @@
 
     <Category title="电影">
       <video slot="center" controls src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"></video>
-      <!-- 可以用<template>包裹多内容标签，用 v-slot:xxx 指定名称 -->
+      <!-- 多内容写法2：可再用<template>包裹多内容标签，用 v-slot:xxx 指定名称 -->
       <template v-slot:footer>
         <div class="foot">
           <a href="http://www.atguigu.com">经典</a>

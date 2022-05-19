@@ -8,6 +8,7 @@
       <option value="2">2</option>
       <option value="3">3</option>
     </select>
+    <!-- 勿忘传参-->
     <button @click="increment(n)">+</button>
     <button @click="decrement(n)">-</button>
     <button @click="incrementOdd(n)">当前求和为奇数再加</button>
@@ -57,12 +58,12 @@ export default {
     /* ************************************************* */
 
     //程序员亲自写方法
-    incrementOdd() {
+    /* incrementOdd() {
       this.$store.dispatch('jiaOdd', this.n)
     },
     incrementWait() {
       this.$store.dispatch('jiaWait', this.n)
-    },
+    }, */
 
     //借助mapActions生成对应的方法，方法中会调用dispatch去联系actions(对象写法)
     ...mapActions({ incrementOdd: 'jiaOdd', incrementWait: 'jiaWait' })

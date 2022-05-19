@@ -8,24 +8,24 @@ import Message from '../pages/Message'
 
 //创建并暴露一个路由器
 export default new VueRouter({
-	routes:[
-		{
-			path:'/about',
-			component:About
-		},
-		{
-			path:'/home',
-			component:Home,
-			children:[
-				{
-					path:'news',
-					component:News,
-				},
-				{
-					path:'message',
-					component:Message,
-				}
-			]
-		}
-	]
+  routes: [
+    {
+      path: '/about',
+      component: About,
+    },
+    {
+      path: '/home',
+      component: Home,
+      children: [
+        {
+          path: 'news',
+          component: News,
+        },
+        {
+          path: 'message',
+          component: Message,
+        },
+      ],
+    },
+  ],
 })

@@ -4594,6 +4594,1037 @@
 
 ------
 
+### 2.10 案例：ToDoList
+
+> 第三方库依赖：`nanoid`，用于生成唯一id
+
+![todolist项目说明](D:\MyProjects\Website\Tutoring\Web_Frame\Vue\src\todolist项目说明.png)
+
+#### 2.10.1 应用：props属性
+
+##### 父组件：App.vue
+
+1. 由3个子组件：`MyHeader`、`MyList`、`MyFooter`构成（其中`MyList`还嵌套了一层`MyItem`子组件）
+
+2. 使用props属性为子组件传递函数，并接收由子组件发回的参数
+
+3. 状态提升：列表数据todos之所以放在父组件App.vue中，是因为子组件`MyHeader`、`MyFooter`都在使用
+
+   ```vue
+   <template>
+     <div id="root">
+       <div class="todo-container">
+         <div class="todo-wrap">
+           <!-- 传参：addTodo(在MyHeader中配置props)，传入函数addTodo -->
+           <!-- MyHeader功能：添加ToDo -->
+           <MyHeader :addTodo="addTodo" />
+           <!-- MyList功能：勾选、删除ToDo -->
+           <MyList :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo" />
+           <!-- MyFooter功能：全选、清除已完成ToDo -->
+           <MyFooter :todos="todos" :checkAllTodo="checkAllTodo" :clearAllTodo="clearAllTodo" />
+         </div>
+       </div>
+     </div>
+   </template>
+   
+   <script>
+   // 这里之所以没引入MyItem，是因为MyList中已经引入了
+   import MyHeader from './components/MyHeader'
+   import MyList from './components/MyList'
+   import MyFooter from './components/MyFooter.vue'
+   
+   export default {
+     name: 'App',
+     components: { MyHeader, MyList, MyFooter },
+     data() {
+       return {
+         //由于todos是MyHeader组件和MyFooter组件都在使用，所以放在App中（状态提升）
+         todos: [
+           { id: '001', title: '抽烟', done: true },
+           { id: '002', title: '喝酒', done: false },
+           { id: '003', title: '开车', done: true }
+         ]
+       }
+     },
+     methods: {
+       // 添加
+       addTodo(todoObj) {
+         this.todos.unshift(todoObj)
+       },
+       // 勾选
+       checkTodo(id) {
+         this.todos.forEach(todo => {
+           if (todo.id === id) todo.done = !todo.done
+         })
+       },
+       // 删除
+       deleteTodo(id) {
+         // filter不会改变原数组，只是返回新数组，虽然都叫todos，但是已经不一样了，只要保证id不出问题，不会改变原todos
+         this.todos = this.todos.filter(todo => todo.id !== id)
+       },
+       // 全选
+       checkAllTodo(done) {
+         this.todos.forEach(todo => {
+           todo.done = done
+         })
+       },
+       // 清除已完成
+       clearAllTodo() {
+         this.todos = this.todos.filter(todo => {
+           return !todo.done
+         })
+       }
+     }
+   }
+   </script>
+   
+   <style>
+   body {
+     background: #fff;
+   }
+   .btn {
+     display: inline-block;
+     padding: 4px 12px;
+     margin-bottom: 0;
+     font-size: 14px;
+     line-height: 20px;
+     text-align: center;
+     vertical-align: middle;
+     cursor: pointer;
+     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+     border-radius: 4px;
+   }
+   .btn-danger {
+     color: #fff;
+     background-color: #da4f49;
+     border: 1px solid #bd362f;
+   }
+   .btn-danger:hover {
+     color: #fff;
+     background-color: #bd362f;
+   }
+   .btn:focus {
+     outline: none;
+   }
+   .todo-container {
+     width: 600px;
+     margin: 0 auto;
+   }
+   .todo-container .todo-wrap {
+     padding: 10px;
+     border: 1px solid #ddd;
+     border-radius: 5px;
+   }
+   </style>
+   ```
+
+##### 子组件：MyHeader.vue
+
+1. 作用：提供input输入框，根据用户输入内容添加ToDo
+
+2. 导入：第三方库nanoid，用于给ToDo对象提供唯一值的id
+
+3. props接收父组件传递过来的addToDo函数：`props['addToDo']`
+
+4. add函数：生成todoObj后，用`this.addTodo(todoObj)`将todoObj传递给父组件App.vue
+
+   ```vue
+   <template>
+     <div class="todo-header">
+       <input type="text" placeholder="请输入你的任务名称，按回车键确认" v-model="title" @keyup.enter="add" />
+     </div>
+   </template>
+   
+   <script>
+   // nanoid是用于生成唯一id的第三方库，使用npm i nanoid安装后导入使用
+   import { nanoid } from 'nanoid'
+       
+   export default {
+     name: 'MyHeader',
+     // 接收从父组件App传递过来的addTodo函数
+     props: ['addTodo'],
+     data() {
+       return {
+         //收集用户输入的title
+         title: ''
+       }
+     },
+     methods: {
+       // js原生事件方法获取输入框的值：e.target
+       /* add(e){
+         console.log(e.target.value)
+       }, */
+   
+       add() {
+         // 校验数据：需要输入非空数据
+         if (!this.title.trim()) return alert('输入不能为空')
+         // 将用户的输入包装成一个todo对象
+         const todoObj = { id: nanoid(), title: this.title, done: false }
+         // 子传父通信：通知父组件App添加一个todo对象
+         this.addTodo(todoObj)
+         // 清空输入
+         this.title = ''
+       }
+     }
+   }
+   </script>
+   
+   <style scoped>
+   .todo-header input {
+     width: 560px;
+     height: 28px;
+     font-size: 14px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     padding: 4px 7px;
+   }
+   
+   .todo-header input:focus {
+     outline: none;
+     border-color: rgba(82, 168, 236, 0.8);
+     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+   }
+   </style>
+   ```
+
+##### 子组件：MyList.vue
+
+1. 作用：中转，里面嵌套孙组件MyItem，遍历App传递过来的`todos`，形成列表
+
+2. props接受父组件App的数据：`props: ['todos', 'checkTodo', 'deleteTodo']`
+
+   1）todos：数据对象，用于遍历形成列表
+
+   2）checkTodo：勾选/取消勾选函数，要继续传递给孙组件`MyItem`
+
+   3）deleteTodo：删除函数，要继续传递给孙组件`MyItem`
+
+3. props给孙组件`MyItem`传递数据：
+
+   1）todo：todoObj单条数据
+
+   2）checkTodo：checkTodo函数
+
+   3）deleteTodo：deleteTodo函数
+
+   ```vue
+   <template>
+     <ul class="todo-main">
+       <!-- 给MyItem传递数据：todoObj、checkTodo、deleteTodo -->
+       <MyItem
+         v-for="todoObj in todos"
+         :key="todoObj.id"
+         :todo="todoObj"
+         :checkTodo="checkTodo"
+         :deleteTodo="deleteTodo"
+       />
+     </ul>
+   </template>
+   
+   <script>
+   import MyItem from './MyItem'
+   
+   export default {
+     name: 'MyList',
+     components: { MyItem },
+     //声明接收App传递过来的数据，其中todos是自己用的，checkTodo和deleteTodo是给子组件MyItem用的
+     props: ['todos', 'checkTodo', 'deleteTodo']
+   }
+   </script>
+   
+   <style scoped>
+   .todo-main {
+     margin-left: 0px;
+     border: 1px solid #ddd;
+     border-radius: 2px;
+     padding: 0px;
+   }
+   
+   .todo-empty {
+     height: 40px;
+     line-height: 40px;
+     border: 1px solid #ddd;
+     border-radius: 2px;
+     padding-left: 5px;
+     margin-top: 10px;
+   }
+   </style>
+   ```
+
+##### 孙组件：MyItem.vue
+
+1. 作用：对单条数据todoObj进行勾选、删除操作
+
+2. props接收MyList-->App传递来的数据（层层穿透）：`props: ['todo', 'checkTodo', 'deleteTodo']`
+
+3. handleCheck函数：传递勾选的id，再用`this.checkTodo(id)`将id传递给父组件App
+
+4. handleDelete函数：传递勾选的id，再用`this.deleteTodo(id)`将id传递给父组件App
+
+   ```vue
+   <template>
+     <li>
+       <label>
+         <input type="checkbox" :checked="todo.done" @change="handleCheck(todo.id)" />
+         <!-- 如下代码也能实现功能，但是不太推荐，因为有点违反原则，因为修改了props -->
+         <!-- <input type="checkbox" v-model="todo.done"/> -->
+         <span>{{todo.title}}</span>
+       </label>
+       <button class="btn btn-danger" @click="handleDelete(todo.id)">删除</button>
+     </li>
+   </template>
+   
+   <script>
+   export default {
+     name: 'MyItem',
+     // 声明接收todo、checkTodo、deleteTodo
+     // 这里的todo接受的是单条数据todoObj
+     props: ['todo', 'checkTodo', 'deleteTodo'],
+     methods: {
+       // 勾选/取消勾选
+       handleCheck(id) {
+         // 通知父组件App将对应的todo对象的done值取反
+         this.checkTodo(id)
+       },
+       // 删除
+       handleDelete(id) {
+         if (confirm('确定删除吗？')) {
+           // 通知父组件App将对应的todo对象删除
+           this.deleteTodo(id)
+         }
+       }
+     }
+   }
+   </script>
+   
+   <style scoped>
+   li {
+     list-style: none;
+     height: 36px;
+     line-height: 36px;
+     padding: 0 5px;
+     border-bottom: 1px solid #ddd;
+   }
+   li label {
+     /* float: left; */
+     cursor: pointer;
+   }
+   li label li input {
+     vertical-align: middle;
+     margin-right: 6px;
+     position: relative;
+     top: -1px;
+   }
+   li button {
+     float: right;
+     display: none;
+     margin-top: 3px;
+   }
+   li:before {
+     content: initial;
+   }
+   li:last-child {
+     border-bottom: none;
+   }
+   li:hover {
+     background-color: #ddd;
+   }
+   li:hover button {
+     display: block;
+   }
+   </style>
+   ```
+
+##### 子组件：MyFooter.vue
+
+1. 作用：底部计数栏、全选/全不选、清除已完成任务
+
+2. props接收父组件App传递来的数据：`props: ['todo', 'checkTodo', 'deleteTodo']`
+
+3. 计算属性isAll：
+
+   1）get()：控制是否全选
+
+   2）set(value)：控制当其被改变时，用`this.checkAllTodo(value)`通知父组件App将todos中所有done属性标记为用户传递过来的value
+
+4. clearAll函数：点击按钮时，调用`this.clearAllTodo()`通知父组件App清除已完成todos
+
+   ```vue
+   <template>
+     <!-- v-show控制的是diplay，如果total为0，则不展示footer计数栏 -->
+     <div class="todo-footer" v-show="total">
+       <label>
+         <!-- 全选框：方法1：用checkAll函数改变checked状态，比较麻烦 -->
+         <!-- <input type="checkbox" :checked="isAll" @change="checkAll"/> -->
+         
+         <!-- 全选框：方法2：巧用计算属性isAll，无需再另外声明函数 -->
+         <input type="checkbox" v-model="isAll" />
+       </label>
+       <span>
+         <span>已完成{{doneTotal}}</span>
+         / 全部{{total}}
+       </span>
+       <button class="btn btn-danger" @click="clearAll">清除已完成任务</button>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'MyFooter',
+     props: ['todos', 'checkAllTodo', 'clearAllTodo'],
+     computed: {
+       // 总数
+       total() {
+         return this.todos.length
+       },
+       // 已完成数
+       doneTotal() {
+         // 用reduce方法做条件统计（有几条数据调用几次），pre是累计器（初始值为0），todo是当前值
+         return this.todos.reduce((pre, todo) => pre + (todo.done ? 1 : 0), 0)
+       },
+       // 注意：isAll计算属性是由total、doneTotal这两个计算属性动态计算得来的（允许套娃）
+       // 控制全选框（bool类型）
+       isAll: {
+         //全选框是否勾选（如果没有待完成事件时，取消勾选）
+         get() {
+           return this.doneTotal === this.total && this.total > 0
+         },
+         // isAll被修改时set被调用（即checkbox选项框被点击时）
+         set(value) {
+           // 通知父组件App将todos中所有done属性标记为用户传递过来的value（true或false）
+           this.checkAllTodo(value)
+         }
+       }
+     },
+     methods: {
+       // 全选框：方法1：用checkAll函数改变checked状态，比较麻烦
+       /* checkAll(e){
+   		  this.checkAllTodo(e.target.checked)
+   		} */
+        
+       // 清空所有已完成
+       clearAll() {
+         // 通知父组件App清除所有todos.done为true的数据
+         this.clearAllTodo()
+       }
+     }
+   }
+   </script>
+   
+   <style scoped>
+   .todo-footer {
+     height: 40px;
+     line-height: 40px;
+     padding-left: 6px;
+     margin-top: 5px;
+   }
+   .todo-footer label {
+     display: inline-block;
+     margin-right: 20px;
+     cursor: pointer;
+   }
+   .todo-footer label input {
+     position: relative;
+     top: -1px;
+     vertical-align: middle;
+     margin-right: 5px;
+   }
+   .todo-footer button {
+     float: right;
+     margin-top: 5px;
+   }
+   </style>
+   ```
+
+##### 入口文件：main.js
+
+1. 正常写法：
+
+   ```js
+   //引入Vue
+   import Vue from 'vue'
+   //引入App
+   import App from './App.vue'
+   //关闭Vue的生产提示
+   Vue.config.productionTip = false
+   
+   //创建vm
+   new Vue({
+     el: '#app',
+     render: (h) => h(App),
+   })
+   ```
+
+------
+
+#### 2.10.2 应用：本地储存
+
+> 需求：将父组件中定义的todos数组改造成从本地储存`localStorage`中读取、储存
+
+##### 父组件：App.vue
+
+1. 将data()中的todos数组改为从本地储存localStorage取数据，如果前期无数据，则初始化为空数组`[]`
+
+   ```js
+   data() {
+     return {
+       // 初始化时，如果没有数据，需要将todos设置为一个空数组，否则会变成null
+       todos: JSON.parse(localStorage.getItem('todos')) || []
+     }
+   },
+   ```
+
+2. 监视属性watch：监视todos，一旦变化，就会触发localStorage的变化
+
+   ```js
+   // 使用watch实现，只要todos变化了，就会触发localStorage的变化
+   watch: {
+     todos: {
+       // 必须用深度监视，否则勾选后checked属性不发生变化
+       deep: true,
+       handler(value) {
+         localStorage.setItem('todos', JSON.stringify(value))
+       }
+     }
+   }
+   ```
+
+------
+
+#### 2.10.3 应用：自定义事件
+
+> 需求：将`addTodo`、`checkAllTodo`、`clearAllTodo`函数由props传递改成自定义事件，影响：App、MyHeader、MyFooter
+
+##### 父组件：App.vue
+
+1. 绑定事件：使用`@`或`v-on`
+
+   ```vue
+   <template>
+     <div id="root">
+       <div class="todo-container">
+         <div class="todo-wrap">
+           <!-- 注意：所有父给子传递函数的地方，都可以改造成自定义事件的模式 -->
+           <!-- <MyHeader :addTodo="addTodo" /> -->
+           <MyHeader @addTodo="addTodo" />
+           <MyList :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo" />
+           <!-- <MyFooter :todos="todos" :checkAllTodo="checkAllTodo" :clearAllTodo="clearAllTodo" /> -->
+           <MyFooter :todos="todos" @checkAllTodo="checkAllTodo" @clearAllTodo="clearAllTodo" />
+         </div>
+       </div>
+     </div>
+   </template>
+   ```
+
+##### 子组件：MyHeader.vue
+
+1. 无需再使用props接受父组件传递的addTodo函数
+
+2. 在add()方法中用 `$emit` 触发父组件App中的addTodo函数
+
+   ```js
+   export default {
+     name: 'MyHeader',
+     // 无需再接收addTodo
+     // props: ['addTodo'],
+     data() {
+       return {
+         title: ''
+       }
+     },
+     methods: {
+       add() {
+         if (!this.title.trim()) return alert('输入不能为空')
+         const todoObj = { id: nanoid(), title: this.title, done: false }
+         // 子传父通信（旧方法）
+         // this.addTodo(todoObj)
+         
+         // 触发事件：$emit，通知App组件去添加一个todo对象
+         this.$emit('addTodo', todoObj, 1, 2, 3)
+         this.title = ''
+       }
+     }
+   }
+   ```
+
+##### 子组件：MyFooter.vue
+
+1. 无需再使用props接受父组件传递的checkTodo、deleteTodo函数
+
+2. 将checkAllTodo、clearAllTodo改造为`this.$emit()`模式
+
+   ```vue
+   <script>
+   export default {
+     name: 'MyFooter',
+     props: ['todos'], // 无需再接收checkAllTodo、clearAllTodo
+     computed: {
+       //总数
+       total() {
+         return this.todos.length
+       },
+       doneTotal() {
+         return this.todos.reduce((pre, todo) => pre + (todo.done ? 1 : 0), 0)
+       },
+       isAll: {
+         get() {
+           return this.doneTotal === this.total && this.total > 0
+         },
+         set(value) {
+           // 子传父通信（旧方法）
+           // this.checkAllTodo(value)
+           
+           // 触发事件：$emit
+           this.$emit('checkAllTodo', value)
+         }
+       }
+     },
+     methods: {
+       clearAll() {
+         // 子传父通信（旧方法）
+         // this.clearAllTodo()
+         
+         // 触发事件：$emit
+         this.$emit('clearAllTodo')
+       }
+     }
+   }
+   </script>
+   ```
+
+------
+
+#### 2.10.4 应用：全局事件总线
+
+> 需求：将`checkTodo`、`deleteTodo`函数由props属性传递改造成全局事件总线，影响：main.js、App、MyList、MyItem
+
+##### 入口文件：main.js
+
+1. 设置全局事件总线
+
+   ```js
+   //引入Vue
+   import Vue from 'vue'
+   //引入App
+   import App from './App.vue'
+   //关闭Vue的生产提示
+   Vue.config.productionTip = false
+   
+   //创建vm
+   new Vue({
+   	el:'#app',
+   	render: h => h(App),
+       // 设置全局事件总线
+   	beforeCreate() {
+   		Vue.prototype.$bus = this
+   	},
+   })
+   ```
+
+##### 父组件：App.vue
+
+1. 接收数据：在`mounted()`中使用`$bus.$on`挂载事件
+
+2. 解绑事件：在beforeDestory()中使用`$bus.$off`释放事件名称
+
+   ```html
+   <!-- 使用全局事件总线，绑定checkTodo 和 deleteTodo函数，无需再使用props属性及自定义事件-->
+   <!--<MyList :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo" />-->
+   <MyList :todos="todos" />
+   ```
+
+   ```js
+   mounted() {
+     this.$bus.$on('checkTodo', this.checkTodo)
+     this.$bus.$on('deleteTodo', this.deleteTodo)
+   },
+   beforeDestroy() {
+     this.$bus.$off('checkTodo')
+     this.$bus.$off('deleteTodo')
+   }
+   ```
+
+##### 子组件：MyList.vue
+
+1. 无需再用 props 给 MyItem 孙组件传递todo、checkTodo、deleteTodo
+
+2. 无需再用 props 接受父组件传递过来的 checkTodo、deleteTodo 函数
+
+   ```vue
+   <template>
+     <ul class="todo-main">
+       <!-- 无需再用 props 给 MyItem 孙组件传递todo、checkTodo、deleteTodo -->
+       <!-- <MyItem v-for="todoObj in todos" :key="todoObj.id" :todo="todoObj" :checkTodo="checkTodo" :deleteTodo="deleteTodo" /> -->
+       <MyItem v-for="todoObj in todos" :key="todoObj.id" :todo="todoObj" />
+     </ul>
+   </template>
+   
+   <script>
+   import MyItem from './MyItem'
+   
+   export default {
+     name: 'MyList',
+     components: { MyItem },
+     props: ['todos']	// 无需再接收checkTodo、deleteTodo
+   }
+   </script>
+   
+   <style scoped>
+   /*main*/
+   .todo-main {
+     margin-left: 0px;
+     border: 1px solid #ddd;
+     border-radius: 2px;
+     padding: 0px;
+   }
+   
+   .todo-empty {
+     height: 40px;
+     line-height: 40px;
+     border: 1px solid #ddd;
+     border-radius: 2px;
+     padding-left: 5px;
+     margin-top: 10px;
+   }
+   </style>
+   ```
+
+##### 孙组件：MyItem.vue
+
+1. 无需再用 props 接受父组件传递过来的 checkTodo、deleteTodo 函数
+
+2. 使用全局事件总线`this.$bus.$emit`挂载 checkTodo、deleteTodo 函数
+
+   ```vue
+   <script>
+   export default {
+     name: 'MyItem',
+     //声明接收todo
+     props: ['todo'],
+     methods: {
+       handleCheck(id) {
+         // 子传父通信（旧方法）
+         // this.checkTodo(id)
+         
+         // 全局事件总线：this.$bus.$emit 挂载函数
+         this.$bus.$emit('checkTodo', id)
+       },
+       handleDelete(id) {
+         if (confirm('确定删除吗？')) {
+           // 子传父通信（旧方法）
+           // this.deleteTodo(id)
+           
+           // 全局事件总线：this.$bus.$emit 挂载函数
+           this.$bus.$emit('deleteTodo', id)
+         }
+       }
+     }
+   }
+   </script>
+   ```
+
+------
+
+#### 2.10.5 应用：消息订阅与发布
+
+> 需求：将`deleteTodo`函数改造成pubsub形式，影响：App、MyItem
+
+##### 父组件：App.vue
+
+1. 安装并导入`pubsub-js`
+
+2. 在`mounted()`中使用`pubsub.subscribe`订阅deleteTodo函数
+
+3. 在`beforeDestroy()`中使用`pubsub.unsubscribe`取消订阅deleteTodo函数
+
+   ```vue
+   <template>
+     <div id="root">
+       <div class="todo-container">
+         <div class="todo-wrap">
+           <MyHeader @addTodo="addTodo" />
+           <MyList :todos="todos" />
+           <MyFooter :todos="todos" @checkAllTodo="checkAllTodo" @clearAllTodo="clearAllTodo" />
+         </div>
+       </div>
+     </div>
+   </template>
+   
+   <script>
+   // 引入pubsub-js
+   import pubsub from 'pubsub-js'
+   import MyHeader from './components/MyHeader'
+   import MyList from './components/MyList'
+   import MyFooter from './components/MyFooter'
+   
+   export default {
+     name: 'App',
+     components: { MyHeader, MyList, MyFooter },
+     data() {
+       return {
+         todos: JSON.parse(localStorage.getItem('todos')) || []
+       }
+     },
+     methods: {
+       // 添加一个todo
+       addTodo(todoObj) {
+         this.todos.unshift(todoObj)
+       },
+       // 勾选or取消勾选一个todo
+       checkTodo(id) {
+         this.todos.forEach(todo => {
+           if (todo.id === id) todo.done = !todo.done
+         })
+       },
+       // 删除一个todo（注意：由于使用了pubsub库，第一个参数默认是msgName，但如果不用的话会报错，所以用"_"占位）
+       deleteTodo(_, id) {
+         this.todos = this.todos.filter(todo => todo.id !== id)
+       },
+       // 全选or取消全选
+       checkAllTodo(done) {
+         this.todos.forEach(todo => {
+           todo.done = done
+         })
+       },
+       // 清除所有已经完成的todo
+       clearAllTodo() {
+         this.todos = this.todos.filter(todo => {
+           return !todo.done
+         })
+       }
+     },
+     watch: {
+       todos: {
+         deep: true,
+         handler(value) {
+           localStorage.setItem('todos', JSON.stringify(value))
+         }
+       }
+     },
+     mounted() {
+       this.$bus.$on('checkTodo', this.checkTodo)
+       // 订阅deleteTodo函数
+       this.pubId = pubsub.subscribe('deleteTodo', this.deleteTodo)
+     },
+     beforeDestroy() {
+       this.$bus.$off('checkTodo')
+       // 取消订阅deleteTodo函数
+       pubsub.unsubscribe(this.pubId)
+     }
+   }
+   </script>
+   ```
+
+##### 孙组件：MyItem.vue
+
+1. 安装并导入`pubsub-js`
+
+2. 在`method()`对应的函数中使用`pubsub.publish`发布deleteTodo函数
+
+   ```vue
+   <script>
+   import pubsub from 'pubsub-js'
+   export default {
+     name: 'MyItem',
+     //声明接收todo
+     props: ['todo'],
+     methods: {
+       //勾选or取消勾选
+       handleCheck(id) {
+         // 子传父通信（旧方法）：通知App组件将对应的todo对象的done值取反
+         // this.checkTodo(id)
+         // 全局事件总线：this.$bus.$emit 挂载函数
+         this.$bus.$emit('checkTodo', id)
+       },
+       //删除
+       handleDelete(id) {
+         if (confirm('确定删除吗？')) {
+           // 子传父通信（旧方法）：通知App组件将对应的todo对象删除
+           // this.deleteTodo(id)
+           
+           // 全局事件总线：this.$bus.$emit 挂载函数
+           // this.$bus.$emit('deleteTodo', id)
+           
+           // 消息订阅与发布：pubsub.publish
+           pubsub.publish('deleteTodo', id)
+         }
+       }
+     }
+   }
+   </script>
+   ```
+
+------
+
+#### 2.10.6 应用：nextTick
+
+> 需求：为每项todo数据添加“编辑按钮”，输入完毕失去焦点后即编辑完成，影响：App、MyItem
+
+##### 父组件：App.vue
+
+1. 定义更新数据的函数`updateTodo`
+
+   ```js
+   updateTodo(id, title) {
+     this.todos.forEach(todo => {
+       if (todo.id === id) todo.title = title
+     })
+   },
+   ```
+
+2. 使用全局事件总线，在mounted()与beforeDestroy()中挂载、解绑事件
+
+   ```js
+   mounted() {
+     this.$bus.$on('checkTodo', this.checkTodo)
+     // 挂载updateTodo
+     this.$bus.$on('updateTodo', this.updateTodo)
+     this.pubId = pubsub.subscribe('deleteTodo', this.deleteTodo)
+   },
+   beforeDestroy() {
+     this.$bus.$off('checkTodo')
+     // 解绑updateTodo
+     this.$bus.$off('updateTodo')
+     pubsub.unsubscribe(this.pubId)
+   }
+   ```
+
+3. 添加对应的css样式
+
+   ```css
+   .btn-edit {
+     color: #fff;
+     background-color: skyblue;
+     border: 1px solid rgb(103, 159, 180);
+     margin-right: 5px;
+   }
+   ```
+
+##### 孙组件：MyItem.vue
+
+1. 为todo数据添加`isEdit`属性（布尔值），根据`v-show="!todo.isEdit"`判断是否要显示当前元素
+
+   1）使用`bject.prototype.hasOwnProperty`判断todo是否有`isEdit`属性，如果有，则隐藏原有的`<span>`，并显示输入框`<input>`
+
+   2）如果没有，则用`$set`为todo添加`isEdit`为true的属性
+
+2. 点击编辑按钮`<button>`后，隐藏编辑按钮，显示输入框`<input>`并自动获取焦点，但由于`<input>`获取焦点的动作需要在DOM更新后完成，此处需要借助`this.$nextTick(回调函数)`
+
+3. 在输入框`<input>`编辑完毕后，鼠标移开失去焦点，认为编辑完毕，页面恢复原样，重新显示`<span>`和编辑按钮`<button>`
+
+   ```vue
+   <template>
+     <li>
+       <label>
+         <input type="checkbox" :checked="todo.done" @change="handleCheck(todo.id)" />
+         <!-- 添加显示条件v-show，只有处于非编辑状态时，才会显示span -->
+         <span v-show="!todo.isEdit">{{todo.title}}</span>
+         <!-- 新增编辑输入框input，设置显示条件，定义失去焦点即完成编辑的函数，添加ref -->
+         <!-- 注意：这里可以使用$event来传递事件参数 -->
+         <input
+           type="text"
+           v-show="todo.isEdit"
+           :value="todo.title"
+           @blur="handleBlur(todo,$event)"
+           ref="inputTitle"
+         />
+       </label>
+       <button class="btn btn-danger" @click="handleDelete(todo.id)">删除</button>
+       <!-- 新增编辑按钮，设置显示条件，定义点击后编辑函数 -->
+       <button v-show="!todo.isEdit" class="btn btn-edit" @click="handleEdit(todo)">编辑</button>
+     </li>
+   </template>
+   
+   <script>
+   import pubsub from 'pubsub-js'
+   export default {
+     name: 'MyItem',
+     props: ['todo'],
+     methods: {
+       handleCheck(id) {
+         this.$bus.$emit('checkTodo', id)
+       },
+       handleDelete(id) {
+         if (confirm('确定删除吗？')) {
+           pubsub.publish('deleteTodo', id)
+         }
+       },
+       
+       // 编辑
+       handleEdit(todo) {
+         // 先判断todo身上是否已经有isEdit属性
+         // Object.prototype.hasOwnProperty()返回一个布尔值，指示对象自身属性中是否具有指定的属性
+         // if (todo.hasOwnProperty('isEdit')) {   // 这样写ESlint会报错
+         if (Object.prototype.hasOwnProperty.call(todo, 'isEdit')) {
+           todo.isEdit = true
+         } else {
+           // 注意：需要用$set给todos追加属性，才能是响应式的
+           this.$set(todo, 'isEdit', true)
+         }
+         // 让input框获取焦点，$nextTick中的回调函数会在DOM节点更新后执行（用定时器setTimeout也能实现）
+         this.$nextTick(function() {
+           // 如果不加$nextTick,Vue会等handleEdit中的所有代码执行完毕后再渲染模板，而此时input框还没出来，所以无法获取焦点
+           this.$refs.inputTitle.focus()
+         })
+       },
+       
+       //失去焦点回调（真正执行修改逻辑）
+       handleBlur(todo, e) {
+         // 注意：这里之所以不用$set，是因为肯定是先点击handleEdit才能是handleBlur，必然已经有isEdit属性
+         todo.isEdit = false
+         if (!e.target.value.trim()) return alert('输入不能为空！')
+         this.$bus.$emit('updateTodo', todo.id, e.target.value)
+       }
+     }
+   }
+   </script>
+   ```
+
+------
+
+#### 2.10.7 应用：动画效果
+
+> 需求：为todo数据项添加进入效果，影响：MyList
+
+##### 子组件：MyList.vue
+
+1. 多个元素需要过度，用`<transition-group>`包裹要过度的元素，配置name属性，且每个元素都要指定key值
+
+   ```vue
+   <template>
+     <ul class="todo-main">
+       <!-- 包裹MyItem -->
+       <transition-group name="todo" appear>
+         <MyItem v-for="todoObj in todos" :key="todoObj.id" :todo="todoObj" />
+       </transition-group>
+     </ul>
+   </template>
+   ```
+
+2. 编写css动画样式
+
+   ```css
+   .todo-enter-active {
+     animation: atguigu 0.5s linear;
+   }
+   
+   .todo-leave-active {
+     animation: atguigu 0.5s linear reverse;
+   }
+   
+   @keyframes atguigu {
+     from {
+       transform: translateX(100%);
+     }
+     to {
+       transform: translateX(0px);
+     }
+   }
+   ```
+
+
+------
+
 ## 第3章 Vue配置代理
 
 > 配置代理服务器：服务器之间通信不受同源策略限制，只有浏览器和服务器之间通信受限
@@ -5037,348 +6068,7 @@
 
 ------
 
-### 4.2 核心API
-
-#### 4.1.2.1 $store
-
-> 子组件 components.vue 使用`$store`访问Vuex中的对象和方法
-
-1. `$store.state.xxx`：调用`state`对象中的数据
-
-2. `$store.dispatch`方法：调用`actions`对象中定义的函数
-
-3. `$store.commit`方法：跳过actions，直接调用`mutations`对象中定义的函数
-
-   ```html
-   <button @click="increment">+</button>
-   <button @click="decrement">-</button>
-   <button @click="incrementOdd">当前求和为奇数再加</button>
-   <button @click="incrementWait">等一等再加</button>
-   ```
-
-   ```js
-   methods: {
-     increment() {
-       // 使用commit方法，绕过actions，直接调用mutations中的函数
-       this.$store.commit('JIA', this.n)
-     },
-     decrement() {
-       this.$store.commit('JIAN', this.n)
-     },
-     incrementOdd() {
-       // 使用dispatch方法，通过actions，调用mutations中的函数
-       this.$store.dispatch('jiaOdd', this.n)
-     },
-     incrementWait() {
-       this.$store.dispatch('jiaWait', this.n)
-     }
-   },
-   ```
-
-#### 4.1.2.2 actions
-
-> `actions`对象：用于响应组件中的动作，可以包含异步代码（定时器，ajax等） 
-
-1. context：
-
-   1）在action里面定义的函数第一个参数默认是`context`，如`function(context,value)`，相当于迷你版的store
-
-   2）context上面有`commit`、`dispatch`、`state`、`getters`、`rootGetters`、`rootState`等
-
-2. state：在`context`上可使用`state`属性访问数据
-
-3. commit：在`context`上可使用`commit`方法调用`mutations`对象中定义的函数，如`context.commit(functionName, value)`
-
-   ```js
-   const actions = {
-     jiaOdd(context, value) {
-       console.log('actions中的jiaOdd被调用了')
-       if (context.state.sum % 2) {
-         context.commit('JIA', value)
-       }
-     },
-     jiaWait(context, value) {
-       console.log('actions中的jiaWait被调用了')
-       setTimeout(() => {
-         context.commit('JIA', value)
-       }, 500)
-     },
-   }
-   ```
-
-4. dispatch：在`context`上可使用`dispatch`方法，用于actions中的函数嵌套（接力），如果一个函数逻辑太复杂，可以分很多函数写
-
-   ```js
-   const actions = {
-     func1(context, value) {
-       console.log('处理了100行代码...')
-       // dispatch，让func2继续处理
-       context.dispatch('func2', value)
-     },
-     func2(context, value) {
-       console.log('处理了100行代码...')
-       // dispatch，让func3继续处理
-       context.dispatch('func3', value)
-     },
-     func3(context, value) {
-       console.log('处理了100行代码...')
-       // dispatch，让func4继续处理
-       context.dispatch('func4', value)
-     },
-   }
-   ```
-
-#### 4.1.2.3 mutations
-
-> `mutations`对象：用于操作数据（state），可以用开发者工具调试
-
-1. 里面定义的函数第一个参数默认是`state`，第二个参数是接受子组件传递过来的参数，可以命名为`value`
-
-2. 不要在mutations里发送ajax请求，不能写异步代码，只能单纯的操作`state`
-
-   ```js
-   const mutations = {
-     JIA(state, value) {
-       console.log('mutations中的JIA被调用了')
-       state.sum += value
-     },
-     JIAN(state, value) {
-       console.log('mutations中的JIAN被调用了')
-       state.sum -= value
-     },
-   }
-   ```
-
-#### 4.1.2.4 state
-
-> `state`对象：用于存储数据，类似于data()的功能
-
-1. Vuex文件 store/index.js：定义state
-
-   ```js
-   const state = {
-     sum:0, //当前的和
-     school:'尚硅谷',
-     subject:'前端'
-   }
-   ```
-
-2. 子组件 Count.vue：通过`$store.state.xxx`访问数据
-
-   ```html
-   <h1>当前求和为：{{$store.state.sum}}</h1>
-   ```
-
-#### 4.1.2.5 getters
-
-> `gettes对象`：用于将state中的数据进行加工，包含多个用于返回数据的函数，可接受`state`参数，类似于computed()计算属性
-
-1. Vuex文件 store/index.js：定义getters
-
-   ```js
-   const getters = {
-   	bigSum(state){
-   		return state.sum * 10
-   	}
-   }
-   ```
-
-2. 子组件 Count.vue：通过`$store.getters.xxx`访问其中的函数
-
-   ```html
-   <h3>当前求和放大10倍为：{{$store.getters.bigSum}}</h3>
-   ```
-
-
-#### 4.1.2.6 mapState/mapGetters
-
-> 用于简化子组件从store中读取`state`数据和`getters`方法，令插值语法更加简洁，效果等同于computed()计算属性
-
-1. `mapState`：生成计算属性，从state中读取数据
-
-   1）对象写法：可以自定义名称
-
-   ```js
-   ...mapState({he:'sum',xuexiao:'school',xueke:'subject'})
-   ```
-
-   ```js
-   // 等同于以下写法
-   computed:{
-   	sum(){
-   		return this.$store.state.sum
-   	},
-   	school(){
-   		return this.$store.state.school
-   	},
-   	subject(){
-   		return this.$store.state.subject
-   	},
-   }
-   ```
-
-   2）数组写法：使用state中定义好的名称
-
-   ```js
-   ...mapState(['sum','school','subject']),
-   ```
-
-2. `mapGetters`：生成计算属性，从getters中读取数据
-
-   1）对象写法：可以自定义名称
-
-   ```js
-   ...mapGetters({bigSum:'bigSum'})
-   ```
-
-   ```js
-   // 等同于以下写法
-   computed: {
-     bigSum() {
-       return this.$store.getters.bigSum
-     },
-   }
-   ```
-
-   2）数组写法：使用state中定义好的名称
-
-   ```js
-   ...mapGetters(['bigSum'])
-   ```
-
-3. 子组件 Count.vue
-
-   1）引入`mapState`和`mapGetters`
-
-   ```js
-   import {mapState,mapGetters} from 'vuex'
-   ```
-
-   2）在计算属性`computed()`中定义`mapState`和`mapGetters`
-
-   ```js
-   computed:{
-   	// mapState：生成计算属性，从state中读取数据
-       // 对象写法：可以自定义名称
-   	// ...mapState({he:'sum',xuexiao:'school',xueke:'subject'}),
-   	// 数组写法：使用state中定义好的名称
-   	...mapState(['sum','school','subject']),
-   	
-   	// mapGetters：生成计算属性，从getters中读取数据
-       // 对象写法：可以自定义名称
-   	// ...mapGetters({bigSum:'bigSum'})
-   	// 数组写法：使用state中定义好的名称
-   	...mapGetters(['bigSum'])
-   },
-   ```
-
-   3）插值语法渲染元素
-
-   ```html
-   <!-- <h1>当前求和为：{{$store.state.sum}}</h1> -->
-   <h1>当前求和为：{{sum}}</h1>
-   <!-- <h3>当前求和放大10倍为：{{$store.geters.bigSum}}</h3> -->
-   <h3>当前求和放大10倍为：{{bigSum}}</h3>
-   <!-- <h3>我在{{$store.school}}，学习{{$store.subject}}</h3> -->
-   <h3>我在{{school}}，学习{{subject}}</h3>
-   ```
-
-#### 4.1.2.7 mapMutations/mapActions
-
-> 用于简化子组件从store中读取`mutations`和`actions`方法，令插值语法更加简洁，效果等同于methods()事件处理
-
-1. `mapMutations`：生成对应的方法，方法中会调用`commit`去联系`mutations`【注意：需要传参的话，要在插值语法中传递】
-
-   1）对象写法：名称与插值语法中使用的名称一致
-
-   ```js
-   ...mapMutations({increment:'JIA',decrement:'JIAN'}),
-   ```
-
-   ```js
-   // 等同于以下写法
-   methods: {
-     increment() {
-       this.$store.commit('JIA', this.n)
-     },
-     decrement() {
-       this.$store.commit('JIAN', this.n)
-     },
-   }
-   ```
-
-   2）数组写法：插值语法中的函数名需要与数组中的名称保持一致，即increment改为JIA、decrement改为JIAN
-
-   ```js
-   ...mapMutations(['JIA','JIAN']),
-   ```
-
-2. `mapActions`：生成对应的方法，方法中会调用`dispatch`去联系`actions`【注意：需要传参的话，要在插值语法中传递】
-
-   1）对象写法：名称与插值语法中使用的名称一致
-
-   ```js
-   ...mapActions({ incrementOdd: 'jiaOdd', incrementWait: 'jiaWait' })
-   ```
-
-   ```js
-   // 等同于以下写法
-   methods: {
-     incrementOdd() {
-       this.$store.dispatch('jiaOdd', this.n)
-     },
-     incrementWait() {
-       this.$store.dispatch('jiaWait', this.n)
-     },
-   }
-   ```
-
-   2）数组写法：插值语法中的函数名需要与数组中的名称保持一致，即incrementOdd改为jiaOdd、incrementWait改为jiaWait
-
-   ```js
-   ...mapActions(['jiaOdd','jiaWait'])
-   ```
-
-3. 子组件 Count.vue
-
-   1）引入`mapMutations`和`mapActions`
-
-   ```js
-   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-   ```
-
-   2）在事件处理`methods()`中定义`mapMutations`和`mapActions`
-
-   ```js
-   methods: {
-     // mapMutations：生成对应的方法，方法中会调用commit去联系mutations
-     // 对象写法
-     ...mapMutations({ increment: 'JIA', decrement: 'JIAN' }),
-     // 数组写法
-     // ...mapMutations(['JIA','JIAN']),
-     
-     //mapActions：生成对应的方法，方法中会调用dispatch去联系actions
-     // 对象写法
-     ...mapActions({ incrementOdd: 'jiaOdd', incrementWait: 'jiaWait' })
-     // 数组写法
-     // ...mapActions(['jiaOdd','jiaWait'])
-   },
-   ```
-
-   3）插值语法渲染元素：需要传递参数！
-
-   ```vue
-   <button @click="increment(n)">+</button>
-   <button @click="decrement(n)">-</button>
-   <button @click="incrementOdd(n)">当前求和为奇数再加</button>
-   <button @click="incrementWait(n)">等一等再加</button>
-   ```
-
-   
-
-------
-
-### 4.3 搭建环境
+### 4.2 搭建环境
 
 1. `store/index.js`：用于创建Vuex中最为核心的store
 
@@ -5455,11 +6145,576 @@
 
 ------
 
-### 4.4 求和案例
+### 4.3 核心API
 
-#### 4.4.1 纯Vue版
+#### 4.3.1 $store
 
-##### 4.4.1.1 入口文件 main.js
+> 子组件 components.vue 使用`$store`访问Vuex中的对象和方法
+
+1. `$store.state.xxx`：调用`state`对象中的数据
+
+2. `$store.dispatch`方法：调用`actions`对象中定义的函数
+
+3. `$store.commit`方法：跳过actions，直接调用`mutations`对象中定义的函数
+
+   ```html
+   <button @click="increment">+</button>
+   <button @click="decrement">-</button>
+   <button @click="incrementOdd">当前求和为奇数再加</button>
+   <button @click="incrementWait">等一等再加</button>
+   ```
+
+   ```js
+   methods: {
+     increment() {
+       // 使用commit方法，绕过actions，直接调用mutations中的函数
+       this.$store.commit('JIA', this.n)
+     },
+     decrement() {
+       this.$store.commit('JIAN', this.n)
+     },
+     incrementOdd() {
+       // 使用dispatch方法，通过actions，调用mutations中的函数
+       this.$store.dispatch('jiaOdd', this.n)
+     },
+     incrementWait() {
+       this.$store.dispatch('jiaWait', this.n)
+     }
+   },
+   ```
+
+#### 4.3.2 actions
+
+> `actions`对象：用于响应组件中的动作，可以包含异步代码（定时器，ajax等） 
+
+1. context：
+
+   1）在action里面定义的函数第一个参数默认是`context`，如`function(context,value)`，相当于迷你版的store
+
+   2）context上面有`commit`、`dispatch`、`state`、`getters`、`rootGetters`、`rootState`等
+
+2. state：在`context`上可使用`state`属性访问数据
+
+3. commit：在`context`上可使用`commit`方法调用`mutations`对象中定义的函数，如`context.commit(functionName, value)`
+
+   ```js
+   const actions = {
+     jiaOdd(context, value) {
+       console.log('actions中的jiaOdd被调用了')
+       if (context.state.sum % 2) {
+         context.commit('JIA', value)
+       }
+     },
+     jiaWait(context, value) {
+       console.log('actions中的jiaWait被调用了')
+       setTimeout(() => {
+         context.commit('JIA', value)
+       }, 500)
+     },
+   }
+   ```
+
+4. dispatch：在`context`上可使用`dispatch`方法，用于actions中的函数嵌套（接力），如果一个函数逻辑太复杂，可以分很多函数写
+
+   ```js
+   const actions = {
+     func1(context, value) {
+       console.log('处理了100行代码...')
+       // dispatch，让func2继续处理
+       context.dispatch('func2', value)
+     },
+     func2(context, value) {
+       console.log('处理了100行代码...')
+       // dispatch，让func3继续处理
+       context.dispatch('func3', value)
+     },
+     func3(context, value) {
+       console.log('处理了100行代码...')
+       // dispatch，让func4继续处理
+       context.dispatch('func4', value)
+     },
+   }
+   ```
+
+#### 4.3.3 mutations
+
+> `mutations`对象：用于操作数据（state），可以用开发者工具调试
+
+1. 里面定义的函数第一个参数默认是`state`，第二个参数是接受子组件传递过来的参数，可以命名为`value`
+
+2. 不要在mutations里发送ajax请求，不能写异步代码，只能单纯的操作`state`
+
+   ```js
+   const mutations = {
+     JIA(state, value) {
+       console.log('mutations中的JIA被调用了')
+       state.sum += value
+     },
+     JIAN(state, value) {
+       console.log('mutations中的JIAN被调用了')
+       state.sum -= value
+     },
+   }
+   ```
+
+#### 4.3.4 state
+
+> `state`对象：用于存储数据，类似于data()的功能
+
+1. Vuex文件 store/index.js：定义state
+
+   ```js
+   const state = {
+     sum:0, //当前的和
+     school:'尚硅谷',
+     subject:'前端'
+   }
+   ```
+
+2. 子组件 Count.vue：通过`$store.state.xxx`访问数据
+
+   ```html
+   <h1>当前求和为：{{$store.state.sum}}</h1>
+   ```
+
+#### 4.3.5 getters
+
+> `gettes对象`：用于将state中的数据进行加工，包含多个用于返回数据的函数，可接受`state`参数，类似于computed计算属性
+
+1. Vuex文件 store/index.js：定义getters
+
+   ```js
+   const getters = {
+   	bigSum(state){
+   		return state.sum * 10
+   	}
+   }
+   ```
+
+2. 子组件 Count.vue：通过`$store.getters.xxx`访问其中的函数
+
+   ```html
+   <h3>当前求和放大10倍为：{{$store.getters.bigSum}}</h3>
+   ```
+
+
+#### 4.3.6 mapState/mapGetters
+
+> 用于简化子组件从store中读取`state`数据和`getters`方法，令插值语法更加简洁，效果等同于computed计算属性
+
+1. `mapState`：生成计算属性，从state中读取数据
+
+   1）对象写法：可以自定义名称
+
+   ```js
+   ...mapState({he:'sum',xuexiao:'school',xueke:'subject'})
+   ```
+
+   ```js
+   // 等同于以下写法
+   computed:{
+   	sum(){
+   		return this.$store.state.sum
+   	},
+   	school(){
+   		return this.$store.state.school
+   	},
+   	subject(){
+   		return this.$store.state.subject
+   	},
+   }
+   ```
+
+   2）数组写法：使用state中定义好的名称
+
+   ```js
+   ...mapState(['sum','school','subject']),
+   ```
+
+2. `mapGetters`：生成计算属性，从getters中读取数据
+
+   1）对象写法：可以自定义名称
+
+   ```js
+   ...mapGetters({bigSum:'bigSum'})
+   ```
+
+   ```js
+   // 等同于以下写法
+   computed: {
+     bigSum() {
+       return this.$store.getters.bigSum
+     },
+   }
+   ```
+
+   2）数组写法：使用state中定义好的名称
+
+   ```js
+   ...mapGetters(['bigSum'])
+   ```
+
+3. 子组件 Count.vue
+
+   1）引入`mapState`和`mapGetters`
+
+   ```js
+   import {mapState,mapGetters} from 'vuex'
+   ```
+
+   2）在计算属性`computed`中定义`mapState`和`mapGetters`
+
+   ```js
+   computed:{
+   	// mapState：生成计算属性，从state中读取数据
+       // 对象写法：可以自定义名称
+   	// ...mapState({he:'sum',xuexiao:'school',xueke:'subject'}),
+   	// 数组写法：使用state中定义好的名称
+   	...mapState(['sum','school','subject']),
+   	
+   	// mapGetters：生成计算属性，从getters中读取数据
+       // 对象写法：可以自定义名称
+   	// ...mapGetters({bigSum:'bigSum'})
+   	// 数组写法：使用state中定义好的名称
+   	...mapGetters(['bigSum'])
+   },
+   ```
+
+   3）插值语法渲染元素
+
+   ```html
+   <!-- <h1>当前求和为：{{$store.state.sum}}</h1> -->
+   <h1>当前求和为：{{sum}}</h1>
+   <!-- <h3>当前求和放大10倍为：{{$store.geters.bigSum}}</h3> -->
+   <h3>当前求和放大10倍为：{{bigSum}}</h3>
+   <!-- <h3>我在{{$store.school}}，学习{{$store.subject}}</h3> -->
+   <h3>我在{{school}}，学习{{subject}}</h3>
+   ```
+
+#### 4.3.7 mapMutations/mapActions
+
+> 用于简化子组件从store中读取`mutations`和`actions`方法，令插值语法更加简洁，效果等同于methods事件处理
+
+1. `mapMutations`：生成对应的方法，方法中会调用`commit`去联系`mutations`【注意：需要传参的话，要在插值语法中传递，否则默认传递`event`】
+
+   1）对象写法：名称与插值语法中使用的名称一致
+
+   ```js
+   ...mapMutations({increment:'JIA',decrement:'JIAN'}),
+   ```
+
+   ```js
+   // 等同于以下写法
+   methods: {
+     increment() {
+       this.$store.commit('JIA', this.n)
+     },
+     decrement() {
+       this.$store.commit('JIAN', this.n)
+     },
+   }
+   ```
+
+   2）数组写法：插值语法中的函数名需要与数组中的名称保持一致，即increment改为JIA、decrement改为JIAN
+
+   ```js
+   ...mapMutations(['JIA','JIAN']),
+   ```
+
+2. `mapActions`：生成对应的方法，方法中会调用`dispatch`去联系`actions`【注意：需要传参的话，要在插值语法中传递，否则默认传递`event`】
+
+   1）对象写法：名称与插值语法中使用的名称一致
+
+   ```js
+   ...mapActions({ incrementOdd: 'jiaOdd', incrementWait: 'jiaWait' })
+   ```
+
+   ```js
+   // 等同于以下写法
+   methods: {
+     incrementOdd() {
+       this.$store.dispatch('jiaOdd', this.n)
+     },
+     incrementWait() {
+       this.$store.dispatch('jiaWait', this.n)
+     },
+   }
+   ```
+
+   2）数组写法：插值语法中的函数名需要与数组中的名称保持一致，即incrementOdd改为jiaOdd、incrementWait改为jiaWait
+
+   ```js
+   ...mapActions(['jiaOdd','jiaWait'])
+   ```
+
+3. 子组件 Count.vue
+
+   1）引入`mapMutations`和`mapActions`
+
+   ```js
+   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+   ```
+
+   2）在事件处理`methods()`中定义`mapMutations`和`mapActions`
+
+   ```js
+   methods: {
+     // mapMutations：生成对应的方法，方法中会调用commit去联系mutations
+     // 对象写法
+     ...mapMutations({ increment: 'JIA', decrement: 'JIAN' }),
+     // 数组写法
+     // ...mapMutations(['JIA','JIAN']),
+     
+     //mapActions：生成对应的方法，方法中会调用dispatch去联系actions
+     // 对象写法
+     ...mapActions({ incrementOdd: 'jiaOdd', incrementWait: 'jiaWait' })
+     // 数组写法
+     // ...mapActions(['jiaOdd','jiaWait'])
+   },
+   ```
+
+   3）插值语法渲染元素：需要传递参数！
+
+   ```vue
+   <button @click="increment(n)">+</button>
+   <button @click="decrement(n)">-</button>
+   <button @click="incrementOdd(n)">当前求和为奇数再加</button>
+   <button @click="incrementWait(n)">等一等再加</button>
+   ```
+
+
+------
+
+### 4.4 多组件共享
+
+> 多个子组件都可以通过`store`访问与调用Vuex文件：index.js中的数据和方法。
+
+1. Vuex文件：store/index.js
+
+   1）在 `mutations` 中添加 `ADD_PERSONS` 函数
+
+   2）在 `state` 中添加 `personList` 数据
+
+   ```js
+   const mutations = {
+     ......
+     // 添加add_person函数，接受子组件中传递过来的数据，存入state中的personList
+     ADD_PERSON(state, value) {
+       console.log('mutations中的ADD_PERSON被调用了')
+       state.personList.unshift(value)
+     },
+   }
+   
+   const state = {
+     ......
+     // 新增personList数据
+     personList: [{ id: '001', name: '张三' }],
+   }
+   ```
+
+2. 新增子组件：Person.vue
+
+   1）需求：输入名字，点击按钮新增人员
+
+   2）引入`nanoid`插件
+
+   3）在`computed`中引入`state`里的`personList`和`sum`数据
+
+   4）在`method`中使用`commit`调用`mutations`中的`ADD_PERSONS`函数
+
+   5）插值语法渲染，引入`sum`、`personList`数据
+
+   ```vue
+   <template>
+     <div>
+       <h1>人员列表</h1>
+       <h3 style="color:red">Count组件求和为：{{sum}}</h3>
+       <input type="text" placeholder="请输入名字" v-model="name" />
+       <button @click="add">添加</button>
+       <ul>
+         <li v-for="p in personList" :key="p.id">{{p.name}}</li>
+       </ul>
+     </div>
+   </template>
+   
+   <script>
+   import { nanoid } from 'nanoid'
+   export default {
+     name: 'Person',
+     data() {
+       return {
+         name: ''
+       }
+     },
+     computed: {
+       // 引入state里的personList和sum数据
+       personList() {
+         return this.$store.state.personList
+       },
+       sum() {
+         return this.$store.state.sum
+       }
+     },
+     methods: {
+       // 使用commit调用mutations中的ADD_PERSONS函数
+       add() {
+         const personObj = { id: nanoid(), name: this.name }
+         this.$store.commit('ADD_PERSON', personObj)
+         this.name = ''
+       }
+     }
+   }
+   </script>
+   ```
+
+3. 原子组件：Count.vue
+
+   1）在`mapState`中引入新增的`personList`数据
+
+   ```js
+   computed: {
+     ...mapState(['sum', 'school', 'subject', 'personList']),
+   },
+   ```
+
+   2）插值语法渲染，引入新增的`personList`数据
+
+   ```html
+   <h3 style="color:red">Person组件的总人数是：{{personList.length}}</h3>
+   ```
+
+4. 父组件：App.vue
+
+   1）新增组件结构`<Person/>`
+
+   2）引入Person.vue子组件
+
+   ```vue
+   <template>
+   	<div>
+   		<Count/>
+   		<hr>
+   		<Person/>
+   	</div>
+   </template>
+   
+   <script>
+   	import Count from './components/Count'
+   	import Person from './components/Person'
+   
+   	export default {
+   		name:'App',
+   		components:{Count,Person},
+   	}
+   </script>
+   ```
+
+------
+
+### 4.5 模块化编码
+
+> 将Vuex文件拆分成多个功能模块，让代码更好维护，让多种数据分类更加明确。
+>
+> * state：`this.$store.state.自定义模块名.数据名` 或 `...mapState('自定义模块名',['数据名1','数据名2',...])`
+> * getters：`this.$store.getters['自定义模块名/函数名']` 或 `...mapGetters('自定义模块名',['函数名1','函数名2',...])`
+> * mutations：`this.$store.commit('自定义模块名/函数名', 数据)` 或 `...mapMutations('自定义模块名',['函数名1','函数名2',...])`
+> * actions：`this.$store.dispatch('自定义模块名/函数名', 数据)` 或 `...mapActions('自定义模块名',['函数名1','函数名2',...])`
+
+1. Vuex汇总文件：store/index.js
+
+   1）将各组件的actions、mutations、state、getters拆分成不同js模块文件
+
+   2）导入各个模块文件
+
+   3）暴露模块，可自定义名称
+
+   ```js
+   import Vue from 'vue'
+   import Vuex from 'vuex'
+   // 导入各个模块文件
+   import countOptions from './count'
+   import personOptions from './person'
+   Vue.use(Vuex)
+   
+   export default new Vuex.Store({
+     // 暴露模块，可自定义名称
+     modules: {
+       countAbout: countOptions,
+       personAbout: personOptions,
+     },
+   })
+   ```
+
+2. Vuex模块文件：count.js、person.js
+
+   1）默认暴露actions、mutations、state、getters等配置项
+
+   2）`namespaced`：命名空间，可以自定义模块名称，默认为false，开启命名空间：`namespaced: true`
+
+   ```js
+   export default {
+     // 命名空间：可以自定义模块名称，默认为false
+     namespaced: true,
+     actions: {
+       ......
+     },
+     mutations: {
+       ......
+     },
+     state: {
+       ......
+     },
+     getters: {
+       ......
+     },
+   }
+   ```
+
+3. 子组件：Count.vue、Person.vue（personAbout、countAbout是自定义的模块名称）
+
+   1）开启命名空间后，组件中读取`state`数据
+
+   ```js
+   //方式一：自己直接读取
+   this.$store.state.personAbout.list
+   //方式二：借助mapState读取：
+   ...mapState('countAbout',['sum','school','subject']),
+   ```
+
+   2）开启命名空间后，组件中读取`getters`数据
+
+   ```js
+   //方式一：自己直接读取
+   this.$store.getters['personAbout/firstPersonName']
+   //方式二：借助mapGetters读取：
+   ...mapGetters('countAbout',['bigSum'])
+   ```
+
+   3）开启命名空间后，组件中使用`dispatch`，调用`actions`中的函数
+
+   ```js
+   //方式一：自己直接dispatch
+   this.$store.dispatch('personAbout/addPersonWang',person)
+   //方式二：借助mapActions：
+   ...mapActions('countAbout',{incrementOdd:'jiaOdd',incrementWait:'jiaWait'})
+   ```
+
+   4）开启命名空间后，组件中使用`commit`，调用`mutations`中的函数
+
+   ```js
+   //方式一：自己直接commit
+   this.$store.commit('personAbout/ADD_PERSON',person)
+   //方式二：借助mapMutations：
+   ...mapMutations('countAbout',{increment:'JIA',decrement:'JIAN'}),
+   ```
+
+------
+
+### 4.6 求和案例
+
+#### 4.6.1 纯Vue版
+
+##### 入口文件 main.js
 
 1. 使用 `vueResorce` 插件
 
@@ -5482,7 +6737,7 @@
    })
    ```
 
-##### 4.4.1.2 子组件 Count.vue
+##### 子组件 Count.vue
 
 1. 设置选择框`<select>`，让用户选择数字`n`，注意在绑定的时候需要用`v-model.number`确保是数值类型的数据
 
@@ -5542,7 +6797,7 @@
    </style>
    ```
 
-##### 4.4.1.3 父组件 App.vue
+##### 父组件 App.vue
 
 1. 正常书写：
 
@@ -5562,9 +6817,11 @@
    </script>
    ```
 
-#### 4.4.2 Vuex版
+#### 4.6.2 Vuex原始版
 
-##### 4.4.2.1 Vuex文件 index.js
+> 仅使用store、actions、mutations、state基础API
+
+##### Vuex文件 index.js
 
 1. 引入并使用 `Vuex`
 
@@ -5635,7 +6892,7 @@
    
    ```
 
-##### 4.4.2.2 入口文件 main.js
+##### 入口文件 main.js
 
 1. 引入并挂载store
 
@@ -5660,7 +6917,7 @@
    })
    ```
 
-##### 4.4.2.3 子组件 Count.vue
+##### 子组件 Count.vue
 
 1. 将原先data()中的sum改为读取state中的sum：`$store.state.sum`
 
@@ -5722,7 +6979,7 @@
    </style>
    ```
 
-##### 4.4.2.4 父组件 App.vue
+##### 父组件 App.vue
 
 1. 正常书写
 
@@ -5745,4 +7002,741 @@
    </script>
    ```
 
+
+------
+
+#### 4.6.3 Vuex拓展版
+
+> 使用getters、mapState、mapGetters、mapMutations、mapActions拓展API
+
+##### Vuex文件 index.js
+
+1. 定义并导出getters
+
+   ```js
+   import Vue from 'vue'
+   import Vuex from 'vuex'
+   Vue.use(Vuex)
    
+   // 准备actions：用于响应组件中的动作
+   const actions = {
+     jiaOdd(context, value) {
+       console.log('actions中的jiaOdd被调用了')
+       if (context.state.sum % 2) {
+         context.commit('JIA', value)
+       }
+     },
+     jiaWait(context, value) {
+       console.log('actions中的jiaWait被调用了')
+       setTimeout(() => {
+         context.commit('JIA', value)
+       }, 500)
+     },
+   }
+   // 准备mutations：用于操作数据（state）
+   const mutations = {
+     JIA(state, value) {
+       console.log('mutations中的JIA被调用了')
+       state.sum += value
+     },
+     JIAN(state, value) {
+       console.log('mutations中的JIAN被调用了')
+       state.sum -= value
+     },
+   }
+   // 准备state：用于存储数据
+   const state = {
+     sum: 0, //当前的和
+     school: '尚硅谷',
+     subject: '前端',
+   }
+   // 准备getters：用于将state中的数据进行加工
+   const getters = {
+     bigSum(state) {
+       return state.sum * 10
+     },
+   }
+   
+   // 创建并暴露store
+   export default new Vuex.Store({
+     actions,
+     mutations,
+     state,
+     getters,
+   })
+   ```
+
+##### 入口文件 main.js
+
+1. 正常书写
+
+   ```js
+   import Vue from 'vue'
+   import App from './App.vue'
+   import vueResource from 'vue-resource'
+   import store from './store'
+   
+   Vue.config.productionTip = false
+   Vue.use(vueResource)
+   
+   new Vue({
+   	el:'#app',
+   	render: h => h(App),
+   	store,
+   	beforeCreate() {
+   		Vue.prototype.$bus = this
+   	}
+   })
+   ```
+
+##### 子组件 Count.vue
+
+1. 从vuex引入：mapState, mapGetters, mapMutations, mapActions
+
+2. 改造methods和computed中的函数
+
+3. 更改模板字符串
+
+4. 使用mapMutations、mapActions的函数勿忘传参
+
+   ```vue
+   <template>
+     <div>
+       <!-- 更改模板字符串-->
+       <h1>当前求和为：{{sum}}</h1>
+       <h3>当前求和放大10倍为：{{bigSum}}</h3>
+       <h3>我在{{school}}，学习{{subject}}</h3>
+       <select v-model.number="n">
+         <option value="1">1</option>
+         <option value="2">2</option>
+         <option value="3">3</option>
+       </select>
+       <!-- 勿忘传参-->
+       <button @click="increment(n)">+</button>
+       <button @click="decrement(n)">-</button>
+       <button @click="incrementOdd(n)">当前求和为奇数再加</button>
+       <button @click="incrementWait(n)">等一等再加</button>
+     </div>
+   </template>
+   
+   <script>
+   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+   export default {
+     name: 'Count',
+     data() {
+       return {
+         n: 1 //用户选择的数字
+       }
+     },
+     computed: {
+       // 借助mapState生成计算属性，从state中读取数据
+       // 对象写法
+       // ...mapState({he:'sum',xuexiao:'school',xueke:'subject'}),
+       // 数组写法
+       ...mapState(['sum', 'school', 'subject']),
+   
+       //借助mapGetters生成计算属性，从getters中读取数据
+       // 对象写法
+       // ...mapGetters({bigSum:'bigSum'})
+       // 数组写法
+       ...mapGetters(['bigSum'])
+     },
+     methods: {
+       // 借助mapMutations生成对应的方法，方法中会调用commit去联系mutations
+       // 对象写法
+       ...mapMutations({ increment: 'JIA', decrement: 'JIAN' }),
+       // 数组写法
+       // ...mapMutations(['JIA','JIAN']),
+   
+       // 借助mapActions生成对应的方法，方法中会调用dispatch去联系actions
+       // 对象写法
+       ...mapActions({ incrementOdd: 'jiaOdd', incrementWait: 'jiaWait' })
+       // 数组写法
+       // ...mapActions(['jiaOdd','jiaWait'])
+     },
+     mounted() {
+       const x = mapState({ he: 'sum', xuexiao: 'school', xueke: 'subject' })
+       console.log(x)
+     }
+   }
+   </script>
+   
+   <style lang="css">
+   button {
+     margin-left: 5px;
+   }
+   </style>
+   ```
+
+##### 父组件 App.vue
+
+1. 正常书写
+
+   ```vue
+   <template>
+   	<div>
+   		<Count/>
+   	</div>
+   </template>
+   
+   <script>
+   	import Count from './components/Count'
+   	export default {
+   		name:'App',
+   		components:{Count},
+   		mounted() {
+   			// console.log('App',this)
+   		},
+   	}
+   </script>
+   ```
+
+------
+
+#### 4.6.3 Vuex模块版
+
+##### Vuex汇总文件 index.js
+
+1. 将各组件的actions、mutations、state、getters拆分成不同js模块文件
+
+2. 导入各个模块文件
+
+3. 暴露模块，可自定义名称
+
+   ```js
+   import Vue from 'vue'
+   import Vuex from 'vuex'
+   // 导入各个模块文件
+   import countOptions from './count'
+   import personOptions from './person'
+   Vue.use(Vuex)
+   
+   export default new Vuex.Store({
+     // 暴露模块，可自定义名称
+     modules: {
+       countAbout: countOptions,
+       personAbout: personOptions,
+     },
+   })
+   ```
+
+##### Vuex模块文件 count.js
+
+1. 开启命名空间：`namespaced: true`
+
+2. 定义actions、mutations、state、getters配置
+
+   ```js
+   //求和相关的配置
+   export default {
+     // 命名空间：可以自定义模块名称，默认为false
+     namespaced: true,
+     actions: {
+       jiaOdd(context, value) {
+         console.log('actions中的jiaOdd被调用了')
+         if (context.state.sum % 2) {
+           context.commit('JIA', value)
+         }
+       },
+       jiaWait(context, value) {
+         console.log('actions中的jiaWait被调用了')
+         setTimeout(() => {
+           context.commit('JIA', value)
+         }, 500)
+       },
+     },
+     mutations: {
+       JIA(state, value) {
+         console.log('mutations中的JIA被调用了')
+         state.sum += value
+       },
+       JIAN(state, value) {
+         console.log('mutations中的JIAN被调用了')
+         state.sum -= value
+       },
+     },
+     state: {
+       sum: 0,
+       school: '尚硅谷',
+       subject: '前端',
+     },
+     getters: {
+       bigSum(state) {
+         return state.sum * 10
+       },
+     },
+   }
+   ```
+
+##### Vuex模块文件 person.js
+
+1. 导入axios、nanoid插件
+
+2. 开启命名空间：`namespaced: true`
+
+3. 定义actions、mutations、state、getters配置
+
+4. 在actions发送axios请求
+
+   ```js
+   //人员管理相关的配置
+   import axios from 'axios'
+   import { nanoid } from 'nanoid'
+   export default {
+     // 命名空间：可以自定义模块名称，默认为false
+     namespaced: true,
+     actions: {
+       addPersonWang(context, value) {
+         if (value.name.indexOf('王') === 0) {
+           context.commit('ADD_PERSON', value)
+         } else {
+           alert('添加的人必须姓王！')
+         }
+       },
+       addPersonServer(context) {
+         axios.get('https://api.uixsj.cn/hitokoto/get?type=social').then(
+           (response) => {
+             context.commit('ADD_PERSON', { id: nanoid(), name: response.data })
+           },
+           (error) => {
+             alert(error.message)
+           }
+         )
+       },
+     },
+     mutations: {
+       ADD_PERSON(state, value) {
+         console.log('mutations中的ADD_PERSON被调用了')
+         state.personList.unshift(value)
+       },
+     },
+     state: {
+       personList: [{ id: '001', name: '张三' }],
+     },
+     getters: {
+       firstPersonName(state) {
+         return state.personList[0].name
+       },
+     },
+   }
+   ```
+
+##### 入口文件 main.js
+
+1. 正常书写
+
+   ```js
+   import Vue from 'vue'
+   import App from './App.vue'
+   import vueResource from 'vue-resource'
+   import store from './store'
+   
+   Vue.config.productionTip = false
+   Vue.use(vueResource)
+   
+   new Vue({
+     el: '#app',
+     render: (h) => h(App),
+     store,
+     beforeCreate() {
+       Vue.prototype.$bus = this
+     },
+   })
+   ```
+
+##### 子组件 Count.vue
+
+1. 在计算属性`computed`中配置`mapState`、`mapGetters`
+
+2. 在事件处理`methods`中配置`mapMutations`、`mapActions`
+
+3. 插值语法渲染，若使用`mapMutations`、`mapActions`中的函数，勿忘传递参数
+
+4. 跨模块：调用了`personAbout`模块中的`personList`数据
+
+   ```vue
+   <template>
+     <div>
+       <h1>当前求和为：{{sum}}</h1>
+       <h3>当前求和放大10倍为：{{bigSum}}</h3>
+       <h3>我在{{school}}，学习{{subject}}</h3>
+       <h3 style="color:red">Person组件的总人数是：{{personList.length}}</h3>
+       <select v-model.number="n">
+         <option value="1">1</option>
+         <option value="2">2</option>
+         <option value="3">3</option>
+       </select>
+       <button @click="increment(n)">+</button>
+       <button @click="decrement(n)">-</button>
+       <button @click="incrementOdd(n)">当前求和为奇数再加</button>
+       <button @click="incrementWait(n)">等一等再加</button>
+     </div>
+   </template>
+   
+   <script>
+   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+   export default {
+     name: 'Count',
+     data() {
+       return {
+         n: 1
+       }
+     },
+     computed: {
+       // 开启命名空间后，可以使用自定义的模块名称导入其中的方法
+       ...mapState('countAbout', ['sum', 'school', 'subject']),
+       ...mapState('personAbout', ['personList']),
+       ...mapGetters('countAbout', ['bigSum'])
+     },
+     methods: {
+       ...mapMutations('countAbout', { increment: 'JIA', decrement: 'JIAN' }),
+       ...mapActions('countAbout', { incrementOdd: 'jiaOdd', incrementWait: 'jiaWait' })
+     },
+     mounted() {
+       console.log(this.$store)
+     }
+   }
+   </script>
+   
+   <style lang="css">
+   button {
+     margin-left: 5px;
+   }
+   </style>
+   ```
+
+##### 子组件 Person.vue
+
+1. 导入nanoid插件
+
+2. 不使用`mapState`、`mapGetters`、`mapMutations`、`mapActions`，直接调用store中的方法和数据
+
+   1）state：`this.$store.state.自定义模块名称.数据名`
+
+   2）getters：`this.$store.getters['自定义模块名称/函数名']`
+
+   3）mutations：`this.$store.commit('自定义模块名称/函数名', 要传递的数据)`
+
+   4）actions：`this.$store.dispatch('自定义模块名称/函数名', 要传递的数据)`
+
+3. 跨模块：调用了`countAbout`中的`sum`数据
+
+   ```vue
+   <template>
+     <div>
+       <h1>人员列表</h1>
+       <h3 style="color:red">Count组件求和为：{{sum}}</h3>
+       <h3>列表中第一个人的名字是：{{firstPersonName}}</h3>
+       <input type="text" placeholder="请输入名字" v-model="name" />
+       <button @click="add">添加</button>
+       <button @click="addWang">添加一个姓王的人</button>
+       <button @click="addPersonServer">添加一个人，名字随机</button>
+       <ul>
+         <li v-for="p in personList" :key="p.id">{{p.name}}</li>
+       </ul>
+     </div>
+   </template>
+   
+   <script>
+   import { nanoid } from 'nanoid'
+   export default {
+     name: 'Person',
+     data() {
+       return {
+         name: ''
+       }
+     },
+     computed: {
+       personList() {
+         // 不使用mapState时，要用.personAbout指定模块
+         return this.$store.state.personAbout.personList
+       },
+       sum() {
+         return this.$store.state.countAbout.sum
+       },
+       firstPersonName() {
+         // 不使用mapGetters时，要用['personAbout/xxx']指定模块
+         return this.$store.getters['personAbout/firstPersonName']
+       }
+     },
+     methods: {
+       add() {
+         const personObj = { id: nanoid(), name: this.name }
+         // 不使用mapMutations时，要用personAbout/指定模块
+         this.$store.commit('personAbout/ADD_PERSON', personObj)
+         this.name = ''
+       },
+       addWang() {
+         const personObj = { id: nanoid(), name: this.name }
+         this.$store.dispatch('personAbout/addPersonWang', personObj)
+         this.name = ''
+       },
+       addPersonServer() {
+         this.$store.dispatch('personAbout/addPersonServer')
+       }
+     }
+   }
+   </script>
+   ```
+
+##### 父组件 App.vue
+
+1. 导入各个模块
+
+   ```vue
+   <template>
+   	<div>
+   		<Count/>
+   		<hr>
+   		<Person/>
+   	</div>
+   </template>
+   
+   <script>
+   	import Count from './components/Count'
+   	import Person from './components/Person'
+   
+   	export default {
+   		name:'App',
+   		components:{Count,Person},
+   	}
+   </script>
+   ```
+
+------
+
+## 第5章 Vue-router路由
+
+### 5.1 路由简介
+
+1. `vue-router`：是 vue 的一个插件库，专门用来实现 SPA 应用
+
+   ```cmd
+   npm i vue-router
+   ```
+
+2. SPA 应用：
+
+   1）单页 Web 应用（single page web application，SPA）
+
+   2）整个应用只有一个完整的页面
+
+   3）点击页面中的导航链接不会刷新页面，只会做页面的局部更新
+
+   4）数据需要通过 ajax 请求获取
+
+3. 路由的定义：一个路由就是一组映射关系(key-value)，key为路径, value是`function`或`component`，多个路由需要路由器(router)进行管理
+
+4. 后端路由：node.js
+
+   1）value 是 function, 用于处理客户端提交的请求
+
+   2）工作过程：服务器接收到一个请求时, 根据请求路径找到匹配的函数来处理请求, 返回响应数据
+
+5. 前端路由：vue
+
+   1）value 是 component，用于展示页面内容
+
+   2）工作过程：当浏览器的路径改变时, 对应的组件就会显示
+
+------
+
+### 5.2 基本使用
+
+#### 路由配置 router/index.js
+
+1. 引入子组件
+
+2. 创建并暴露路由器：`export default new VueRouter({ routers:[] })`
+
+   ```js
+   // 该文件专门用于创建整个应用的路由器
+   import VueRouter from 'vue-router'
+   //引入组件
+   import About from '../components/About'
+   import Home from '../components/Home'
+   
+   //创建并暴露一个路由器
+   export default new VueRouter({
+     routes: [
+       {
+         path: '/about',
+         component: About,
+       },
+       {
+         path: '/home',
+         component: Home,
+       },
+     ],
+   })
+   ```
+
+#### 入口文件 main.js
+
+1. 导入并应用插件：`Vue.use(VueRouter)`
+
+2. 创建路由器：`router: router`
+
+   ```js
+   import Vue from 'vue'
+   import App from './App.vue'
+   //引入VueRouter
+   import VueRouter from 'vue-router'
+   //引入路由器
+   import router from './router'
+   
+   Vue.config.productionTip = false
+   //应用插件
+   Vue.use(VueRouter)
+   
+   //创建vm
+   new Vue({
+     el: '#app',
+     render: (h) => h(App),
+     // 创建路由器
+     router: router,
+   })
+   ```
+
+#### 一般组件 About.vue、Home.vue
+
+1. 正常书写
+
+   ```vue
+   <template>
+   	<h2>我是About的内容</h2>
+   </template>
+   
+   <script>
+   	export default {
+   		name:'About'
+   	}
+   </script>
+   ```
+
+   ```vue
+   <template>
+   	<h2>我是Home的内容</h2>
+   </template>
+   
+   <script>
+   	export default {
+   		name:'Home'
+   	}
+   </script>
+   ```
+
+#### 父组件 App.vue
+
+1. 原始html：使用`<a>`标签实现页面的跳转
+
+   ```html
+   <a class="list-group-item active" href="./about.html">About</a>
+   <a class="list-group-item" href="./home.html">Home</a>
+   ```
+
+2. Vue：借助`<router-link>`标签实现路由的切换（`active-class`可配置高亮样式）
+
+   ```html
+   <router-link class="list-group-item" active-class="active" to="/about">About</router-link>
+   <router-link class="list-group-item" active-class="active" to="/home">Home</router-link>
+   ```
+
+3. 指定展示位置：`<router-view>`
+
+   ```html
+   <router-view></router-view>
+   ```
+
+4. 完整代码：style没写，因为已经在`public/index.html`主页中引入了bootstrap.css样式
+
+   ```vue
+   <template>
+     <div>
+       <div class="row">
+         <div class="col-xs-offset-2 col-xs-8">
+           <div class="page-header">
+             <h2>Vue Router Demo</h2>
+           </div>
+         </div>
+       </div>
+       <div class="row">
+         <div class="col-xs-2 col-xs-offset-2">
+           <div class="list-group">
+             <!-- 原始html中使用a标签实现页面的跳转 -->
+             <!-- <a class="list-group-item active" href="./about.html">About</a> -->
+             <!-- <a class="list-group-item" href="./home.html">Home</a> -->
+   
+             <!-- Vue中借助router-link标签实现路由的切换 -->
+             <router-link class="list-group-item" active-class="active" to="/about">About</router-link>
+             <router-link class="list-group-item" active-class="active" to="/home">Home</router-link>
+           </div>
+         </div>
+         <div class="col-xs-6">
+           <div class="panel">
+             <div class="panel-body">
+               <!-- 指定组件的呈现位置 -->
+               <router-view></router-view>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'App'
+   }
+   </script>
+   ```
+
+------
+
+### 5.3 多级路由
+
+> 1. 路由组件通常存放在```pages```文件夹，一般组件通常存放在```components```文件夹
+> 2. 通过切换，“隐藏”了的路由组件，默认是被销毁掉的，需要的时候再去挂载
+> 3. 每个组件都有自己的```$route```属性，里面存储着自己的路由信息
+> 4. 整个应用只有一个router，可以通过组件的```$router```属性获取到
+
+#### 路由配置 router/index.js
+
+1. 从`pages`文件夹导入路由组件
+
+2. 使用`children`配置项
+
+   ```js
+   // 该文件专门用于创建整个应用的路由器
+   import VueRouter from 'vue-router'
+   // 引入组件
+   import About from '../pages/About'
+   import Home from '../pages/Home'
+   import News from '../pages/News'
+   import Message from '../pages/Message'
+   
+   // 创建并暴露一个路由器
+   export default new VueRouter({
+     routes: [
+       {
+         path: '/about',
+         component: About,
+       },
+       {
+         path: '/home',
+         component: Home,
+         children: [
+           {
+             path: 'news',
+             component: News,
+           },
+           {
+             path: 'message',
+             component: Message,
+           },
+         ],
+       },
+     ],
+   })
+   ```
+

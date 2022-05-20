@@ -9,30 +9,30 @@ import Detail from '../pages/Detail'
 
 //创建并暴露一个路由器
 export default new VueRouter({
-	routes:[
-		{
-			path:'/about',
-			component:About
-		},
-		{
-			path:'/home',
-			component:Home,
-			children:[
-				{
-					path:'news',
-					component:News,
-				},
-				{
-					path:'message',
-					component:Message,
-					children:[
-						{
-							path:'detail',
-							component:Detail,
-						}
-					]
-				}
-			]
-		}
-	]
+  routes: [
+    {
+      path: '/about',
+      component: About,
+    },
+    {
+      path: '/home',
+      component: Home,
+      children: [
+        {
+          path: 'news',
+          component: News,
+        },
+        {
+          path: 'message',
+          component: Message,
+          children: [
+            {
+              path: 'detail',
+              component: Detail,
+            },
+          ],
+        },
+      ],
+    },
+  ],
 })

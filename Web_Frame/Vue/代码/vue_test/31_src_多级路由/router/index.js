@@ -14,10 +14,12 @@ export default new VueRouter({
       component: About,
     },
     {
+      // 一级路由，路径加'/'
       path: '/home',
       component: Home,
       children: [
         {
+          // 二级路由，路径不加'/'
           path: 'news',
           component: News,
         },

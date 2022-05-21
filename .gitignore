@@ -3,7 +3,7 @@ node_modules
 */node_modules
 **/node_modules
 dist
-
+zeusquant
 
 # local env files
 .env.local

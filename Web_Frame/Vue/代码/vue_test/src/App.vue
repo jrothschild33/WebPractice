@@ -1,36 +1,29 @@
 <template>
   <div>
-    <div class="row">
-      <Banner/>
-    </div>
-    <div class="row">
-      <div class="col-xs-2 col-xs-offset-2">
-        <div class="list-group">
-					<!-- 原始html中我们使用a标签实现页面的跳转 -->
-          <!-- <a class="list-group-item active" href="./about.html">About</a> -->
-          <!-- <a class="list-group-item" href="./home.html">Home</a> -->
-
-					<!-- Vue中借助router-link标签实现路由的切换 -->
-					<router-link class="list-group-item" active-class="active" to="/about">About</router-link>
-          <router-link class="list-group-item" active-class="active" to="/home">Home</router-link>
-        </div>
-      </div>
-      <div class="col-xs-6">
-        <div class="panel">
-          <div class="panel-body">
-						<!-- 指定组件的呈现位置 -->
-            <router-view></router-view>
-          </div>
-        </div>
-      </div>
-    </div>
+    <button>原生的按钮</button>
+    <input type="text" />
+    <atguigu-row>
+      <atguigu-button>默认按钮</atguigu-button>
+      <atguigu-button type="primary">主要按钮</atguigu-button>
+      <atguigu-button type="success">成功按钮</atguigu-button>
+      <atguigu-button type="info">信息按钮</atguigu-button>
+      <atguigu-button type="warning">警告按钮</atguigu-button>
+      <atguigu-button type="danger">危险按钮</atguigu-button>
+    </atguigu-row>
+    <atguigu-date-picker type="date" placeholder="选择日期"></atguigu-date-picker>
+    <atguigu-row>
+      <atguigu-button icon="el-icon-search" circle></atguigu-button>
+      <atguigu-button type="primary" icon="el-icon-s-check" circle></atguigu-button>
+      <atguigu-button type="success" icon="el-icon-check" circle></atguigu-button>
+      <atguigu-button type="info" icon="el-icon-message" circle></atguigu-button>
+      <atguigu-button type="warning" icon="el-icon-star-off" circle></atguigu-button>
+      <atguigu-button type="danger" icon="el-icon-delete" circle></atguigu-button>
+    </atguigu-row>
   </div>
 </template>
 
 <script>
-	import Banner from './components/Banner'
-	export default {
-		name:'App',
-		components:{Banner}
-	}
+export default {
+  name: 'App'
+}
 </script>

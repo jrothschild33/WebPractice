@@ -2604,6 +2604,111 @@
 
 ## 第2章 Vue-CLI
 
+### 2.0 项目上线流程
+
+#### 文件结构
+
+1. `src/`文件夹：存放最主要的前端文件
+
+   1）`components/`文件夹：存放一般组件，包含`各组件.vue`
+
+   2）`store/`文件夹：Vuex，包含`index.js`、`各组件.js`
+
+   3）`router/`文件夹：vue路由配置，包含`index.js`
+
+   4）`pages/`文件夹：存放路由组件，包含`各组件.vue`
+
+   5）`assets/`文件夹：存放静态资源，如logo.png
+
+   5）`App.vue`：父组件，对各个组件的汇总
+
+   6）`main.js`：入口文件
+
+2. `public/`文件夹：存放html主页及css样式文件
+
+   1）`css/`文件夹：存放引入的`各样式.css`
+
+   2）`index.html`：主页面，在此文件中引入第三方样式，路径用<%= BASE_URL %>css/xxx.css
+
+   3）`favicon.ico`：页签图标
+
+3. `node_modules/`文件夹：存放第三方库
+
+4. `dist/`文件夹：存放打包后的前端文件，复制到express服务器的static文件夹进行部署
+
+5. `.gitignore`：git版本管制忽略的配置文件
+
+6. `babel.config.js`：babel的配置文件（以前叫`.babelrc`），如果使用第三方UI组件库，需要根据官方说明进行配置
+
+7. `package.json`：应用包配置文件
+
+8. `package-lock.json`：包版本控制文件
+
+9. `README.md`：应用描述文件
+
+10. `vue.config.js`：脚手架配置文件，用于配置代理等
+
+#### 前端配置
+
+1. 创建项目：
+
+   ```cmd
+   vue create projectName
+   ```
+
+2. 打包项目：
+
+   ```cmd
+   npm run build
+   ```
+
+3. 将生成的`dist`文件夹中的内容放入express中的`static`文件夹
+
+#### 后端配置
+
+1. 项目初始化：
+
+   ```cmd
+   npm init -y
+   ```
+
+2. 安装express服务器：
+
+   ```cmd
+   npm i express
+   ```
+
+3. 配置express服务器：`server.js`，如果使用history模式则需要用`connect-history-api-fallback`插件
+
+   ```js
+   const express = require('express')
+   // 引入history相关插件
+   const history = require('connect-history-api-fallback')
+   
+   const app = express()
+   // 全局中间件：挂载history相关插件
+   app.use(history())
+   // 托管静态资源
+   app.use(express.static(__dirname + '/static'))
+   // 配置GET请求等等
+   app.get(...)
+   ......
+   // 启动服务器
+   app.listen(8080, (err) => {
+     if(!err) console.log('服务器成功启动了!')
+   })
+   ```
+
+4. 新建`static`文件夹，将前端打包好的`dis`t文件夹中全部内容放入其中
+
+5. 开启服务器
+
+   ```cmd
+   node server.js
+   ```
+
+------
+
 ### 2.1 初始化脚手架
 
 > 官网：[https://cli.vuejs.org/zh/](https://cli.vuejs.org/zh/)
@@ -2664,10 +2769,10 @@
 | src/     | components/       | 存放组件，如HelloWorld.vue                                   |
 | src/     | App.vue           | 汇总所有组件                                                 |
 | src/     | main.js           | 入口文件                                                     |
-| 其他文件 | .gitignore        | git版本管制忽略的配置                                        |
-| 其他文件 | babel.config.js   | babel的配置文件                                              |
+| 其他文件 | .gitignore        | git版本管制忽略的配置文件                                    |
+| 其他文件 | babel.config.js   | babel的配置文件（以前叫`.babelrc`），如果使用第三方UI组件库，需要根据官方说明进行配置 |
 | 其他文件 | README.md         | 应用描述文件                                                 |
-| 其他文件 | vue.config.js     | 脚手架个性化定制文件                                         |
+| 其他文件 | vue.config.js     | 脚手架配置文件，用于配置代理等                               |
 
 1. 组件：src/components/School.vue
 
@@ -8531,7 +8636,7 @@
 
 1. 全局前置路由守卫：初始化的时候被调用、每次路由切换之前被调用
 
-   1）语法：`router.beforeEach((to, from, next)`
+   1）语法：`router.beforeEach((to, from, next)=>{})`
 
    2）参数：
 
@@ -8541,7 +8646,7 @@
 
 2. 全局后置路由守卫：初始化的时候被调用、每次路由切换之后被调用
 
-   1）语法：`router.afterEach((to, from)`
+   1）语法：`router.afterEach((to, from))=>{})`
 
    2）参数：
 
@@ -8636,3 +8741,302 @@
 ------
 
 #### 5.12.2 独享路由守卫
+
+1. 独享路由守卫：单独针对某一个路由，可以和全局后置路由守卫相配合
+
+   1）语法：`beforeEnter: (to, from, next)=>{}`
+
+   2）参数：
+
+   * `to`：要去的地址
+   * `from`：来源地址
+   * `next`：放行函数
+
+2. 案例：针对News路由组件，如果localStorage中储存的school名称不为atguigu，则无法访问
+
+   1）直接在路由设置文件router/index.js中对news路由配置项进行修改即可
+
+   ```js
+   ......
+   {
+     name: 'xinwen',
+     path: 'news',
+     component: News,
+     meta: { isAuth: true, title: '新闻' },
+     // 独享路由守卫
+     beforeEnter: (to, from, next) => {
+       console.log('独享路由守卫', to, from)
+       if (to.meta.isAuth) {
+         //判断是否需要鉴权
+         if (localStorage.getItem('school') === 'atguigu') {
+           next()
+         } else {
+           alert('学校名不对，无权限查看！')
+         }
+       } else {
+         next()
+       }
+     },
+   },
+   ......
+   ```
+
+   2）导出路由
+
+   ```js
+   export default router
+   ```
+
+------
+
+#### 5.12.3 组件内守卫
+
+1. 进入守卫：通过路由规则，进入该组件时被调用
+
+   1）语法：`beforeRouteEnter(to, from, next){}`
+
+   2）参数：
+
+   * `to`：要去的地址
+   * `from`：来源地址
+   * `next`：放行函数
+
+2. 离开守卫：通过路由规则，离开该组件时被调用
+
+   1）语法：`beforeRouteLeave(to, from, next){}`
+
+   2）参数：
+
+   * `to`：要去的地址
+   * `from`：来源地址
+   * `next`：放行函数
+
+3. 注意：必须是通过路由规则进入/离开组件时才会起作用，如果不是通过路由规则（如直接引入并渲染在页面），则会失效
+
+4. 案例：为About.vue路由组件添加组件内守卫
+
+   ```vue
+   <template>
+     <h2>我是About的内容</h2>
+   </template>
+   
+   <script>
+   export default {
+     name: 'About',
+     // 进入守卫：通过路由规则，进入该组件时被调用
+     beforeRouteEnter(to, from, next) {
+       console.log('About--beforeRouteEnter', to, from)
+       if (to.meta.isAuth) {
+         //判断是否需要鉴权
+         if (localStorage.getItem('school') === 'atguigu') {
+           next()
+         } else {
+           alert('学校名不对，无权限查看！')
+         }
+       } else {
+         next()
+       }
+     },
+   
+     // 离开守卫：通过路由规则，离开该组件时被调用
+     beforeRouteLeave(to, from, next) {
+       console.log('About--beforeRouteLeave', to, from)
+       next()
+     }
+   }
+   </script>
+   ```
+
+------
+
+### 5.13 路由器的两种工作模式
+
+> * hash值：URL中井号（`#`）后面的内容就是hash值，如：`localhost:8080/about/#/news/big/123`
+>
+> * hash值不会包含在http请求中，即hash值不会带给服务器，上述URL中服务器接收到的地址不会带`#`后面的参数
+
+#### 5.13.1 hash模式
+
+1. 开启方法：在路由配置文件router/index.js中设置，如果不设置默认为`hash`模式
+
+   ```js
+   const router = new VueRouter({
+     mode: 'hash',
+     routes: [...]
+     ],
+   })
+   ```
+
+2. URL地址中永远带着`#`号，不美观
+
+3. 若将地址通过第三方手机app分享，如果app校验严格，则地址会被标记为不合法
+
+4. 兼容性较好
+
+5. 刷新页面时，不会产生404错误
+
+#### 5.13.2 history模式
+
+1. 开启方法：在路由配置文件router/index.js中设置
+
+   ```js
+   const router = new VueRouter({
+     mode: 'history',
+     routes: [...]
+     ],
+   })
+   ```
+
+2. URL地址干净美观
+
+3. 兼容性和hash模式相比略差
+
+4. 应用部署上线时需要后端人员支持，解决刷新页面服务端404的问题。npm插件：`connect-history-api-fallback`
+
+   1）安装：
+
+   ```cmd
+   npm i connect-history-api-fallback
+   ```
+
+   2）express服务器部署：
+
+   ```js
+   const express = require('express')
+   // 引入history相关插件
+   const history = require('connect-history-api-fallback')
+   
+   const app = express()
+   // 全局中间件：挂载history相关插件
+   app.use(history())
+   // 托管静态资源
+   app.use(express.static(__dirname + '/static'))
+   // 配置GET请求等等
+   app.get(...)
+   ......
+   // 启动服务器
+   app.listen(8080, (err) => {
+     if(!err) console.log('服务器成功启动了!')
+   })
+   ```
+
+------
+
+### 5.14 UI组件库
+
+#### 5.14.1 移动端UI组件库
+
+1. Vant：[https://youzan.github.io/vant](https://youzan.github.io/vant)
+2. Cube UI：[https://didi.github.io/cube-ui](https://didi.github.io/cube-ui)
+3. Mint UI：[http://mint-ui.github.io](http://mint-ui.github.io)
+
+#### 5.14.2 PC端UI组件库
+
+1. Element UI：[https://element.eleme.cn](https://element.eleme.cn)
+2. IView UI：[https://www.iviewui.com](https://www.iviewui.com)
+
+#### 5.14.3 使用Element组件库
+
+1. 安装：
+
+   ```cmd
+   npm i element-ui
+   ```
+
+2. 入口文件 main.js：ElementUI组件库
+
+   1）完整引入：不推荐，格式太大
+
+   2）按需引入：推荐，借助[`babel-plugin-component`](https://github.com/ElementUI/babel-plugin-component)按需引入
+
+   ```js
+   // babel.config.js
+   module.exports = {
+     presets: [
+       '@vue/cli-plugin-babel/preset',
+       // 注意：这里和官网写的不一样
+       ['@babel/preset-env', { modules: false }],
+     ],
+     plugins: [
+       [
+         'component',
+         {
+           libraryName: 'element-ui',
+           styleLibraryName: 'theme-chalk',
+         },
+       ],
+     ],
+   }
+   
+   ```
+
+   ```js
+   // 引入Vue
+   import Vue from 'vue'
+   // 引入App
+   import App from './App.vue'
+   
+   // 完整引入
+   // 引入ElementUI组件库
+   // import ElementUI from 'element-ui';
+   
+   // 引入ElementUI全部样式
+   // import 'element-ui/lib/theme-chalk/index.css';
+   
+   // 按需引入
+   import { Button, Row, DatePicker } from 'element-ui'
+   
+   // 关闭Vue的生产提示
+   Vue.config.productionTip = false
+   
+   // 应用ElementUI
+   // Vue.use(ElementUI);
+   
+   // 自定义组件名称
+   Vue.component('atguigu-button', Button)
+   Vue.component('atguigu-row', Row)
+   Vue.component('atguigu-date-picker', DatePicker)
+   
+   //创建vm
+   new Vue({
+     el: '#app',
+     render: (h) => h(App),
+   })
+   ```
+
+3. 父组件 App.vue：直接使用定义好的组件
+
+   ```vue
+   <template>
+     <div>
+       <button>原生的按钮</button>
+       <input type="text" />
+       <atguigu-row>
+         <atguigu-button>默认按钮</atguigu-button>
+         <atguigu-button type="primary">主要按钮</atguigu-button>
+         <atguigu-button type="success">成功按钮</atguigu-button>
+         <atguigu-button type="info">信息按钮</atguigu-button>
+         <atguigu-button type="warning">警告按钮</atguigu-button>
+         <atguigu-button type="danger">危险按钮</atguigu-button>
+       </atguigu-row>
+       <atguigu-date-picker type="date" placeholder="选择日期"></atguigu-date-picker>
+       <atguigu-row>
+         <atguigu-button icon="el-icon-search" circle></atguigu-button>
+         <atguigu-button type="primary" icon="el-icon-s-check" circle></atguigu-button>
+         <atguigu-button type="success" icon="el-icon-check" circle></atguigu-button>
+         <atguigu-button type="info" icon="el-icon-message" circle></atguigu-button>
+         <atguigu-button type="warning" icon="el-icon-star-off" circle></atguigu-button>
+         <atguigu-button type="danger" icon="el-icon-delete" circle></atguigu-button>
+       </atguigu-row>
+     </div>
+   </template>
+   
+   <script>
+   export default {
+     name: 'App'
+   }
+   </script>
+   ```
+
+------
+

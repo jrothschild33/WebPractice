@@ -2664,6 +2664,43 @@
 
 3. 将生成的`dist`文件夹中的内容放入express中的`static`文件夹
 
+4. 备注：如果需要修改`vue.config.js`，可以参考以下文件
+
+   ```js
+   module.exports = {
+     pages: {
+       index: {
+         //入口
+         entry: 'src/main.js',
+       },
+     },
+     lintOnSave: false, //关闭语法检查
+   
+     // 开启代理服务器（方式一）：只能控制单个服务器，且只有public文件夹中找不到资源时才会请求代理服务器
+     /* devServer: {
+       proxy: 'http://localhost:5000'
+     }, */
+   
+     //开启代理服务器（方式二）
+     devServer: {
+       proxy: {
+         '/atguigu': {
+           target: 'http://localhost:5000',
+           pathRewrite: { '^/atguigu': '' }, // 重写路径，不然后端服务器路径错误
+           // ws: true, //用于支持websocket
+           // changeOrigin: true //用于控制请求头中的host值，如果为false则如实回答，如果是ture(默认)则谎称与服务器同源
+         },
+         '/demo': {
+           target: 'http://localhost:5001',
+           pathRewrite: { '^/demo': '' },
+           // ws: true, //用于支持websocket
+           // changeOrigin: true //用于控制请求头中的host值
+         },
+       },
+     },
+   }
+   ```
+
 #### 后端配置
 
 1. 项目初始化：
@@ -2726,6 +2763,10 @@
   // 简写
   render: h => h(APP)
   ```
+
+3. 开发者工具：chrome网上商店安装[不带beta版logo的](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd?utm_source=chrome-ntp-icon)
+
+   ![vue2开发者工具](D:\MyProjects\Website\Tutoring\Web_Frame\Vue\src\vue2开发者工具.png)
 
 #### 2.1.2 使用步骤
 

@@ -5,7 +5,7 @@ node_modules
 **/node_modules
 dist
 zeusquant
-notebook
+
 
 # local env files
 .env.local

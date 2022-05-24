@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@main
+      uses: actions/checkout@master
 
     - name: vuepress-deploy
       uses: jrothschild33/WebsitePractice@main
@@ -14,4 +14,5 @@ jobs:
         TARGET_REPO: jrothschild33/WebsitePractice
         TARGET_BRANCH: gh-pages
         BUILD_SCRIPT: yarn && yarn build
-        BUILD_DIR: blog/.vuepress/dist/
+        # BUILD_DIR: blog/.vuepress/dist/
+        BUILD_DIR: notebook/docs/.vuepress/dist/

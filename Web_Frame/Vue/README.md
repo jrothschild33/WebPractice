@@ -2673,13 +2673,13 @@
 
 1. 创建项目：
 
-   ```cmd
+   ```bash
    vue create projectName
    ```
 
 2. 打包项目：
 
-   ```cmd
+   ```bash
    npm run build
    ```
 
@@ -2726,13 +2726,13 @@
 
 1. 项目初始化：
 
-   ```cmd
+   ```bash
    npm init -y
    ```
 
 2. 安装express服务器：
 
-   ```cmd
+   ```bash
    npm i express
    ```
 
@@ -2761,7 +2761,7 @@
 
 5. 开启服务器
 
-   ```cmd
+   ```bash
    node server.js
    ```
 
@@ -2787,7 +2787,7 @@
 
 3. 开发者工具：chrome网上商店安装[不带beta版logo的](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd?utm_source=chrome-ntp-icon)
 
-   ![vue2开发者工具](D:\MyProjects\Website\Tutoring\Web_Frame\Vue\src\vue2开发者工具.png)
+   ![vue2开发者工具](./src/vue2开发者工具.png)
 
 #### 2.1.2 使用步骤
 
@@ -2795,25 +2795,25 @@
 
 1. 全局安装
 
-   ```cmd
+   ```bash
    npm i @vue/cli -g
    ```
 
 2. 创建项目：
 
-   ```cmd
+   ```bash
    vue create projectName
    ```
 
 3. 启动项目：
 
-   ```cmd
+   ```bash
    npm run serve
    ```
 
 4. 提示：vue inspect > 自定义输出文件名.js，可以查看到Vue脚手架的默认配置
 
-   ```cmd
+   ```bash
    vue inspect > config.js
    ```
 
@@ -3640,7 +3640,7 @@
 
 1. 安装与引入
 
-   ```cmd
+   ```bash
    npm i pubsub-js
    ```
 
@@ -4719,7 +4719,7 @@
 
 2. 安装：
 
-   ```cmd
+   ```bash
    npm install animate.css
    ```
 
@@ -5899,7 +5899,7 @@
 
 2. 安装：
 
-   ```cmd
+   ```bash
    npm i axios
    ```
 
@@ -6219,13 +6219,13 @@
 
    1）vue2中，要用vuex3版本
 
-   ```cmd
+   ```bash
    npm i vuex@3
    ```
 
    2）vue3中，要用vuex4版本
 
-   ```cmd
+   ```bash
    npm i vuex@4
    ```
 
@@ -7680,7 +7680,7 @@
 
 1. `vue-router`：是 vue 的一个插件库，专门用来实现 SPA 应用
 
-   ```cmd
+   ```bash
    npm i vue-router
    ```
 
@@ -8959,7 +8959,7 @@
 
    1）安装：
 
-   ```cmd
+   ```bash
    npm i connect-history-api-fallback
    ```
 
@@ -9003,7 +9003,7 @@
 
 1. 安装：
 
-   ```cmd
+   ```bash
    npm i element-ui
    ```
 
@@ -9123,15 +9123,12 @@
    1）性能的提升：
 
    - 打包大小减少41%
-
    - 初次渲染快55%, 更新渲染快133%
-
    - 内存减少54%
 
    2）源码的升级：
 
    - 使用`Proxy`代替`defineProperty`实现响应式
-
    - 重写虚拟DOM的实现和Tree-Shaking
 
    3）拥抱TypeScript：Vue3可以更好的支持TypeScript
@@ -9171,26 +9168,26 @@
 
 1. 查看`@vue/cli`版本，确保版本在4.5.0以上
 
-   ```cmd
+   ```bash
    vue -V
    vue --version
    ```
 
 2. 安装或者升级`@vue/cli`
 
-   ```cmd
+   ```bash
    npm install -g @vue/cli
    ```
 
 3. 创建项目
 
-   ```cmd
+   ```bash
    vue create <project-name>
    ```
 
 4. 启动项目
 
-   ```cmd
+   ```bash
    npm run serve
    ```
 
@@ -9214,25 +9211,26 @@
 
 3. 传统构建与vite构建对比：
 
-<img src="https://cn.vitejs.dev/assets/bundler.37740380.png" style="width:500px;height:280px;float:left;margin-right:10px" /><img src="https://cn.vitejs.dev/assets/esm.3070012d.png" style="width:480px;height:280px" />
+   | <img src="https://cn.vitejs.dev/assets/bundler.37740380.png" style="width:500px;height:280px" /> | <img src="https://cn.vitejs.dev/assets/esm.3070012d.png" style="width:480px;height:280px" /> |
+   | :----------------------------------------------------------: | :----------------------------------------------------------: |
 
 ##### 1.2.2.2 vite搭建流程
 
 1. 创建工程
 
-   ```cmd
+   ```bash
    npm init vite-app <project-name>
    ```
 
 2. 安装依赖
 
-   ```cmd
+   ```bash
    npm install
    ```
 
 3. 启动项目
 
-   ```cmd
+   ```bash
    npm run dev
    ```
 
@@ -10138,7 +10136,7 @@
 >
 > Vue3生命周期：[https://v3.cn.vuejs.org/images/lifecycle.svg](https://v3.cn.vuejs.org/images/lifecycle.svg)
 
-![vue生命周期对比](D:\MyProjects\Website\Tutoring\Web_Frame\Vue\src\vue生命周期对比.png)
+![vue生命周期对比](./src/vue生命周期对比.png)
 
 1. Vue3中可以继续使用Vue2中的生命周期钩子，但有有两个被更名：
 
@@ -10676,7 +10674,7 @@
 
 > 实现祖与后代组件间通信：父组件使用`provide`选项来提供数据，后代组件使用`inject`选项来开始使用这些数据
 
-![provide与inject](D:\MyProjects\Website\Tutoring\Web_Frame\Vue\src\provide与inject.png)
+![provide与inject](./src/provide与inject.png)
 
 1. 祖组件：
 

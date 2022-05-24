@@ -4,6 +4,7 @@ node_modules
 **/node_modules
 dist
 zeusquant
+Web_Frame/Note
 
 # local env files
 .env.local

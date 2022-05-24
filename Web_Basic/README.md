@@ -4236,7 +4236,7 @@
 
    3）span 的样式中指定 font-family：icomoon
 
-   4）在下载站找到对应的方块图标□，或用VS插件找到ttf中对应的符号，复制到<span>中
+   4）在下载站找到对应的方块图标□，或用VS插件找到ttf中对应的符号，复制到`<span>`中
 
    ```css
    <style>
@@ -10199,7 +10199,7 @@
 
 ##### 2.12.4.5 括号类
 
-1. 小括号`()`：表示优先级，可与模板语法配合：`{{(...)}}`小括号内表示一个分组，提取想要的内容
+1. 小括号`()`：表示优先级，可与模板语法配合：小括号内表示一个分组，提取想要的内容
 
    ```js
    // 让abc重复三次
@@ -10230,7 +10230,7 @@
 
 1. `\d`：匹配一个数字字符，等价于`[0-9]`
 
-2. `\D`：匹配一个非数字字符，等价于`[^0-9]``
+2. `\D`：匹配一个非数字字符，等价于`[^0-9]`
 
 3. `\w`：匹配包括下划线的任何单词字符，等价于`[A-Za-z0-9_]`
 
@@ -10979,7 +10979,7 @@
 
 5. Promise 的基本流程：
 
-   ![](D:\MyProjects\Website\Tutoring\Web_Basic\Section4-JavaScript\Chapter07-Promise\资源\promise的基本流程.png)
+   ![promise的基本流程](./src/promise的基本流程.png)
 
 ------
 
@@ -14092,9 +14092,9 @@
 
    4）点击删除按钮，内容消失：
 
-   * 点击<a>链接删除的不是li，而是本地存储中对应的数据
+   * 点击`<a>`链接删除的不是li，而是本地存储中对应的数据
    * 先获取本地存储数据，删除对应数据后保存，重新渲染列表li
-   * 给每个<a>添加index属性，便于查找要删除的数据索引
+   * 给每个`<a>`添加index属性，便于查找要删除的数据索引
 
    5）点击待办事项复选框，把当前数据添加到已完成事项中：点击之后获取本地存储数据，修改done属性值为当前复选框checked状态
 
@@ -19702,7 +19702,7 @@
 
    3）命令：
 
-   ```cmd
+   ```bash
    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
    ```
 
@@ -19710,7 +19710,7 @@
 
    5）检测：
 
-   ```cmd
+   ```bash
    sst -t git@github.com
    ```
 
@@ -20451,13 +20451,13 @@
 
    1）安装命令
 
-   ```cmd
+   ```bash
    npm i packageName -g
    ```
 
    2）卸载命令
 
-   ```cmd
+   ```bash
    npm uninstall packageName -g
    ```
 
@@ -20469,13 +20469,13 @@
 
 1. 快速创建项目：项目文件夹名不能有中文，路径可以有中文
 
-   ```cmd
+   ```bash
    npm init -y
    ```
 
 2. 安装包：不同类型包的安装方法
 
-   ```cmd
+   ```bash
    npm i packageName
    npm i packageName -D
    npm i packageName -g
@@ -20508,7 +20508,7 @@
 
 4. 一次性安装所有包：npm 先读取package.json中的dependencies节点，一次性下载到项目中
 
-   ```cmd
+   ```bash
    npm install
    npm i
    ```
@@ -20517,7 +20517,7 @@
 
    1）卸载项目包：
 
-   ```cmd
+   ```bash
    npm uninstall packageName
    ```
 
@@ -20525,13 +20525,13 @@
 
    1）查看镜像源
 
-   ```cmd
+   ```bash
    npm config get registry
    ```
 
    2）切换镜像源
 
-   ```cmd
+   ```bash
    npm config set registry=https://registry.npm.taobao.org/
    ```
 
@@ -20539,19 +20539,19 @@
 
    * 安装nrm
 
-   ```cmd
+   ```bash
    npm i nrm -g
    ```
 
    * 查看所有可用镜像源
 
-   ```cmd
+   ```bash
    nrm ls
    ```
 
    * 切换淘宝镜像源
 
-   ```cmd
+   ```bash
    nrm use taobao
    ```
 
@@ -20706,7 +20706,7 @@
 
 2. 将下包的服务器地址切换为 npm 的官方服务器
 
-   ```cmd
+   ```bash
    npm config set registry=https://registry.npmjs.org/
    ```
 
@@ -20717,7 +20717,7 @@
 
 1. 只能删除 72 小时以内发布的包，删除后在 24 小时内不允许重复发布
 
-   ```cmd
+   ```bash
    npm unpublish packageName --force
    ```
 
@@ -20733,7 +20733,7 @@
 
 2. 安装：
 
-   ```cmd
+   ```bash
    npm i express@4.17.1
    ```
 
@@ -21988,7 +21988,7 @@
 
 3. 安装：
 
-   ```cmd
+   ```bash
    npm i express-session
    ```
 

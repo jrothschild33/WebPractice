@@ -2239,7 +2239,7 @@
 
    3）命令：
 
-   ```cmd
+   ```bash
    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
    ```
 
@@ -2247,7 +2247,7 @@
 
    5）检测：
 
-   ```cmd
+   ```bash
    sst -t git@github.com
    ```
 
@@ -2988,13 +2988,13 @@
 
    1）安装命令
 
-   ```cmd
+   ```bash
    npm i packageName -g
    ```
 
    2）卸载命令
 
-   ```cmd
+   ```bash
    npm uninstall packageName -g
    ```
 
@@ -3006,13 +3006,13 @@
 
 1. 快速创建项目：项目文件夹名不能有中文，路径可以有中文
 
-   ```cmd
+   ```bash
    npm init -y
    ```
 
 2. 安装包：不同类型包的安装方法
 
-   ```cmd
+   ```bash
    npm i packageName
    npm i packageName -D
    npm i packageName -g
@@ -3045,7 +3045,7 @@
 
 4. 一次性安装所有包：npm 先读取package.json中的dependencies节点，一次性下载到项目中
 
-   ```cmd
+   ```bash
    npm install
    npm i
    ```
@@ -3054,7 +3054,7 @@
 
    1）卸载项目包：
 
-   ```cmd
+   ```bash
    npm uninstall packageName
    ```
 
@@ -3062,13 +3062,13 @@
 
    1）查看镜像源
 
-   ```cmd
+   ```bash
    npm config get registry
    ```
 
    2）切换镜像源
 
-   ```cmd
+   ```bash
    npm config set registry=https://registry.npm.taobao.org/
    ```
 
@@ -3076,19 +3076,19 @@
 
    * 安装nrm
 
-   ```cmd
+   ```bash
    npm i nrm -g
    ```
 
    * 查看所有可用镜像源
 
-   ```cmd
+   ```bash
    nrm ls
    ```
 
    * 切换淘宝镜像源
 
-   ```cmd
+   ```bash
    nrm use taobao
    ```
 
@@ -3243,7 +3243,7 @@
 
 2. 将下包的服务器地址切换为 npm 的官方服务器
 
-   ```cmd
+   ```bash
    npm config set registry=https://registry.npmjs.org/
    ```
 
@@ -3254,7 +3254,7 @@
 
 1. 只能删除 72 小时以内发布的包，删除后在 24 小时内不允许重复发布
 
-   ```cmd
+   ```bash
    npm unpublish packageName --force
    ```
 
@@ -3270,7 +3270,7 @@
 
 2. 安装：
 
-   ```cmd
+   ```bash
    npm i express@4.17.1
    ```
 
@@ -4525,7 +4525,7 @@
 
 3. 安装：
 
-   ```cmd
+   ```bash
    npm i express-session
    ```
 

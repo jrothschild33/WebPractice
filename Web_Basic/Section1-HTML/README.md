@@ -366,7 +366,7 @@
 
 1. 作用：绑定一个表单元素，点击文字即可跳转到表单元素上
 
-2. 属性：<label>起点：`for`，表单元素终点：`id`
+2. 属性：`<label>`起点：`for`，表单元素终点：`id`
 
    ```html
    <label for="text"> 用户名:</label> <input type="text" id="text" value="请输入用户名">

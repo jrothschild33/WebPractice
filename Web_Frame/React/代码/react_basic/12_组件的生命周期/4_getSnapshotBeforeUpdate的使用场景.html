@@ -1,68 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>4_getSnapShotBeforeUpdate的使用场景</title>
-	<style>
-		.list{
-			width: 200px;
-			height: 150px;
-			background-color: skyblue;
-			overflow: auto;
-		}
-		.news{
-			height: 30px;
-		}
-	</style>
-</head>
-<body>
-	<!-- 准备好一个“容器” -->
-	<div id="test"></div>
-	
-	<!-- 引入react核心库 -->
-	<script type="text/javascript" src="../js/17.0.1/react.development.js"></script>
-	<!-- 引入react-dom，用于支持react操作DOM -->
-	<script type="text/javascript" src="../js/17.0.1/react-dom.development.js"></script>
-	<!-- 引入babel，用于将jsx转为js -->
-	<script type="text/javascript" src="../js/17.0.1/babel.min.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>4_getSnapShotBeforeUpdate的使用场景</title>
+    <style>
+      .list {
+        width: 200px;
+        height: 150px;
+        background-color: skyblue;
+        overflow: auto;
+      }
+      .news {
+        height: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 准备好一个“容器” -->
+    <div id="test"></div>
 
-	<script type="text/babel">
-		class NewsList extends React.Component{
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/17.0.1/react.development.js"></script>
+    <!-- 引入react-dom，用于支持react操作DOM -->
+    <script type="text/javascript" src="../js/17.0.1/react-dom.development.js"></script>
+    <!-- 引入babel，用于将jsx转为js -->
+    <script type="text/javascript" src="../js/17.0.1/babel.min.js"></script>
 
-			state = {newsArr:[]}
+    <script type="text/babel">
+      class NewsList extends React.Component {
+        state = { newsArr: [] }
 
-			componentDidMount(){
-				setInterval(() => {
-					//获取原状态
-					const {newsArr} = this.state
-					//模拟一条新闻
-					const news = '新闻'+ (newsArr.length+1)
-					//更新状态
-					this.setState({newsArr:[news,...newsArr]})
-				}, 1000);
-			}
+        componentDidMount() {
+          setInterval(() => {
+            // 获取原状态
+            const { newsArr } = this.state
+            // 模拟一条新闻
+            const news = '新闻' + (newsArr.length + 1)
+            // 更新状态
+            this.setState({ newsArr: [news, ...newsArr] })
+          }, 1000)
+        }
 
-			getSnapshotBeforeUpdate(){
-				return this.refs.list.scrollHeight
-			}
+        // scrollHeight：内容区总高度；scrollTop：当前位置距顶端高度
+        // 作用：组件在发生更改之前从DOM中获取一些信息，如：滚动位置
+        getSnapshotBeforeUpdate() {
+          return this.refs.list.scrollHeight // 返回当前内容区总高度
+        }
 
-			componentDidUpdate(preProps,preState,height){
-				this.refs.list.scrollTop += this.refs.list.scrollHeight - height
-			}
+        componentDidUpdate(preProps, preState, height) {
+          // 距顶端高度增加值 = 新内容区总高度 - 旧内容区总高度
+          this.refs.list.scrollTop += this.refs.list.scrollHeight - height
+        }
 
-			render(){
-				return(
-					<div className="list" ref="list">
-						{
-							this.state.newsArr.map((n,index)=>{
-								return <div key={index} className="news">{n}</div>
-							})
-						}
-					</div>
-				)
-			}
-		}
-		ReactDOM.render(<NewsList/>,document.getElementById('test'))
-	</script>
-</body>
+        render() {
+          return (
+            <div className="list" ref="list">
+              {this.state.newsArr.map((n, index) => {
+                return (
+                  <div key={index} className="news">
+                    {n}
+                  </div>
+                )
+              })}
+            </div>
+          )
+        }
+      }
+      ReactDOM.render(<NewsList />, document.getElementById('test'))
+    </script>
+    <script>
+      const array2 = [1, 4, 9, 16]
+      {
+        array2.map((x) => x * 2)
+      }
+    </script>
+  </body>
 </html>

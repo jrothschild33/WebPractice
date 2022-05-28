@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>key的作用</title>
-</head>
-<body>
-<div id="test"></div>
-<!-- 引入react核心库 -->
-<script type="text/javascript" src="../js/react.development.js"></script>
-<!-- 引入react-dom -->
-<script type="text/javascript" src="../js/react-dom.development.js"></script>
-<!-- 引入babel -->
-<script type="text/javascript" src="../js/babel.min.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>key的作用</title>
+  </head>
+  <body>
+    <div id="test"></div>
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <!-- 引入babel -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
 
-<script type="text/babel">
-	/*
+    <script type="text/babel">
+      /*
    经典面试题:
       1). react/vue中的key有什么作用？（key的内部原理是什么？）
       2). 为什么遍历列表时，key最好不要用index?
@@ -46,8 +46,8 @@
 								1.最好使用每条数据的唯一标识作为key, 比如id、手机号、身份证号、学号等唯一值。
 								2.如果确定只是简单的展示数据，用index也是可以的。
    */
-	
-	/* 
+
+      /* 
 		慢动作回放----使用index索引值作为key
 
 			初始数据：
@@ -88,50 +88,57 @@
 
 
 	 */
-	class Person extends React.Component{
+      class Person extends React.Component {
+        state = {
+          persons: [
+            { id: 1, name: '小张', age: 18 },
+            { id: 2, name: '小李', age: 19 },
+          ],
+        }
 
-		state = {
-			persons:[
-				{id:1,name:'小张',age:18},
-				{id:2,name:'小李',age:19},
-			]
-		}
+        add = () => {
+          const { persons } = this.state
+          const p = { id: persons.length + 1, name: '小王', age: 20 }
+          this.setState({ persons: [p, ...persons] })
+        }
 
-		add = ()=>{
-			const {persons} = this.state
-			const p = {id:persons.length+1,name:'小王',age:20}
-			this.setState({persons:[p,...persons]})
-		}
+        render() {
+          return (
+            <div>
+              <h2>展示人员信息</h2>
+              <button onClick={this.add}>添加一个小王</button>
+              <h3>使用index（索引值）作为key</h3>
+              <ul>
+                {this.state.persons.map((personObj, index) => {
+                  return (
+                    <li key={index}>
+                      {personObj.name}---{personObj.age}
+                      <input type="text" />
+                    </li>
+                  )
+                })}
+              </ul>
 
-		render(){
-			return (
-				<div>
-					<h2>展示人员信息</h2>
-					<button onClick={this.add}>添加一个小王</button>
-					<h3>使用index（索引值）作为key</h3>
-					<ul>
-						{
-							this.state.persons.map((personObj,index)=>{
-								return <li key={index}>{personObj.name}---{personObj.age}<input type="text"/></li>
-							})
-						}
-					</ul>
-					<hr/>
-					<hr/>
-					<h3>使用id（数据的唯一标识）作为key</h3>
-					<ul>
-						{
-							this.state.persons.map((personObj)=>{
-								return <li key={personObj.id}>{personObj.name}---{personObj.age}<input type="text"/></li>
-							})
-						}
-					</ul>
-				</div>
-			)
-		}
-	}
+              <hr />
+              <hr />
 
-	ReactDOM.render(<Person/>,document.getElementById('test'))
-</script>
-</body>
+              <h3>使用id（数据的唯一标识）作为key</h3>
+              <ul>
+                {this.state.persons.map((personObj) => {
+                  return (
+                    <li key={personObj.id}>
+                      {personObj.name}---{personObj.age}
+                      <input type="text" />
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          )
+        }
+      }
+
+      ReactDOM.render(<Person />, document.getElementById('test'))
+    </script>
+  </body>
 </html>

@@ -16,37 +16,37 @@
     <script type="text/javascript" src="../js/babel.min.js"></script>
 
     <script type="text/babel">
-      //创建组件
-      //生命周期回调函数 <=> 生命周期钩子函数 <=> 生命周期函数 <=> 生命周期钩子
+      // 创建组件
+      // 生命周期回调函数 <=> 生命周期钩子函数 <=> 生命周期函数 <=> 生命周期钩子
       class Life extends React.Component {
         state = { opacity: 1 }
 
         death = () => {
-          //卸载组件
+          // 卸载组件
           ReactDOM.unmountComponentAtNode(document.getElementById('test'))
         }
 
-        //组件挂完毕
+        // 组件挂完毕
         componentDidMount() {
           console.log('componentDidMount')
           this.timer = setInterval(() => {
-            //获取原状态
+            // 获取原状态
             let { opacity } = this.state
-            //减小0.1
+            // 减小0.1
             opacity -= 0.1
             if (opacity <= 0) opacity = 1
-            //设置新的透明度
+            // 设置新的透明度
             this.setState({ opacity })
           }, 200)
         }
 
-        //组件将要卸载
+        // 组件将要卸载
         componentWillUnmount() {
-          //清除定时器
+          // 清除定时器
           clearInterval(this.timer)
         }
 
-        //初始化渲染、状态更新之后
+        // 初始化渲染、状态更新之后
         render() {
           console.log('render')
           return (
@@ -57,7 +57,7 @@
           )
         }
       }
-      //渲染组件
+      // 渲染组件
       ReactDOM.render(<Life />, document.getElementById('test'))
     </script>
   </body>

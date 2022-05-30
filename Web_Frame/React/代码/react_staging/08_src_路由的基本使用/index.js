@@ -1,15 +1,15 @@
-//引入react核心库
+// 引入react核心库
 import React from 'react'
-//引入ReactDOM
+// 引入ReactDOM
 import ReactDOM from 'react-dom'
-//
-import {BrowserRouter} from 'react-router-dom'
-//引入App
+// 引入路由插件
+import { BrowserRouter } from 'react-router-dom'
+// 引入App
 import App from './App'
 
 ReactDOM.render(
-	<BrowserRouter>
-		<App/>
-	</BrowserRouter>,
-	document.getElementById('root')
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById('root')
 )

@@ -38,6 +38,10 @@
           // alert(this.myRef2.current.value)
           alert(event.target.value) // 这里的event就是input，可以用event.value获取数据
         }
+        // 展示传递的自定义参数
+        showData3 = (name, age) => {
+          console.log(name, age)
+        }
 
         render() {
           return (
@@ -47,6 +51,8 @@
               <button onClick={this.showData}>点我提示左侧的数据</button>&nbsp;
               <input onBlur={this.showData2} type="text" placeholder="失去焦点提示数据" />
               &nbsp;
+              {/* 如果事件绑定的函数需要传递参数（除event之外），必须在内部写成箭头函数 */}
+              <button onClick={() => this.showData3('tom', 18)}>测试传递自定义参数</button>&nbsp;
             </div>
           )
         }

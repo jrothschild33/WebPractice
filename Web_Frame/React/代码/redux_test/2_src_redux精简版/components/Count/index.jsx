@@ -3,18 +3,20 @@ import React, { Component } from 'react'
 import store from '../../redux/store'
 
 export default class Count extends Component {
+  // 这里的state随便写，与redux无关，真正的state已经交给reducer了（initState）
   state = { carName: '奔驰c63' }
 
   /* componentDidMount() {
     // 检测redux中状态的变化，只要变化，就调用render
     store.subscribe(() => {
-      this.setState({})
+      this.setState({}) // 另类方法：setState中不传递任何参数，但也会引起react重新渲染页面
     })
   } */
 
   // 加法
   increment = () => {
     const { value } = this.selectNumber
+    // 通过dispatch方法将action传递给reducer
     store.dispatch({ type: 'increment', data: value * 1 })
   }
   // 减法

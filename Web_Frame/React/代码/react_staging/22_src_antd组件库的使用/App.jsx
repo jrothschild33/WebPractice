@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Button, DatePicker } from 'antd'
 import { WechatOutlined, WeiboOutlined, SearchOutlined } from '@ant-design/icons'
+// import 'antd/dist/antd.css'	// 这里引入后体积较大，按官方配置后无需再引入
 const { RangePicker } = DatePicker
 
 export default class App extends Component {

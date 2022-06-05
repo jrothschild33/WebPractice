@@ -10,7 +10,7 @@
 	(2). setState(updater, [callback])------函数式的setState
             1.updater为返回stateChange对象的函数。
             2.updater可以接收到state和props。
-            4.callback是可选的回调函数, 它在状态更新、界面也更新后(render调用后)才被调用。
+            3.callback是可选的回调函数, 它在状态更新、界面也更新后(render调用后)才被调用。
 总结:
 		1.对象式的setState是函数式的setState的简写方式(语法糖)
 		2.使用原则：
@@ -252,8 +252,7 @@ getDerivedStateFromError配合componentDidCatch
 // 生命周期函数，一旦后台组件报错，就会触发
 static getDerivedStateFromError(error) {
     console.log(error);
-    // 在render之前触发
-    // 返回新的state
+    // 在render之前触发，返回新的state
     return {
         hasError: true,
     };
@@ -288,5 +287,4 @@ componentDidCatch(error, info) {
 		父子组件：props
 		兄弟组件：消息订阅-发布、集中式管理
 		祖孙组件(跨级组件)：消息订阅-发布、集中式管理、conText(开发用的少，封装插件用的多)
-
 

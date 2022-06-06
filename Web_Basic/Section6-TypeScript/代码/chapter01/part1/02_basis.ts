@@ -16,7 +16,7 @@ b = 'hello'
 let c = false
 c = true
 
-// JS中的函数是不考虑参数的类型和个数的
+// JS中的函数是不考虑参数的类型和个数的，容易出现字符串拼接的结果，而TS避免了这一点
 // function sum(a, b){
 //     return a + b;
 // }

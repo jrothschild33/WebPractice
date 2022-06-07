@@ -5,6 +5,7 @@ node_modules
 **/node_modules
 dist
 zeusquant
+**/软件
 
 
 # local env files

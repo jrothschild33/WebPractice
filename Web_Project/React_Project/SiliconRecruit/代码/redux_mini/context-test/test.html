@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>$Title$</title>
+</head>
+<body>
+
+<div id="test"></div>
+
+<script type="text/javascript" src="./react.development.js"></script>
+<script type="text/javascript" src="./react-dom.development.js"></script>
+<script type="text/javascript" src="./prop-types.js"></script>
+<script type="text/javascript" src="./babel.min.js"></script>
+
+<script type="text/babel">
+  class A extends React.Component {
+
+    state = {
+      color: 'red'
+    }
+
+    // 声明向所有子组件提供context包含的数据名称与类型
+    static childContextTypes = {
+      color: PropTypes.string.isRequired
+    }
+    // 向所有子组件提供context
+    getChildContext () {
+      return {color: this.state.color}
+    }
+
+    render() {
+      return (
+        <div>
+          <h2>A组件</h2>
+          <B/>
+        </div>
+      )
+    }
+  }
+
+  class B extends React.Component {
+    // 子组件不需要父组件提供的context, 就不需要声明
+    render() {
+      return (
+        <div>
+          <h2>B组件</h2>
+          <C/>
+        </div>
+      )
+    }
+  }
+
+  class C extends React.Component {
+
+    // 声明接收context(A组件提供)
+    static contextTypes = {
+      color: PropTypes.string.isRequired
+    }
+
+    render() {
+      return (
+        <div>
+          <h2 style={{color: this.context.color}}>C组件</h2>
+        </div>
+      )
+    }
+  }
+
+  ReactDOM.render(<A/>, document.getElementById('test'))
+
+</script>
+</body>
+</html>

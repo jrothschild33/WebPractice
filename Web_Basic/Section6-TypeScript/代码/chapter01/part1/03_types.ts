@@ -6,10 +6,12 @@ a = 10
 let b: 'male' | 'female'
 b = 'male'
 b = 'female'
+// b = 'hello' // 报错
 
-let c: boolean | string
+let c: boolean | string | number
 c = true
 c = 'hello'
+c = 123
 
 // any 表示的是任意类型，一个变量设置类型为any后相当于对该变量关闭了TS的类型检测
 // 使用TS时，不建议使用any类型
@@ -36,11 +38,12 @@ e = 'hello'
 
 // unknown 实际上就是一个类型安全的any
 // unknown类型的变量，不能直接赋值给其他变量
+// 如果必须要赋值，要配合if判断类型
 if (typeof e === 'string') {
   s = e
 }
 
-// 类型断言，可以用来告诉解析器变量的实际类型
+// 类型断言，可以用来告诉解析器变量的实际类型（就不报错了）
 /*
  * 语法：
  *   变量 as 类型

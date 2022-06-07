@@ -18,9 +18,10 @@ c = { name: '猪八戒', age: 18, gender: '男' }
  *       语法：(形参:类型, 形参:类型 ...) => 返回值
  * */
 let d: (a: number, b: number) => number
-// d = function (n1: string, n2: string): number{
-//     return 10;
-// }
+// 这样设置会报错，因为参数已经设置为number，不能再设置为string了
+/* d = function (n1: string, n2: string): number{
+    return 10;
+} */
 
 /*
  *   数组的类型声明：
@@ -59,8 +60,9 @@ i = {
   gender: Gender.Male, // 'male'
 }
 
-// console.log(i.gender === Gender.Male);
-// &表示同时
+// console.log(i.gender === Gender.Male) // True
+
+// &表示同时（要同时满足条件）
 let j: { name: string } & { age: number }
 // j = {name: '孙悟空', age: 18};
 
@@ -71,3 +73,4 @@ let l: myType
 let m: myType
 
 k = 2
+// l = 6 // 报错

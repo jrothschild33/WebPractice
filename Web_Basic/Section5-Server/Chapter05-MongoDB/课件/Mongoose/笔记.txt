@@ -1,0 +1,77 @@
+MongoDB
+	- MongoDB是一个NoSQL的数据库
+	- MongoDB是一款文档型数据库
+	- 数据库指的就是一个存储数据的仓库
+		数据库可以使我们完成对数据的持久化的操作
+	- MongoDB数据库中存储的数据的基本单位就是文档，
+		MongoDB中存储的就是文档，所谓文档其实就是一个“JSON”
+	- MongoDB中的“JSON”我们称为BSON，比普通的JSON的功能要更加的强大
+	- MongoDB数据库使用的是JavaScript进行操作的，在MongoDB含有一个对ES标准实现的引擎，
+		在MongoDB中所有ES中的语法中都可以使用
+		
+	- MongoDB的基本的指令
+		- 启动服务器
+			mongod --dbpath 路径 --port 端口号
+			
+		- 启动客户端
+			mongo
+		
+	- MongoDB的CRUD的操作			
+		- 基本操作
+			use 数据库
+				- 进入指定的数据库
+			show dbs
+				- 显示所有的数据库
+			show collections
+				- 显示数据库中所有的集合
+			db
+				- 显示当前所在的数据库
+	
+		- 向数据库中插入文档
+			- db.collection.insert()
+				- insert()可以向集合中插入一个或多个文档
+			- db.collection.insertOne()
+				- 向集合中插入一个文档
+			- db.collection.insertMany()
+				- 向集合中插入多个文档
+				
+		- 查询数据库中的文档
+			- db.collection.find()
+				- 可以根据指定条件从集合中查询所有符合条件的文档
+				- 返回的是一个数组
+			- db.collection.findOne()
+				- 查询第一个符合条件的文档
+				- 返回的是一个对象
+			- db.collection.find().count()
+				- 查询符合条件的文档的数量
+				
+		- 修改数据库中的文档
+			- db.collection.update()
+				- 可以修改、替换集合中的一个或多个文档
+			- db.collection.updateOne()
+				- 修改集合中的一个文档
+			- db.collection.updateMany()
+				- 修改集合中的多个文档
+			- db.collection.replaceOne()
+				- 替换集合中的一个文档
+				
+		- 删除集合中的文档
+			- db.collection.remove()
+				- 删除集合中的一个或多个文档（默认删除多个）
+			- db.collection.deleteOne()
+				- 删除集合中的一个文档
+			- db.collection.deleteMany()
+				- 删除集合中的多个文档
+			- 清空一个集合
+				db.collection.remove({})
+			- 删除一个集合
+				db.collection.drop()
+			- 删除一个数据库
+				db.dropDatabase()
+				
+				
+				
+				
+				
+		
+		

@@ -1,0 +1,41 @@
+﻿//1.进入my_test数据库
+//2.向数据库的user集合中插入一个文档	
+//3.查询user集合中的文档
+//4.向数据库的user集合中插入一个文档		
+//5.查询数据库user集合中的文档
+//6.统计数据库user集合中的文档数量
+//7.查询数据库user集合中username为sunwukong的文档
+//8.向数据库user集合中的username为sunwukong的文档，添加一个address属性，属性值为huaguoshan
+//9.使用{username:"tangseng"} 替换 username 为 zhubajie的文档
+//10.删除username为sunwukong的文档的address属性
+
+
+//11.向username为sunwukong的文档中，添加一个hobby:{cities:["beijing","shanghai","shenzhen"] , movies:["sanguo","hero"]}
+//12.向username为tangseng的文档中，添加一个hobby:{movies:["A Chinese Odyssey","King of comedy"]}
+//13.查询喜欢电影hero的文档
+//14.向tangseng中添加一个新的电影Interstellar
+//15.删除喜欢beijing的用户
+//16.删除user集合
+
+//17.向numbers中插入20000条数据
+
+
+//18.查询numbers中num为500的文档
+//19.查询numbers中num大于5000的文档
+//20.查询numbers中num小于30的文档
+//21.查询numbers中num大于40小于50的文档
+//22.查询numbers中num大于19996的文档
+//23.查看numbers集合中的前10条数据
+//24.查看numbers集合中的第11条到20条数据
+//25.查看numbers集合中的第21条到30条数据
+
+//26.将dept和emp集合导入到数据库中
+
+
+//27.查询工资小于2000的员工
+//28.查询工资在1000-2000之间的员工
+//29.查询工资小于1000或大于2500的员工
+//30.查询财务部的所有员工
+//31.查询销售部的所有员工
+//32.查询所有mgr为7698的所有员工
+//33.为所有薪资低于1000的员工增加工资400元

@@ -82,7 +82,7 @@ module.exports = {
                   [
                     'postcss-preset-env',
                     {
-                      browsers: 'last 2 versions',
+                      browsers: 'last 2 versions', // 兼容最新2个版本的浏览器
                     },
                   ],
                 ],

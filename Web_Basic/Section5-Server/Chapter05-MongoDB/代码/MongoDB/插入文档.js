@@ -11,16 +11,16 @@
     db.collection.insertMany() 
         - 插入多个文档对象
 */
-db.stus.insert({name:"猪八戒",age:28,gender:"男"});
+db.stus.insert({ name: '猪八戒', age: 28, gender: '男' })
 
 db.stus.insert([
-    {name:"沙和尚",age:38,gender:"男"},
-    {name:"白骨精",age:16,gender:"女"},
-    {name:"蜘蛛精",age:14,gender:"女"}
-]);
+  { name: '沙和尚', age: 38, gender: '男' },
+  { name: '白骨精', age: 16, gender: '女' },
+  { name: '蜘蛛精', age: 14, gender: '女' },
+])
 
-db.stus.insert({_id:"hello",name:"猪八戒",age:28,gender:"男"});
+db.stus.insert({ _id: 'hello', name: '猪八戒', age: 28, gender: '男' })
 
-db.stus.find();
+db.stus.find()
 
 ObjectId()

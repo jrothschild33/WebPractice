@@ -184,15 +184,15 @@ node
 					fs.createReadStream(path[, options])
 ---------------------------------------------------------------------
 练习
-1. 进入my_test数据库
-2. 向数据库的user集合中插入一个文档	
-3. 查询user集合中的文档
-4. 向数据库的user集合中插入一个文档		
-5. 查询数据库user集合中的文档
-6. 统计数据库user集合中的文档数量
-7. 查询数据库user集合中username为sunwukong的文档
-8. 向数据库user集合中的username为sunwukong的文档，添加一个address属性，属性值为huaguoshan
-9. 使用{username:"tangseng"} 替换 username 为 zhubajie的文档
+01. 进入my_test数据库
+02. 向数据库的user集合中插入一个文档	
+03. 查询user集合中的文档
+04. 向数据库的user集合中插入一个文档		
+05. 查询数据库user集合中的文档
+06. 统计数据库user集合中的文档数量
+07. 查询数据库user集合中username为sunwukong的文档
+08. 向数据库user集合中的username为sunwukong的文档，添加一个address属性，属性值为huaguoshan
+09. 使用{username:"tangseng"} 替换 username 为 zhubajie的文档
 10. 删除username为sunwukong的文档的address属性
 11. 向username为sunwukong的文档中，添加一个hobby:{cities:["beijing","shanghai","shenzhen"] , movies:["sanguo","hero"]}
 12. 向username为tangseng的文档中，添加一个hobby:{movies:["A Chinese Odyssey","King of comedy"]}

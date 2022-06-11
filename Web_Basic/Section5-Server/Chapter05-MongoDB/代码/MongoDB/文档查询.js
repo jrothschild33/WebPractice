@@ -14,9 +14,9 @@
        db.collection.find({}).count() 
         - 查询所有结果的数量
 */
-db.stus.find({_id:"hello"});
-db.stus.find({age:16 , name:"白骨精"});
-db.stus.find({age:28});
-db.stus.findOne({age:28});
+db.stus.find({ _id: 'hello' })
+db.stus.find({ age: 16, name: '白骨精' })
+db.stus.find({ age: 28 })
+db.stus.findOne({ age: 28 })
 
-db.stus.find({}).count();
+db.stus.find({}).count()

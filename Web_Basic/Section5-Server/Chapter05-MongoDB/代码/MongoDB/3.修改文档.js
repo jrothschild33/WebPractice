@@ -16,46 +16,50 @@
         db.collection.replaceOne()
         - 替换一个文档
 */
-db.stus.find({});
+db.stus.find({})
 
 //替换
-db.stus.update({name:"沙和尚"},{age:28});
+db.stus.update({ name: '沙和尚' }, { age: 28 })
 
 db.stus.update(
-    {"_id" : ObjectId("59c219689410bc1dbecc0709")},
-    {$set:{
-        gender:"男",
-        address:"流沙河"
-    }}    
+  { _id: ObjectId('59c219689410bc1dbecc0709') },
+  {
+    $set: {
+      gender: '男',
+      address: '流沙河',
+    },
+  }
 )
 
 db.stus.update(
-    {"_id" : ObjectId("59c219689410bc1dbecc0709")},
-    {$unset:{
-        address:1
-    }}    
+  { _id: ObjectId('59c219689410bc1dbecc0709') },
+  {
+    $unset: {
+      address: 1,
+    },
+  }
 )
 
 db.stus.updateMany(
-    {"name" : "猪八戒"},
-    {
-        $set:{
-            address:"猪老庄"
-        }
-    }    
-);
-    
+  { name: '猪八戒' },
+  {
+    $set: {
+      address: '猪老庄',
+    },
+  }
+)
+
 db.stus.update(
-    {"name" : "猪八戒"},
-    
-    {
-        $set:{
-        address:"呵呵呵"
-        }
-    }  ,
-    {
-        multi:true
-    }    
+  { name: '猪八戒' },
+
+  {
+    $set: {
+      address: '呵呵呵',
+    },
+  },
+  {
+    multi: true,
+  }
 )
 
 db.stus.find()

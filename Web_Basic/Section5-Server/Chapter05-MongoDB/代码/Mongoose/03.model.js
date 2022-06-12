@@ -1,24 +1,22 @@
-var mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1/mongoose_test",{useMongoClient:true});
-mongoose.connection.once("open",function () {
-	console.log("数据库连接成功~~~");
-});
+var mongoose = require('mongoose')
+mongoose.connect('mongodb://127.0.0.1/mongoose_test', { useMongoClient: true })
+mongoose.connection.once('open', function () {
+  console.log('数据库连接成功~~~')
+})
 
-var Schema = mongoose.Schema;
+var Schema = mongoose.Schema
 
 var stuSchema = new Schema({
+  name: String,
+  age: Number,
+  gender: {
+    type: String,
+    default: 'female',
+  },
+  address: String,
+})
 
-	name:String,
-	age:Number,
-	gender:{
-		type:String,
-		default:"female"
-	},
-	address:String
-
-});
-
-var StuModel = mongoose.model("student" , stuSchema);
+var StuModel = mongoose.model('student', stuSchema)
 /*
 	- 有了Model，我们就可以来对数据库进行增删改查的操作了
 
@@ -30,11 +28,11 @@ var StuModel = mongoose.model("student" , stuSchema);
 
  	查询的：
 	 Model.find(conditions, [projection], [options], [callback])
-	 	- 查询所有符合条件的文档 总会返回一个数组
+	 	- 查询所有符合条件的文档，返回一个数组
 	 Model.findById(id, [projection], [options], [callback])
 	 	- 根据文档的id属性查询文档
 	 Model.findOne([conditions], [projection], [options], [callback])
-	 	- 查询符合条件的第一个文档 总和返回一个具体的文档对象
+	 	- 查询符合条件的第一个文档，返回一个具体的文档对象
 
  		conditions 查询的条件
  		projection 投影 需要获取到的字段
@@ -48,55 +46,59 @@ var StuModel = mongoose.model("student" , stuSchema);
 
  */
 
-/*StuModel.find({name:"唐僧"},function (err , docs) {
-	if(!err){
-		console.log(docs);
-	}
-});*/
+// 查找name为'唐僧'的文档
+StuModel.find({ name: '唐僧' }, function (err, docs) {
+  if (!err) {
+    console.log(docs)
+  }
+})
+// 查询所有文档，只显示name列
+StuModel.find({}, { name: 1, _id: 0 }, function (err, docs) {
+  if (!err) {
+    console.log(docs)
+  }
+})
+// 查询所有文档，只显示name、age列，从第4条开始显示，仅显示一条数据
+StuModel.find({}, 'name age -_id', { skip: 3, limit: 1 }, function (err, docs) {
+  if (!err) {
+    console.log(docs)
+  }
+})
+// 查询第1条文档
+StuModel.findOne({}, function (err, doc) {
+  if (!err) {
+    console.log(doc)
+  }
+})
+// 按ID查询文档
+StuModel.findById('59c4c3cf4e5483191467d392', function (err, doc) {
+  if (!err) {
+    // 返回的对象就是Document文档对象，是Model的实例
+    console.log(doc instanceof StuModel)
+  }
+})
 
-/*StuModel.find({},{name:1 , _id:0},function (err , docs) {
-	if(!err){
-		console.log(docs);
-	}
-});*/
-
-/*StuModel.find({},"name age -_id", {skip:3 , limit:1} , function (err , docs) {
-	if(!err){
-		console.log(docs);
-	}
-});*/
-
-/*StuModel.findOne({} , function (err , doc) {
-	if(!err){
-		console.log(doc);
-	}
-});*/
-
-/*StuModel.findById("59c4c3cf4e5483191467d392" , function (err , doc) {
-	if(!err){
-		//console.log(doc);
-		//通过find()查询的结果，返回的对象，就是Document，文档对象
-		//Document对象是Model的实例
-		console.log(doc instanceof StuModel);
-	}
-});*/
-
-
-
-/*StuModel.create([
-	{
-		name:"沙和尚",
-		age:38,
-		gender:"male",
-		address:"流沙河"
-	}
-
-],function (err) {
-	if(!err){
-		console.log(arguments);
-	}
-});*/
-
+StuModel.create(
+  [
+    {
+      name: '沙和尚',
+      age: 38,
+      gender: 'male',
+      address: '流沙河',
+    },
+    {
+      name: '孙悟空',
+      age: 26,
+      gender: 'male',
+      address: '花果山',
+    },
+  ],
+  function (err) {
+    if (!err) {
+      console.log(arguments)
+    }
+  }
+)
 
 /*
 	修改
@@ -112,12 +114,12 @@ var StuModel = mongoose.model("student" , stuSchema);
  Model.replaceOne(conditions, doc, [options], [callback])
 * */
 
-//修改唐僧的年龄为20
-/*StuModel.updateOne({name:"唐僧"},{$set:{age:20}},function (err) {
-	if(!err){
-		console.log("修改成功");
-	}
-});*/
+// 修改唐僧的年龄为20
+StuModel.updateOne({ name: '唐僧' }, { $set: { age: 20 } }, function (err) {
+  if (!err) {
+    console.log('修改成功')
+  }
+})
 
 /*
 	删除：
@@ -125,19 +127,20 @@ var StuModel = mongoose.model("student" , stuSchema);
  Model.deleteOne(conditions, [callback])
  Model.deleteMany(conditions, [callback])
  */
-/*StuModel.remove({name:"白骨精"},function (err) {
-	if(!err){
-		console.log("删除成功~~");
-	}
-});*/
+// 删除name为'白骨精'的文档
+StuModel.remove({ name: '白骨精' }, function (err) {
+  if (!err) {
+    console.log('删除成功~~')
+  }
+})
 
 /*
  Model.count(conditions, [callback])
  	- 统计文档的数量的
  */
-StuModel.count({},function (err , count) {
-	if(!err){
-		console.log(count);
-	}
-});
-
+// 统计StuModel中的文档数量
+StuModel.count({}, function (err, count) {
+  if (!err) {
+    console.log(count)
+  }
+})

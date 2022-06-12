@@ -10,24 +10,22 @@
         - 一般数据库中的数据都不会删除，所以删除的方法很少调用
             一般会在数据中添加一个字段，来表示数据是否被删除
 */
-        
+
 db.stus.insert([
-    
-    {
-        name:"zbj",
-        isDel:0
-        },
-        {
-        name:"shs",
-        isDel:0
-        },
-    {
-    name:"ts",
-        isDel:0
-    }
+  {
+    name: 'zbj',
+    isDel: 0,
+  },
+  {
+    name: 'shs',
+    isDel: 0,
+  },
+  {
+    name: 'ts',
+    isDel: 0,
+  },
+])
 
-]);
+db.stus.updateOne({ name: 'ts' }, { $set: { isDel: 1 } })
 
-db.stus.updateOne({name:"ts"},{$set:{isDel:1}});
-    
-db.stus.find({isDel:0})    
+db.stus.find({ isDel: 0 })

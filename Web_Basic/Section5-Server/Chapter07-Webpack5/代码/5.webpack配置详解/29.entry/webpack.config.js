@@ -1,5 +1,5 @@
-const { resolve } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { resolve } = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 /*
   entry: 入口起点
@@ -27,13 +27,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    index: ['./src/index.js', './src/count.js'], 
-    add: './src/add.js'
+    index: ['./src/index.js', './src/count.js'],
+    add: './src/add.js',
   },
   output: {
     filename: '[name].js',
-    path: resolve(__dirname, 'build')
+    path: resolve(__dirname, 'build'),
   },
   plugins: [new HtmlWebpackPlugin()],
-  mode: 'development'
-};
+  mode: 'development',
+}

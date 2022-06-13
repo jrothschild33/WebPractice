@@ -1,11 +1,11 @@
-const { resolve } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { resolve } = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: './src/js/index.js',
   output: {
     filename: 'js/built.js',
-    path: resolve(__dirname, 'build')
+    path: resolve(__dirname, 'build'),
   },
   module: {
     rules: [
@@ -25,15 +25,15 @@ module.exports = {
         loader: 'eslint-loader',
         options: {
           // 自动修复eslint的错误
-          fix: true
-        }
-      }
-    ]
+          fix: true,
+        },
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html'
-    })
+      template: './src/index.html',
+    }),
   ],
-  mode: 'development'
-};
+  mode: 'development',
+}

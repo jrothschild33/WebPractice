@@ -10,14 +10,14 @@
         解决：修改entry入口，将html文件引入
 */
 
-const { resolve } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { resolve } = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: ['./src/js/index.js', './src/index.html'],
   output: {
     filename: 'js/built.js',
-    path: resolve(__dirname, 'build')
+    path: resolve(__dirname, 'build'),
   },
   module: {
     rules: [
@@ -25,12 +25,12 @@ module.exports = {
       {
         // 处理less资源
         test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader']
+        use: ['style-loader', 'css-loader', 'less-loader'],
       },
       {
         // 处理css资源
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         // 处理图片资源
@@ -41,13 +41,13 @@ module.exports = {
           name: '[hash:10].[ext]',
           // 关闭es6模块化
           esModule: false,
-          outputPath: 'imgs'
-        }
+          outputPath: 'imgs',
+        },
       },
       {
         // 处理html中img资源
         test: /\.html$/,
-        loader: 'html-loader'
+        loader: 'html-loader',
       },
       {
         // 处理其他资源
@@ -55,16 +55,16 @@ module.exports = {
         loader: 'file-loader',
         options: {
           name: '[hash:10].[ext]',
-          outputPath: 'media'
-        }
-      }
-    ]
+          outputPath: 'media',
+        },
+      },
+    ],
   },
   plugins: [
     // plugins的配置
     new HtmlWebpackPlugin({
-      template: './src/index.html'
-    })
+      template: './src/index.html',
+    }),
   ],
   mode: 'development',
   devServer: {
@@ -74,6 +74,6 @@ module.exports = {
     open: true,
     // 开启HMR功能
     // 当修改了webpack配置，新配置要想生效，必须重新webpack服务
-    hot: true
-  }
-};
+    hot: true,
+  },
+}

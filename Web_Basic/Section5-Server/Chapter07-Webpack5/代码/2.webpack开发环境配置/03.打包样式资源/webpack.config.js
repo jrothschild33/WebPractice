@@ -6,7 +6,7 @@
 */
 
 // resolve用来拼接绝对路径的方法
-const { resolve } = require('path');
+const { resolve } = require('path')
 
 module.exports = {
   // webpack配置
@@ -18,7 +18,7 @@ module.exports = {
     filename: 'built.js',
     // 输出路径
     // __dirname nodejs的变量，代表当前文件的目录绝对路径
-    path: resolve(__dirname, 'build')
+    path: resolve(__dirname, 'build'),
   },
   // loader的配置
   module: {
@@ -34,8 +34,8 @@ module.exports = {
           // 创建style标签，将js中的样式资源插入进行，添加到head中生效
           'style-loader',
           // 将css文件变成commonjs模块加载js中，里面内容是样式字符串
-          'css-loader'
-        ]
+          'css-loader',
+        ],
       },
       {
         test: /\.less$/,
@@ -44,10 +44,10 @@ module.exports = {
           'css-loader',
           // 将less文件编译成css文件
           // 需要下载 less-loader和less
-          'less-loader'
-        ]
-      }
-    ]
+          'less-loader',
+        ],
+      },
+    ],
   },
   // plugins的配置
   plugins: [

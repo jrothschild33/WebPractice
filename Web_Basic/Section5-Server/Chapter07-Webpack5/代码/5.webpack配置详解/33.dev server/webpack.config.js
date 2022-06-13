@@ -1,28 +1,28 @@
-const { resolve } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { resolve } = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: './src/js/index.js',
   output: {
     filename: 'js/[name].js',
-    path: resolve(__dirname, 'build')
+    path: resolve(__dirname, 'build'),
   },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      }
-    ]
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
   },
   plugins: [new HtmlWebpackPlugin()],
   mode: 'development',
   resolve: {
     alias: {
-      $css: resolve(__dirname, 'src/css')
+      $css: resolve(__dirname, 'src/css'),
     },
     extensions: ['.js', '.json', '.jsx', '.css'],
-    modules: [resolve(__dirname, '../../node_modules'), 'node_modules']
+    modules: [resolve(__dirname, '../../node_modules'), 'node_modules'],
   },
   devServer: {
     // 运行代码的目录
@@ -31,7 +31,7 @@ module.exports = {
     watchContentBase: true,
     watchOptions: {
       // 忽略文件
-      ignored: /node_modules/
+      ignored: /node_modules/,
     },
     // 启动gzip压缩
     compress: true,
@@ -56,9 +56,9 @@ module.exports = {
         target: 'http://localhost:3000',
         // 发送请求时，请求路径重写：将 /api/xxx --> /xxx （去掉/api）
         pathRewrite: {
-          '^/api': ''
-        }
-      }
-    }
-  }
-};
+          '^/api': '',
+        },
+      },
+    },
+  },
+}

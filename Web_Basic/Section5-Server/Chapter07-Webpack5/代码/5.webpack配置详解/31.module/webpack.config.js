@@ -1,11 +1,11 @@
-const { resolve } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { resolve } = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: './src/index.js',
   output: {
     filename: 'js/[name].js',
-    path: resolve(__dirname, 'build')
+    path: resolve(__dirname, 'build'),
   },
   module: {
     rules: [
@@ -13,7 +13,7 @@ module.exports = {
       {
         test: /\.css$/,
         // 多个loader用use
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.js$/,
@@ -27,14 +27,14 @@ module.exports = {
         // enforce: 'post',
         // 单个loader用loader
         loader: 'eslint-loader',
-        options: {}
+        options: {},
       },
       {
         // 以下配置只会生效一个
-        oneOf: []
-      }
-    ]
+        oneOf: [],
+      },
+    ],
   },
   plugins: [new HtmlWebpackPlugin()],
-  mode: 'development'
-};
+  mode: 'development',
+}

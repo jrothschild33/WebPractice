@@ -1,6 +1,6 @@
-const { resolve } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { resolve } = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
 
 // 设置nodejs环境变量
@@ -10,7 +10,7 @@ module.exports = {
   entry: './src/js/index.js',
   output: {
     filename: 'js/built.js',
-    path: resolve(__dirname, 'build')
+    path: resolve(__dirname, 'build'),
   },
   module: {
     rules: [
@@ -25,23 +25,23 @@ module.exports = {
               ident: 'postcss',
               plugins: () => [
                 // postcss的插件
-                require('postcss-preset-env')()
-              ]
-            }
-          }
-        ]
-      }
-    ]
+                require('postcss-preset-env')(),
+              ],
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: './src/index.html',
     }),
     new MiniCssExtractPlugin({
-      filename: 'css/built.css'
+      filename: 'css/built.css',
     }),
     // 压缩css
-    new OptimizeCssAssetsWebpackPlugin()
+    new OptimizeCssAssetsWebpackPlugin(),
   ],
-  mode: 'development'
-};
+  mode: 'development',
+}

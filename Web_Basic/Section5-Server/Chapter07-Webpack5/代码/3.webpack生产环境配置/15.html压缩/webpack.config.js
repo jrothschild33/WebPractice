@@ -1,11 +1,11 @@
-const { resolve } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { resolve } = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: './src/js/index.js',
   output: {
     filename: 'js/built.js',
-    path: resolve(__dirname, 'build')
+    path: resolve(__dirname, 'build'),
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -15,9 +15,9 @@ module.exports = {
         // 移除空格
         collapseWhitespace: true,
         // 移除注释
-        removeComments: true
-      }
-    })
+        removeComments: true,
+      },
+    }),
   ],
-  mode: 'production'
-};
+  mode: 'production',
+}

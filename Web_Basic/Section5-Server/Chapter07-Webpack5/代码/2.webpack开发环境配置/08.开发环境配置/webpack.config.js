@@ -5,14 +5,14 @@
       npx webpack-dev-server 只会在内存中编译打包，没有输出
 */
 
-const { resolve } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { resolve } = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: './src/js/index.js',
   output: {
     filename: 'js/built.js',
-    path: resolve(__dirname, 'build')
+    path: resolve(__dirname, 'build'),
   },
   module: {
     rules: [
@@ -20,12 +20,12 @@ module.exports = {
       {
         // 处理less资源
         test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader']
+        use: ['style-loader', 'css-loader', 'less-loader'],
       },
       {
         // 处理css资源
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         // 处理图片资源
@@ -36,13 +36,13 @@ module.exports = {
           name: '[hash:10].[ext]',
           // 关闭es6模块化
           esModule: false,
-          outputPath: 'imgs'
-        }
+          outputPath: 'imgs',
+        },
       },
       {
         // 处理html中img资源
         test: /\.html$/,
-        loader: 'html-loader'
+        loader: 'html-loader',
       },
       {
         // 处理其他资源
@@ -50,22 +50,22 @@ module.exports = {
         loader: 'file-loader',
         options: {
           name: '[hash:10].[ext]',
-          outputPath: 'media'
-        }
-      }
-    ]
+          outputPath: 'media',
+        },
+      },
+    ],
   },
   plugins: [
     // plugins的配置
     new HtmlWebpackPlugin({
-      template: './src/index.html'
-    })
+      template: './src/index.html',
+    }),
   ],
   mode: 'development',
   devServer: {
     contentBase: resolve(__dirname, 'build'),
     compress: true,
     port: 3000,
-    open: true
-  }
-};
+    open: true,
+  },
+}

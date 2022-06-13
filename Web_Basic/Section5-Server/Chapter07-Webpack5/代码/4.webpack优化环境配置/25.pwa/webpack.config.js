@@ -1,8 +1,8 @@
-const { resolve } = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+const { resolve } = require('path')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 
 /*
   PWA: 渐进式网络开发应用程序(离线可访问)
@@ -10,7 +10,7 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 */
 
 // 定义nodejs环境变量：决定使用browserslist的哪个环境
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'production'
 
 // 复用loader
 const commonCssLoader = [
@@ -21,16 +21,16 @@ const commonCssLoader = [
     loader: 'postcss-loader',
     options: {
       ident: 'postcss',
-      plugins: () => [require('postcss-preset-env')()]
-    }
-  }
-];
+      plugins: () => [require('postcss-preset-env')()],
+    },
+  },
+]
 
 module.exports = {
   entry: './src/js/index.js',
   output: {
     filename: 'js/built.[contenthash:10].js',
-    path: resolve(__dirname, 'build')
+    path: resolve(__dirname, 'build'),
   },
   module: {
     rules: [
@@ -42,8 +42,8 @@ module.exports = {
         enforce: 'pre',
         loader: 'eslint-loader',
         options: {
-          fix: true
-        }
+          fix: true,
+        },
       },
       {
         // 以下loader只会匹配一个
@@ -51,11 +51,11 @@ module.exports = {
         oneOf: [
           {
             test: /\.css$/,
-            use: [...commonCssLoader]
+            use: [...commonCssLoader],
           },
           {
             test: /\.less$/,
-            use: [...commonCssLoader, 'less-loader']
+            use: [...commonCssLoader, 'less-loader'],
           },
           /*
             正常来讲，一个文件只能被一个loader处理。
@@ -75,15 +75,15 @@ module.exports = {
                     corejs: { version: 3 },
                     targets: {
                       chrome: '60',
-                      firefox: '50'
-                    }
-                  }
-                ]
+                      firefox: '50',
+                    },
+                  },
+                ],
               ],
               // 开启babel缓存
               // 第二次构建时，会读取之前的缓存
-              cacheDirectory: true
-            }
+              cacheDirectory: true,
+            },
           },
           {
             test: /\.(jpg|png|gif)/,
@@ -92,35 +92,35 @@ module.exports = {
               limit: 8 * 1024,
               name: '[hash:10].[ext]',
               outputPath: 'imgs',
-              esModule: false
-            }
+              esModule: false,
+            },
           },
           {
             test: /\.html$/,
-            loader: 'html-loader'
+            loader: 'html-loader',
           },
           {
             exclude: /\.(js|css|less|html|jpg|png|gif)/,
             loader: 'file-loader',
             options: {
-              outputPath: 'media'
-            }
-          }
-        ]
-      }
-    ]
+              outputPath: 'media',
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'css/built.[contenthash:10].css'
+      filename: 'css/built.[contenthash:10].css',
     }),
     new OptimizeCssAssetsWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       minify: {
         collapseWhitespace: true,
-        removeComments: true
-      }
+        removeComments: true,
+      },
     }),
     new WorkboxWebpackPlugin.GenerateSW({
       /*
@@ -130,9 +130,9 @@ module.exports = {
         生成一个 serviceworker 配置文件~
       */
       clientsClaim: true,
-      skipWaiting: true
-    })
+      skipWaiting: true,
+    }),
   ],
   mode: 'production',
-  devtool: 'source-map'
-};
+  devtool: 'source-map',
+}

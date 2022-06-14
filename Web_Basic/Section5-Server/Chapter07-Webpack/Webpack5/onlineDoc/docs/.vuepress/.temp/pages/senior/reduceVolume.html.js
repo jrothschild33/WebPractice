@@ -83,7 +83,13 @@ export const data = {
     }
   ],
   "git": {
-    "contributors": []
+    "contributors": [
+      {
+        "name": "Jason Zhou",
+        "email": "dr_neutron@126.com",
+        "commits": 1
+      }
+    ]
   },
   "filePathRelative": "senior/reduceVolume.md"
 }

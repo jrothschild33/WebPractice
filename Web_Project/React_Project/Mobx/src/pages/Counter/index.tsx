@@ -1,25 +1,9 @@
-import { autorun, reaction } from 'mobx'
+// observer是一个高阶组件函数，需要包裹一个组件，实现响应式更新
 import { observer } from 'mobx-react'
-import { useStore } from '../store'
+import { useStore } from '../../store'
 
 export default observer(function Counter() {
-  // function Counter() {
   const { counterStore } = useStore()
-  /* // 监听属性：autorun，初始化时会执行一次，可监视所有属性
-  autorun(() => {
-    console.log('counter上的count属性变化了：', counterStore.count)
-    console.log('counter上的double属性变化了：', counterStore.double)
-  })
-
-  // 监听属性：reaction，初始化时不执行，可监视指定属性
-  // 参数1：data函数，返回值会作为第二个函数输入
-  // 参数2：回调函数
-  reaction(
-    () => counterStore.count,
-    (value, oldValue) => {
-      console.log('count新值 vs 旧值：', value, oldValue)
-    }
-  ) */
   return (
     <>
       <h3>Counter Store</h3>
@@ -64,5 +48,3 @@ export default observer(function Counter() {
     </>
   )
 })
-
-// export default observer(Counter)

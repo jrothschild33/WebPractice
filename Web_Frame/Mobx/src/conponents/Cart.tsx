@@ -1,6 +1,7 @@
+import { observer } from 'mobx-react'
 import { useStore } from '../store'
 
-export function Cart() {
+export default observer(function Cart() {
   const { cartStore } = useStore()
   return (
     <>
@@ -8,4 +9,4 @@ export function Cart() {
       <div>{`list值：${cartStore.list}`}</div>
     </>
   )
-}
+})

@@ -1,5 +1,6 @@
 import { makeObservable } from 'mobx'
 import { action, computed, observable, runInAction } from 'mobx'
+
 // import { makeAutoObservable} from 'mobx'
 // import { configure } from 'mobx'
 
@@ -65,19 +66,3 @@ export class Counter {
     return this.count * 2
   }
 }
-
-// 监听属性：autorun，初始化时会执行一次，可监视所有属性
-/* autorun(() => {
-  console.log('counter上的count属性变化了：', counter.count)
-  console.log('counter上的double属性变化了：', counter.double)
-}) */
-
-// 监听属性：reaction，初始化时不执行，可监视指定属性
-// 参数1：data函数，返回值会作为第二个函数输入
-// 参数2：回调函数
-/* reaction(
-  () => counter.count,
-  (value, oldValue) => {
-    console.log('count新值 vs 旧值：', value, oldValue)
-  }
-) */

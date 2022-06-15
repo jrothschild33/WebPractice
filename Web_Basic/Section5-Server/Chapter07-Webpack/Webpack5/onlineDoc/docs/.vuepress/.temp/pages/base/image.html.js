@@ -44,7 +44,13 @@ export const data = {
     }
   ],
   "git": {
-    "contributors": []
+    "contributors": [
+      {
+        "name": "Jason Zhou",
+        "email": "dr_neutron@126.com",
+        "commits": 1
+      }
+    ]
   },
   "filePathRelative": "base/image.md"
 }

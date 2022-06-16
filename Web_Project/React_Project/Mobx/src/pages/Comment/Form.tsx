@@ -13,7 +13,7 @@ export default observer(function Form() {
   return (
     <div className="commment-send">
       <div className="user-face">
-        <img className="user-head" src="https://c-ssl.dtstatic.com/uploads/item/201901/13/20190113221500_jPjPv.thumb.1000_0.jpeg" alt="" />
+        <img className="user-head" src="http://www.itcast.cn/2020gw/images/indeximg/logobot2.jpg" alt="" />
       </div>
       <div className="textarea-container">
         <textarea cols={80} rows={5} placeholder="发条友善的评论" className="ipt-txt" value={value} onChange={(e) => setValue(e.target.value)} />

@@ -29,7 +29,7 @@ export class Comment {
     const newObj = {
       attitute: 0,
       author: '默认用户',
-      avatar: 'https://c-ssl.dtstatic.com/uploads/item/201901/13/20190113221500_jPjPv.thumb.1000_0.jpeg',
+      avatar: 'http://www.itcast.cn/2020gw/images/indeximg/logobot2.jpg',
       comment: content,
       time: new Date().toLocaleDateString(),
     }

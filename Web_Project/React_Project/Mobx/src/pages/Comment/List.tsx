@@ -2,7 +2,8 @@
 import { observer } from 'mobx-react'
 import { useStore } from '../../store'
 
-export default observer(function List() {
+// export default observer(function List() {
+export const List = observer(() => {
   const { commentStore } = useStore()
   return (
     <div className="comment-list">

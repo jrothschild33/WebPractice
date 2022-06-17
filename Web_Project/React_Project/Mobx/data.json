@@ -21,16 +21,24 @@
       "author": "xixibaby",
       "comment": "我要吃糊糊！",
       "time": "2023-04-06 09:15:33",
-      "attitute": 0,
+      "attitute": 1,
       "avatar": "http://www.itcast.cn/2020gw/images/indeximg/logobot2.jpg"
     },
     {
-      "attitute": 0,
+      "attitute": 1,
       "author": "默认用户",
       "avatar": "http://www.itcast.cn/2020gw/images/indeximg/logobot2.jpg",
       "comment": "测试一下",
       "time": "2022/6/16",
       "id": 4
+    },
+    {
+      "attitute": 0,
+      "author": "默认用户",
+      "avatar": "http://www.itcast.cn/2020gw/images/indeximg/logobot2.jpg",
+      "comment": "6月16日美股暴跌，而A股独树一帜，领涨全球",
+      "time": "2022/6/17",
+      "id": 5
     }
   ]
 }

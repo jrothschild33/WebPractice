@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Counter from './pages/Counter'
-import Comment from './pages/Comment'
+import { Counter } from './pages/Counter'
+import { Comment } from './pages/Comment'
 
 function App() {
   return (

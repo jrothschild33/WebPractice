@@ -1,11 +1,12 @@
-import Form from './Form'
-import List from './List'
+import { Form } from './Form'
+import { List } from './List'
 // observer是一个高阶组件函数，需要包裹一个组件，实现响应式更新
 import { observer } from 'mobx-react'
 import { useStore } from '../../store'
 import { useEffect } from 'react'
 
-export default observer(function Comment() {
+// export default observer(function Comment() {
+export const Comment = observer(() => {
   const { commentStore } = useStore()
   // 发送请求
   useEffect(() => {

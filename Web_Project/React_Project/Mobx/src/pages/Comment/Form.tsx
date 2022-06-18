@@ -3,7 +3,8 @@ import { observer } from 'mobx-react'
 import { useState } from 'react'
 import { useStore } from '../../store'
 
-export default observer(function Form() {
+// export default observer(function Form() {
+export const Form = observer(() => {
   const [value, setValue] = useState('')
   const { commentStore } = useStore()
   const add = () => {

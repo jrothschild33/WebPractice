@@ -2,7 +2,8 @@
 import { observer } from 'mobx-react'
 import { useStore } from '../../store'
 
-export default observer(function Counter() {
+// export default observer(function Counter() {
+export const Counter = observer(() => {
   const { counterStore } = useStore()
   return (
     <>

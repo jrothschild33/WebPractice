@@ -11,5 +11,5 @@ greet('小锋', new Date())
 // msg = 'hello world'
 // msg = 100
 
-let surname: string = undefined
-let age: number = null
+// let surname: string = undefined // 报错
+// let age: number = null  // 报错

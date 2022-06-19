@@ -4,7 +4,7 @@
 
 // greet('Felixlu')
 
-// function getFavoriteNumber() {
+// function getFavoriteNumber() :number {
 //   return 26
 // }
 

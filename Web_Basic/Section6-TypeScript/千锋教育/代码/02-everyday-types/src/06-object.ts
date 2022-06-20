@@ -9,12 +9,13 @@ printCoord({
 })
 
 function printName(obj: { first: string, last?: string }) {
-  // console.log(obj.last.toUpperCase())
-  // if (obj.last !== undefined) {
-  //   console.log(obj.last.toLowerCase())
-  // }
+  console.log(obj.last.toUpperCase())
+  if (obj.last !== undefined) {
+    console.log(obj.last.toLowerCase())
+  }
   console.log(obj.last?.toUpperCase())
 }
+
 printName({
   first: 'Felix'
 })

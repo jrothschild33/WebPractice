@@ -1,4 +1,4 @@
-function printAll(strs: string | string[] | null) {
+/* function printAll(strs: string | string[] | null) {
   if (strs) {
     if (typeof strs === 'object') {
       for (const s of strs) {
@@ -25,4 +25,4 @@ function multiplyAll(
   }
 }
 
-console.log(multiplyAll(undefined, 2))
+console.log(multiplyAll(undefined, 2)) */

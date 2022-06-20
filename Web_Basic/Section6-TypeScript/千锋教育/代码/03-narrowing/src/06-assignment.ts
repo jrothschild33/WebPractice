@@ -10,4 +10,5 @@ x = 'goodbye!'
 console.log(x)
 
 // let x: boolean
-x = true */
+x = true
+ */

@@ -1,3 +1,10 @@
+/* function padLeft(padding: number | string, input: string) {
+  if (typeof padding === 'number') {
+    return new Array(padding + 1).join(' ') + input
+  }
+  return padding + input
+}
+
 function example() {
   let x: string | number | boolean
 
@@ -22,3 +29,4 @@ let x = example()
 x = 'hello'
 x = 100
 x = true
+ */

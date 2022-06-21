@@ -10,4 +10,5 @@ myForEach([1, 3, 4], (a, i) => console.log(a, i))
 
 myForEach([1, 2, 3], (a, i) => {
   console.log(i.toFixed())
-}) */
+})
+ */

@@ -12,20 +12,15 @@ function isFish(pet: Fish | Bird): pet is Fish {
   return (pet as Fish).swim !== undefined
 }
 
-
 function getSmallPet(): Fish | Bird {
   let fish: Fish = {
     name: 'sharkey',
-    swim: () => {
-
-    }
+    swim: () => {},
   }
 
   let bird: Bird = {
     name: 'sparrow',
-    fly: () => {
-
-    }
+    fly: () => {},
   }
 
   return true ? bird : fish
@@ -48,4 +43,5 @@ const underWater3: Fish[] = zoo.filter((pet): pet is Fish => {
     return false
   }
   return isFish(pet)
-}) */
+})
+ */

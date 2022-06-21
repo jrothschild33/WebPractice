@@ -1,4 +1,4 @@
-type DescribableFunction = {
+/* type DescribableFunction = {
   description: string
   (someArg: number): boolean
 }
@@ -13,4 +13,4 @@ function fn1(n: number) {
 }
 fn1.description = 'hello'
 
-doSomething(fn1)
+doSomething(fn1) */

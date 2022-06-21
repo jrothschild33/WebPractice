@@ -2,8 +2,7 @@
   kind: 'circle' | 'square'
   radius?: number
   sideLength?: number
-}
- */
+} */
 
 /* interface Circle {
   kind: 'circle'

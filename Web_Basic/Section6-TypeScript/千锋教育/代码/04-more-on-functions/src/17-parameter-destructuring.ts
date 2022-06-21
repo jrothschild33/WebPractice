@@ -1,4 +1,4 @@
-/* type ABC = { a: number, b: number, c: number }
+/* type ABC = { a: number; b: number; c: number }
 
 function sum({ a, b, c }: ABC) {
   console.log(a + b + c)
@@ -7,5 +7,6 @@ function sum({ a, b, c }: ABC) {
 sum({
   a: 10,
   b: 3,
-  c: 9
-}) */
+  c: 9,
+})
+ */

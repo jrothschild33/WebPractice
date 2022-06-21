@@ -2,9 +2,9 @@
 function len(arr: any[]): number
 function len(x: any) {
   return x.length
-} */
+}
 
-/* function len(x: any[] | string) {
+function len(x: any[] | string) {
   return x.length
 }
 

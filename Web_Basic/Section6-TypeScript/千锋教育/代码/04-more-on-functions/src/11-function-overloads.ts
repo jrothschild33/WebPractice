@@ -10,4 +10,5 @@ function makeDate(mOrTimestamp: number, d?: number, y?: number): Date {
 
 const d1 = makeDate(12345678)
 const d2 = makeDate(5, 6, 7)
-const d3 = makeDate(5, 9) */
+const d3 = makeDate(5, 9)
+ */

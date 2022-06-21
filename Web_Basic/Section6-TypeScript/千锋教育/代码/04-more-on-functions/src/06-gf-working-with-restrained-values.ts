@@ -1,7 +1,4 @@
-/* function minimumLength<Type extends { length: number }>(
-  obj: Type,
-  minimum: number
-): Type {
+/* function minimumLength<Type extends { length: number }>(obj: Type, minimum: number): Type {
   if (obj.length >= minimum) {
     return obj
   } else {
@@ -10,4 +7,5 @@
 }
 
 const arr = minimumLength([1, 2, 3], 6)
-console.log(arr.slice(0)) */
+console.log(arr.slice(0))
+ */

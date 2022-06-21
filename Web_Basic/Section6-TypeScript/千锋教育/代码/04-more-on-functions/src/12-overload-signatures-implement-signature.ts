@@ -1,10 +1,6 @@
 /* function fn(x: string): void
-function fn() {
-
-}
-
+function fn() {}
 fn('hello') */
-
 
 /* function fn(x: boolean): void
 function fn(x: string): void

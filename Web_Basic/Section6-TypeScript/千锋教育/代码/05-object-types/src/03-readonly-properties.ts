@@ -5,11 +5,9 @@
 function doSomething(obj: SomeType) {
   console.log(obj.prop)
   // obj.prop = 'hello'
-}
+} */
 
-
-
-interface Home {
+/* interface Home {
   readonly resident: {
     name: string
     age: number
@@ -22,15 +20,13 @@ function visitForBirthday(home: Home) {
 }
 
 function evict(home: Home) {
-  // home.resident = {
-  //   name: 'Felix',
-  //   age: 18
-  // }
-}
+  home.resident = {
+    name: 'Felix',
+    age: 18
+  }
+} */
 
-
-
-interface Person {
+/* interface Person {
   name: string
   age: number
 }
@@ -42,7 +38,7 @@ interface ReadonlyPerson {
 
 let writablePerson: Person = {
   name: 'Felix',
-  age: 18
+  age: 18,
 }
 
 let readonlyPerson: ReadonlyPerson = writablePerson

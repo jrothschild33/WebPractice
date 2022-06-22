@@ -1,6 +1,6 @@
-/* // function create<Type>(c: { new (): Type }): Type {
-//   return new c()
-// }
+/* function create<Type>(c: { new (): Type }): Type {
+  return new c()
+}
 
 class BeeKeeper {
   hasMask: boolean = true

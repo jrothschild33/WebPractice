@@ -8,7 +8,7 @@ interface Sister {
 
 const sister1: Sister = {
   name: 'sisterAn',
-  age: 20
+  age: 20,
 } */
 
 /* type Sister = {

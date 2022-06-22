@@ -1,15 +1,15 @@
-/* // function doSomething(value: Array<string>) {
-//   // ...
-// }
+/* function doSomething(value: Array<string>) {
+  // ...
+}
 
-// let myArray: string[] = ['hello', 'world']
+let myArray: string[] = ['hello', 'world']
 
-// doSomething(myArray)
-// doSomething(new Array('hello', 'world'))
-
+doSomething(myArray)
+doSomething(new Array('hello', 'world'))
 
 interface Array2<Type> {
-  lenght: number,
+  lenght: number
   pop(): Type | undefined
-  push(...item: Type[]): number 
-} */
+  push(...item: Type[]): number
+}
+ */

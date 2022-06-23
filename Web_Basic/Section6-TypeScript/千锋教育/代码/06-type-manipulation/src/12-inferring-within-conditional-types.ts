@@ -1,4 +1,4 @@
-type GetReturnType<Type> = Type extends (...args: never[]) => infer Return ? Return : never
+/* type GetReturnType<Type> = Type extends (...args: never[]) => infer Return ? Return : never
 
 // 相当于：type Num = number
 type Num = GetReturnType<() => number>
@@ -25,4 +25,4 @@ function stringOrNum(x: string | number): string | number {
 
 // 相当于：type T1 = string | number
 type T1 = ReturnType<typeof stringOrNum>
-const t1: T1 = true
+const t1: T1 = true */

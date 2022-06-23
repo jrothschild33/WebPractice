@@ -61,5 +61,4 @@ const age2: Age2 = 300
 // 如果想用索引访问类型，不能用const将key定义为值，而只能用type将key定义为类型
 // const key = 'age'
 type key = 'age'
-type Age3 = Person[key]
- */
+type Age3 = Person[key] */

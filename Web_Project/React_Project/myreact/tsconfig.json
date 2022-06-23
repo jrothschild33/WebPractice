@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "experimentalDecorators": true,
+    "target": "esnext",
+    "outDir": "./dist",
+    "lib": ["es6", "DOM", "ESNext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -14,15 +16,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "experimentalDecorators": true,
     "jsx": "react-jsx",
     "baseUrl": ".", // 查找非相对路径的模块的起始位置
     "paths": {
       "@/*": ["./src/*"],
-      "@pages/*": ["src/pages/*"],
-      "@assets/*": ["src/assets/*"]
+      "@pages/*": ["./src/pages/*"],
+      "@assets/*": ["./src/assets/*"]
     }
   },
-  // "include": ["src"]
-  "include": [/*需要编译的文件*/ "./src/**/*", "src/app.tsx"]
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"]
 }

@@ -14,7 +14,7 @@ const tailLayout = {
 
 // 定义提交表单的处理函数：登录处理
 const handleLogin = (form: any) => {
-  login(form.username, form.password).then((res) => {
+  login(form.name, form.password).then((res) => {
     // 这里的结构也是服务器后端定义的
     const { code, msg } = res.data
     if (code === 0) {
@@ -36,7 +36,7 @@ export default function Login() {
         <Form id="login-form" {...layout} ref={formRef} onFinish={handleLogin}>
           <Form.Item
             label="用户名"
-            name="username"
+            name="name"
             // 表单校验
             rules={[
               {

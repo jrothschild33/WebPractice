@@ -1,0 +1,53 @@
+version: '3'
+services:
+  nginx:
+    restart: always
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - 8088:80
+    environment:
+      TZ: 'Asia/Shanghai'
+    networks:
+      - front
+    volumes:
+      - ./nginx/nginx.conf/default.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/log:/var/log/nginx
+      - ./static:/usr/share/nginx/html
+  go:
+    container_name: go # 指定容器的名称
+    image: alpine:latest
+    restart: always
+    ports:
+      - 886:886
+    networks:
+      - back
+    volumes:
+      - './main:/main'
+    command: ['/main']
+  mysql:
+    container_name: mysql # 指定容器的名称
+    image: mysql:8.0.21
+    networks:
+      - back
+    ports:
+      - 3306:3306
+    restart: always
+    volumes:
+      - './mysql/master/data:/var/lib/mysql'
+      - './mysql/master/conf.d:/etc/mysql/conf.d'
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    command: --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+networks:
+  front:
+    driver: bridge
+  back:
+    driver: bridge
+    driver_opts:
+      foo: '1'
+      bar: '2'

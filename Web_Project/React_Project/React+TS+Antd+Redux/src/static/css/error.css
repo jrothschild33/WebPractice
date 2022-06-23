@@ -1,0 +1,15 @@
+.error{
+
+    /*设置元素绝对定位*/
+    position:absolute;
+    /*top 50%*/
+    top: 50%;
+    /*left 50%*/
+    left: 50%;
+    /*css3   transform 实现*/
+    transform: translate(-50%, -50%);
+    width: 258px;
+    height: 258px;
+    background: url("../img/code.jpg") no-repeat;
+    margin: 0 auto;
+}

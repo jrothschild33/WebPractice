@@ -1,0 +1,16 @@
+.footer {
+    text-align: center;
+}
+
+.footer .qr {
+    bottom: 50px;
+    width: 28px;
+    height: 28px;
+}
+
+.footer:hover .qr{
+    position: fixed;
+    bottom: 50px;
+    width: 258px;
+    height: 258px;
+}

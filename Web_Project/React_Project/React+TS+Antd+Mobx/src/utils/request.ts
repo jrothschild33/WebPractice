@@ -4,7 +4,8 @@ import NProgress from 'nprogress'
 import { clear, get } from './storage'
 
 const service = axios.create({
-  baseURL: process.env.REACT_APP_BASE_API, // url = base url + request url
+  // baseURL: process.env.REACT_APP_BASE_API, // url = base url + request url
+  baseURL: 'http://127.0.0.1:886',
   // withCredentials: true, // 跨域请求时是否携带cookie
   timeout: 5000, // request timeout
 })

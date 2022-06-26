@@ -38,7 +38,11 @@ export default function App() {
               <AppLayout>{generateRouter(leftRouter)}</AppLayout>
             </Route>
 
-            {generateRouter(unAuthRouter)}
+            {unAuthRouter.map((r) => (
+              <Route key={r.key} exact={r.exact} path={r.path}>
+                {r.component}
+              </Route>
+            ))}
           </Switch>
         </Suspense>
       </BrowserRouter>

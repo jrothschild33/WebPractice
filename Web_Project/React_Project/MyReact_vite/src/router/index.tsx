@@ -99,6 +99,7 @@ export const unAuthRouter: IRouter[] = [
     path: '*',
     title: '404',
     key: '404',
+    exact: false,
     component: <Page404 />,
   },
 ]

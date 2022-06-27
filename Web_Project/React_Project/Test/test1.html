@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const leftRouter = [
+        {
+          path: '/',
+          title: '仪表盘',
+          icon: 'dashboardIcon',
+          key: 'dashboard',
+          component: 'DashboardComponent',
+        },
+        {
+          path: '/admin/user',
+          title: '用户管理',
+          icon: 'userIcon',
+          key: 'user',
+          children: [
+            {
+              path: '/admin/user/list',
+              title: '用户列表',
+              icon: 'userIcon',
+              key: 'userlist',
+              component: 'UserListComponent',
+            },
+          ],
+        },
+
+        {
+          path: '/admin/admin',
+          title: '管理员管理',
+          icon: 'userIcon',
+          key: 'admin',
+          children: [
+            {
+              path: '/admin/admin/list',
+              title: '管理员列表',
+              icon: 'userIcon',
+              key: 'adminList',
+              component: 'AdminListComponent',
+            },
+          ],
+        },
+      ]
+
+      function getItem(label, key, icon, children, type) {
+        return { key, icon, children, label, type }
+      }
+
+      function generateMenu(routerList) {
+        return routerList.map((r) => {
+          if (r.children) {
+            return getItem(r.path, r.key, r.icon, [generateMenu(r.children)])
+          } else {
+            return getItem(r.path, r.key, r.icon)
+          }
+        })
+      }
+
+      const result = generateMenu(leftRouter)
+    </script>
+  </body>
+</html>

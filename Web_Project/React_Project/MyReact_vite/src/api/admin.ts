@@ -1,3 +1,5 @@
+// 作用：使用axios发送请求，获取管理员admin相关信息
+
 import request from '../utils/request'
 
 export const getAdminList = (page: number = 1) => {
@@ -10,22 +12,22 @@ export const getAdminList = (page: number = 1) => {
 export const deleteAdmin = (adminId: number) => {
   return request({
     url: '/admin/admin/delete/' + adminId,
-    method: 'delete',
+    method: 'DELETE',
   })
 }
 
 export const addAdmin = (admin: any) => {
   return request({
     url: '/admin/admin/add',
-    method: 'post',
+    method: 'POST',
     data: admin,
   })
 }
 
 export const saveAdmin = (adminId: number, admin: any) => {
   return request({
-    url: '/admin/admin/update/' + adminId,
-    method: 'put',
+    url: '/admin/admin/update' + adminId,
+    method: 'POST',
     data: admin,
   })
 }

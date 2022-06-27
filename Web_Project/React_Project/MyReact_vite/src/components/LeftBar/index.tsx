@@ -1,6 +1,7 @@
 // 布局：侧边导航栏
-import React, { useCallback, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { FC, useCallback, useEffect, useState } from 'react'
+import { Link, withRouter, matchPath, RouteComponentProps } from 'react-router-dom'
+import { IRouter, leftRouter, router } from '@/router'
 import { Breadcrumb, Layout, Menu, Button } from 'antd'
 import type { MenuProps } from 'antd'
 import {
@@ -31,47 +32,81 @@ function getItem(
   } as MenuItem
 }
 
-const menuItems: MenuProps['items'] = [
-  getItem(<Link to="/">仪表盘</Link>, 'dashboard', <DashboardOutlined />),
-  getItem('用户管理', 'userManage', <UserOutlined />, [
-    getItem(<Link to="/admin/user/list">用户列表</Link>, 'userList'),
-  ]),
-  getItem('角色管理', 'roleManage', <TeamOutlined />, [
-    getItem(<Link to="/admin/role/list">角色列表</Link>, 'roleList'),
-  ]),
-  getItem('管理员管理', 'adminManage', <ApartmentOutlined />, [
-    getItem(<Link to="/admin/admin/list">管理员列表</Link>, 'adminList'),
-  ]),
+interface IState {
+  defaultOpenKeys: string[]
+  defaultSelectedKeys: string[]
+}
 
-  // getItem('Navigation One', 'sub1', <UserOutlined />, [
-  //   getItem('Item 1', 'g1', null, [getItem('Option 1', '1'), getItem('Option 2', '2')], 'group'),
-  //   getItem('Item 2', 'g2', null, [getItem('Option 3', '3'), getItem('Option 4', '4')], 'group'),
-  // ]),
+interface IProps extends RouteComponentProps {}
 
-  // getItem('Navigation Two', 'sub2', <LaptopOutlined />, [
-  //   getItem('Option 5', '5'),
-  //   getItem('Option 6', '6'),
-  //   getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
-  // ]),
-]
-
-export default function LeftBar() {
+const LeftBar: FC<IProps> = (props: IProps) => {
+  const [defaultOpenKeys, setDefaultOpenKeys] = useState<string[]>([])
+  const [defaultSelectedKeys, setDefaultSelectedKeys] = useState<string[]>([])
   const [collapsed, setCollapsed] = useState(false)
   const toggleCollapsed = useCallback(() => {
     setCollapsed(!collapsed)
   }, [collapsed])
+
+  // react挂载时便执行：侧边栏选项处理函数
+  useEffect(() => {
+    chooseDefaultKeys(router)
+  }, [])
+
+  // 处理侧边栏选项的选中和打开问题（根据页面URL判断），不然每次刷新，侧边栏都是选死的
+  const chooseDefaultKeys = (leftRouters: IRouter[]) => {
+    // 获取当前URL路径
+    let path = props.location.pathname
+    // 遍历router
+    for (let r of leftRouters) {
+      // 使用react内置的matchPath进行路由URL匹配
+      let match = matchPath(path, { path: r.path })
+      if (match) {
+        // console.log(match)
+        // match会根据路由层级，层层深入查找，比如/admin/user/list
+        // 第一次返回/(isExact=false)，第二次返回/admin/user(isExact=false)，第三次返回/admin/user/list(isExact=true)
+        if (match.isExact) {
+          setDefaultSelectedKeys([r.key])
+          // console.log('defaultSelectedKeys', defaultSelectedKeys)
+        } else {
+          setDefaultOpenKeys([r.key])
+          // console.log('defaultOpenKeys', defaultOpenKeys)
+        }
+      }
+      // 如果还有子路由，再次遍历
+      if (r.children) {
+        chooseDefaultKeys(r.children)
+      }
+    }
+  }
+
+  // 动态生成导航
+  const generateMenu = (routerList?: IRouter[]): MenuProps['items'] => {
+    return routerList?.map((r) => {
+      if (r.children) {
+        return getItem(r.title, r.key, r.icon, generateMenu(r.children))
+      } else return getItem(<Link to={r.path}>{r.title}</Link>, r.key, r.icon)
+    })
+  }
+
   return (
     <Sider width={200} trigger={null} collapsible collapsed={collapsed}>
-      <Button type="primary" onClick={toggleCollapsed} style={{ margin: 16 }}>
+      {/* <Button type="primary" onClick={handleChoosekeys} style={{ margin: 16 }}>
+        123
+      </Button> */}
+      {/* <Button type="primary" onClick={toggleCollapsed} style={{ margin: 16 }}>
         {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </Button>
-      <Menu
-        mode="inline"
-        theme="dark"
-        defaultSelectedKeys={['dashboard']}
-        defaultOpenKeys={['dashboard']}
-        items={menuItems}
-      />
+      </Button> */}
+      {defaultSelectedKeys.length > 0 ? (
+        <Menu
+          mode="inline"
+          theme="dark"
+          defaultSelectedKeys={defaultSelectedKeys}
+          defaultOpenKeys={defaultOpenKeys}
+          items={generateMenu(router)}
+        />
+      ) : null}
     </Sider>
   )
 }
+
+export default withRouter(LeftBar)

@@ -1,5 +1,12 @@
 import React, { ReactNode, lazy } from 'react'
-import { UserOutlined, DashboardOutlined } from '@ant-design/icons'
+import {
+  UserOutlined,
+  DashboardOutlined,
+  TeamOutlined,
+  ApartmentOutlined,
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+} from '@ant-design/icons'
 
 // 懒加载
 const Dashboard = lazy(() => import('../pages/Dashboard'))
@@ -51,13 +58,13 @@ export const leftRouter: IRouter[] = [
   {
     path: '/admin/admin',
     title: '管理员管理',
-    icon: <UserOutlined />,
+    icon: <ApartmentOutlined />,
     key: 'admin',
     children: [
       {
         path: '/admin/admin/list',
         title: '管理员列表',
-        icon: <UserOutlined />,
+        icon: <ApartmentOutlined />,
         key: 'adminList',
         component: <AdminList />,
       },
@@ -67,13 +74,13 @@ export const leftRouter: IRouter[] = [
   {
     path: '/admin/role',
     title: '角色管理',
-    icon: <UserOutlined />,
+    icon: <TeamOutlined />,
     key: 'role',
     children: [
       {
         path: '/admin/role/list',
         title: '角色列表',
-        icon: <UserOutlined />,
+        icon: <TeamOutlined />,
         key: 'rolelist',
         component: <RoleList />,
       },
@@ -85,7 +92,7 @@ export const leftRouter: IRouter[] = [
 export const topRouter: IRouter[] = []
 
 // 聚合：路由（需登录）
-// export const router: IRouter[] = [...leftRouter, ...topRouter]
+export const router: IRouter[] = [...mainRouter, ...leftRouter, ...topRouter]
 
 // 定义通用路由（无需登录）
 export const unAuthRouter: IRouter[] = [

@@ -30,7 +30,7 @@ interface State {
   auth: boolean
 }
 
-const AppLayout: FC<State> = (props: any) => {
+export default function AppLayout(props: any) {
   return (
     <Layout>
       {/* 顶部导航栏 */}
@@ -64,4 +64,4 @@ const AppLayout: FC<State> = (props: any) => {
   )
 }
 
-export default AppLayout
+// export default AppLayout

@@ -20,7 +20,7 @@
       // 定义别名
       "@/*": ["./src/*"],
       "@assets/*": ["./src/assets/*"],
-      "@page": ["./src/page/*"],
+      "@pages/*": ["./src/pages/*"],
       "@utils": ["./src/utils/*"],
       "@router": ["./src/router/*"]
     }

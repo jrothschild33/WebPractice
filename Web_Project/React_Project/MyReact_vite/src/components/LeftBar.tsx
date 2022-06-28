@@ -1,9 +1,10 @@
 // 布局：侧边导航栏
 import React, { FC, useCallback, useEffect, useState } from 'react'
-import { Link, withRouter, matchPath, RouteComponentProps } from 'react-router-dom'
+import { Link, withRouter, matchPath, RouteComponentProps, useHistory } from 'react-router-dom'
 import { IRouter, router } from '@/router'
-import { Layout, Menu } from 'antd'
+import { Button, Layout, Menu } from 'antd'
 import type { MenuProps } from 'antd'
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 
 const { Header, Content, Sider } = Layout
 type MenuItem = Required<MenuProps>['items'][number]
@@ -82,12 +83,11 @@ const LeftBar: FC<IProps> = (props: IProps) => {
 
   return (
     <Sider width={200} trigger={null} collapsible collapsed={collapsed}>
-      {/* <Button type="primary" onClick={handleChoosekeys} style={{ margin: 16 }}>
-        123
-      </Button> */}
-      {/* <Button type="primary" onClick={toggleCollapsed} style={{ margin: 16 }}>
+      <Button type="primary" onClick={toggleCollapsed} style={{ margin: 16 }}>
         {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </Button> */}
+      </Button>
+
+      {/* 正常 */}
       {defaultSelectedKeys.length > 0 ? (
         <Menu
           mode="inline"

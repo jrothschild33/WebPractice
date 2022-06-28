@@ -8,13 +8,20 @@ import {
   MenuFoldOutlined,
 } from '@ant-design/icons'
 
+import Dashboard from '@pages/Dashboard'
+import Login from '@pages/Login'
+import Page404 from '@pages/Page404'
+import UserList from '@pages/UserList'
+import AdminList from '@pages/AdminList'
+import RoleList from '@pages/RoleList'
+
 // 懒加载
-const Dashboard = lazy(() => import('../pages/Dashboard'))
-const Login = lazy(() => import('../pages/Login'))
-const Page404 = lazy(() => import('../pages/Page404'))
-const UserList = lazy(() => import('../pages/UserList'))
-const AdminList = lazy(() => import('../pages/AdminList'))
-const RoleList = lazy(() => import('../pages/RoleList'))
+// const Dashboard = lazy(() => import('../pages/Dashboard'))
+// const Login = lazy(() => import('../pages/Login'))
+// const Page404 = lazy(() => import('../pages/Page404'))
+// const UserList = lazy(() => import('../pages/UserList'))
+// const AdminList = lazy(() => import('../pages/AdminList'))
+// const RoleList = lazy(() => import('../pages/RoleList'))
 
 export interface IRouter {
   path: string
@@ -100,6 +107,7 @@ export const unAuthRouter: IRouter[] = [
     path: '/login',
     title: '登录',
     key: 'login',
+    exact: true,
     component: <Login />,
   },
   {

@@ -57,16 +57,19 @@ class AdminList extends Component<any, IState> {
   change = (pagination: any) => {
     this.getAdminList(pagination.current)
   }
+
   deleteAdmin = (id: number) => {
     this.setState((state) => ({
       adminList: state.adminList.filter((admin) => admin.id !== id),
     }))
   }
+
   showAddAdminModal = () => {
     this.setState({
       showAddAdminModal: true,
     })
   }
+
   hideAddAdminModal = (refresh?: boolean) => {
     if (refresh) {
       this.getAdminList()
@@ -75,12 +78,14 @@ class AdminList extends Component<any, IState> {
       showAddAdminModal: false,
     })
   }
+
   showEditAdminModal = (admin?: IAdmin) => {
     this.setState({
       admin: admin,
       showEditAdminModal: true,
     })
   }
+
   hideEditAdminModal = (refresh?: boolean) => {
     if (refresh) {
       this.getAdminList()

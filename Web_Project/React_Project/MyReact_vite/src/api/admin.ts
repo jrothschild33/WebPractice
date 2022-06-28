@@ -26,8 +26,8 @@ export const addAdmin = (admin: any) => {
 
 export const saveAdmin = (adminId: number, admin: any) => {
   return request({
-    url: '/admin/admin/update' + adminId,
-    method: 'POST',
+    url: '/admin/admin/update/' + adminId,
+    method: 'PUT',
     data: admin,
   })
 }

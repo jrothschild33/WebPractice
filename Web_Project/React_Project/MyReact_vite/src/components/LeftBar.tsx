@@ -1,17 +1,9 @@
 // 布局：侧边导航栏
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { Link, withRouter, matchPath, RouteComponentProps } from 'react-router-dom'
-import { IRouter, leftRouter, router } from '@/router'
-import { Breadcrumb, Layout, Menu, Button } from 'antd'
+import { IRouter, router } from '@/router'
+import { Layout, Menu } from 'antd'
 import type { MenuProps } from 'antd'
-import {
-  UserOutlined,
-  DashboardOutlined,
-  TeamOutlined,
-  ApartmentOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-} from '@ant-design/icons'
 
 const { Header, Content, Sider } = Layout
 type MenuItem = Required<MenuProps>['items'][number]

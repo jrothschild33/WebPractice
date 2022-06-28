@@ -29,7 +29,9 @@ class SubTitle extends Component<IProps> {
   render() {
     return (
       <>
-        <Breadcrumb style={{ margin: '16px 0' }}>{this.generate(router)}</Breadcrumb>
+        <Breadcrumb style={{ margin: '16px 0' }}>
+          {this.generate(router)}
+        </Breadcrumb>
       </>
     )
   }

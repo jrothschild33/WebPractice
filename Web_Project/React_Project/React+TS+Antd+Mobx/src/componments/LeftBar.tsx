@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import { Layout, Menu } from 'antd'
-import { Link, matchPath, RouteComponentProps, withRouter } from 'react-router-dom'
+import {
+  Link,
+  matchPath,
+  RouteComponentProps,
+  withRouter,
+} from 'react-router-dom'
 import router, { IRouter, leftRouter } from '../router'
 
 const { SubMenu } = Menu

@@ -1,29 +1,36 @@
 // 作用：页面公共布局，如顶部栏、侧边栏
-import React, { useCallback, useState } from 'react'
-import LeftBar from '../LeftBar'
+import React, { FC, useCallback, useState } from 'react'
+import LeftBar from './LeftBar'
 import { Breadcrumb, Layout, Menu, Button } from 'antd'
-import {
-  LaptopOutlined,
-  NotificationOutlined,
-  UserOutlined,
-  DashboardOutlined,
-  TeamOutlined,
-  ApartmentOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-} from '@ant-design/icons'
 import type { MenuProps } from 'antd'
-import { Link } from 'react-router-dom'
-import './index.css'
+import { Link, RouteComponentProps } from 'react-router-dom'
+// import { AdminStore } from '../store/AdminStore'
+// import PermissionStore from '../store/PermissionStore'
+import SubTitle from './SubTitle'
 
 const { Header, Content, Sider } = Layout
 
-const navItems: MenuProps['items'] = ['1', '2', '3'].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}))
+const navItems: MenuProps['items'] = [
+  {
+    key: '1',
+    label: '主页',
+  },
+  {
+    key: '2',
+    label: '设置',
+  },
+]
 
-export default function AppLayout(props: any) {
+// interface Props extends RouteComponentProps {
+//   adminStore?: AdminStore
+//   permissionStore?: PermissionStore
+// }
+
+interface State {
+  auth: boolean
+}
+
+const AppLayout: FC<State> = (props: any) => {
   return (
     <Layout>
       {/* 顶部导航栏 */}
@@ -36,13 +43,9 @@ export default function AppLayout(props: any) {
         {/* 侧边导航栏 */}
         <LeftBar />
 
-        {/* 顶部字体导航：Home / List / App */}
+        {/* 面包屑导航：Home / List / App */}
         <Layout style={{ padding: '0 24px 24px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
+          <SubTitle />
 
           <Content
             className="site-layout-background"
@@ -60,3 +63,5 @@ export default function AppLayout(props: any) {
     </Layout>
   )
 }
+
+export default AppLayout

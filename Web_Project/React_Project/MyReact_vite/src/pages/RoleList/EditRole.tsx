@@ -14,15 +14,11 @@ const EditRole: FC<Props> = ({ role, visible, cancel }) => {
   // 状态 state ------------------------------------------------------------
   const [nodeList, setNodeList] = useState<IPermission[]>([])
   const [defaultCheckedKeys, setDefaultCheckedKeys] = useState<string[]>([])
+  const [visibleEditRoleModal, setVisibleEditRoleModal] = useState<boolean>(visible)
+  console.log(visible)
 
-  // 表格ref
+  // 索引 ref ------------------------------------------------------------
   const formRef = useRef<FormInstance>(null)
-
-  // 生命周期 ------------------------------------------------------------
-  useEffect(() => {
-    formRef.current?.setFieldsValue({ ...role })
-    // handelGetRoleDetail()
-  })
 
   // 表格 Table ------------------------------------------------------------
   // 表格样式
@@ -49,21 +45,30 @@ const EditRole: FC<Props> = ({ role, visible, cancel }) => {
     })
   }, [])
 
+  // 生命周期 ------------------------------------------------------------
+  useEffect(() => {
+    formRef.current?.setFieldsValue({ ...role })
+    handelGetRoleDetail()
+  }, [role, formRef.current, visible])
+  // }, [role, nodeList, visible])
+
   // 树形控件 Tree ------------------------------------------------------------
   // 树形控件：获取角色权限详情
   const handelGetRoleDetail = useCallback(() => {
     getRoleDetail(role?.id as number).then((res) => {
-      console.log(role)
       const { permissionList, permissionAll } = res.data.data
-      console.log(res)
+      // 服务器返回全部用户权限列表
       let pAll = generatePermissionList(permissionAll)
+      // 服务器返回当前用户拥有的权限（只需要记录id，然后传入name为permissionList的Form.Item）
       let permissions = permissionList.map((p: IPermission) => {
         return p.id
       })
       formRef.current?.setFieldsValue({
         permissionList: permissions,
       })
+      // 将全部用户权限列表传给nodeList
       setNodeList(pAll)
+      // 将用户拥有的权限id（本质上就是tree控件里的checkedKeys）传给defaultCheckedKeys
       setDefaultCheckedKeys(permissions)
     })
   }, [nodeList, defaultCheckedKeys])
@@ -90,6 +95,7 @@ const EditRole: FC<Props> = ({ role, visible, cancel }) => {
         <Form.Item name="id" label="ID">
           <Input disabled />
         </Form.Item>
+
         <Form.Item
           name="roleName"
           label="角色名称"

@@ -24,8 +24,11 @@ interface Props {
 export const generatePermissionList = (permissionList: IPermission[], parendId: number = 0) => {
   let pList: IPermission[] = []
   permissionList.forEach((p) => {
+    // 如果parendId为0，证明属于最外层权限（从0开始，逐层递进查找）
     if (p.parentId === parendId) {
+      // 添加key属性，与id相同
       p.key = p.id
+      // 添加children属性，使用递归，令parentId变为id值，继续查找（id与parentId对应，证明其为父子关系）
       p.children = generatePermissionList(permissionList, p.id)
       pList.push(p)
     }
@@ -33,9 +36,14 @@ export const generatePermissionList = (permissionList: IPermission[], parendId: 
   return pList
 }
 
+// 函数式组件 ===========================================================================================
 const AddRole: FC<Props> = ({ visible, cancel }) => {
+  // 状态 state ------------------------------------------------------------
   const [nodeList, setNodeList] = useState<IPermission[]>([])
+  // 索引 ref ------------------------------------------------------------
+  const formRef = useRef<FormInstance>(null)
 
+  // 表格 Table ------------------------------------------------------------
   // 表格样式
   const layout = {
     labelCol: { span: 4 },
@@ -45,35 +53,7 @@ const AddRole: FC<Props> = ({ visible, cancel }) => {
     wrapperCol: { offset: 7, span: 16 },
   }
 
-  // 表格ref
-  const formRef = useRef<FormInstance>(null)
-
-  // 向服务器发送请求，返回的数据用于生成权限列表
-  const handelGetAllPermission = useCallback(() => {
-    getAllPermission().then((res) => {
-      const { data } = res.data
-      setNodeList(generatePermissionList(data))
-    })
-  }, [nodeList])
-
-  // 挂载时就向服务器请求数据
-  useEffect(() => {
-    handelGetAllPermission()
-  }, [])
-
-  // 树形控件：选中后的处理函数
-  const onCheck: TreeProps['onCheck'] = (checkedKeys: any) => {
-    formRef.current?.setFieldsValue({
-      permissionList: checkedKeys.checked,
-    })
-  }
-
-  // 点击关闭弹窗（visible、cacel回调函数由AdminList主界面通过props传递）
-  const handleCancel = useCallback(() => {
-    cancel()
-  }, [])
-
-  // 表格提交后：发送到服务器处理，并接收返回结果，关闭弹窗后向callback传递refresh=true，刷新数据
+  // 提交表格：向服务器请求数据，刷新表格，并关闭模态框
   const handelAddRole = useCallback((form: any) => {
     addRole(form).then((res) => {
       // 取回数据
@@ -92,6 +72,36 @@ const AddRole: FC<Props> = ({ visible, cancel }) => {
     })
   }, [])
 
+  // 树形控件 Tree ------------------------------------------------------------
+  // 初始化树形控件：向服务器发送请求，返回的数据用于生成权限列表，填充nodeList
+  const handelGetAllPermission = useCallback(() => {
+    getAllPermission().then((res) => {
+      const { data } = res.data
+      setNodeList(generatePermissionList(data))
+    })
+  }, [nodeList])
+
+  // 生命周期 ------------------------------------------------------------
+  useEffect(() => {
+    handelGetAllPermission()
+  }, [])
+
+  // 树形控件：选中后的处理函数
+  // checkedKeys.checked：选中的复选框编号（编号从0开始，每点击一次返回当前所有选中的复选框编号数组，如[0,1,2]，代表选中了前三个框）
+  const onCheck: TreeProps['onCheck'] = (checkedKeys: any) => {
+    formRef.current?.setFieldsValue({
+      // permissionList是"权限列表"Form.Item的name
+      permissionList: checkedKeys.checked,
+    })
+  }
+
+  // 模态框 Modal ------------------------------------------------------------
+  // 关闭模态框：不刷新数据
+  const handleCancel = useCallback(() => {
+    cancel()
+  }, [])
+
+  // 渲染页面 ------------------------------------------------------------
   return (
     <Modal title="添加角色" visible={visible} onCancel={handleCancel} footer={null}>
       <Form

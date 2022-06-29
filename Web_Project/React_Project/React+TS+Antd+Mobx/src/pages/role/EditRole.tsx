@@ -67,6 +67,7 @@ class EditRole extends Component<IProps, IState> {
     })
     return pList
   }
+
   getRoleDetail = () => {
     getRoleDetail(this.props.role?.id as number).then((response) => {
       const { permissionList, permissionAll } = response.data.data

@@ -1,4 +1,4 @@
-import { IRouter, router } from '../router'
+import { IRouter, router } from '@router'
 import { Breadcrumb } from 'antd'
 import React, { FC, Fragment, ReactNode, useCallback } from 'react'
 import { matchPath, RouteComponentProps, withRouter } from 'react-router-dom'

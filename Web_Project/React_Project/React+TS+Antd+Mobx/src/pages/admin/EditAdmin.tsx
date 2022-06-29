@@ -44,7 +44,12 @@ class EditAdmin extends Component<IProps> {
   render() {
     this.formRef.current?.setFieldsValue({ ...this.props.admin, password: '' })
     return (
-      <Modal title="编辑管理员" visible={this.props.visible} footer={null} onCancel={this.cancel}>
+      <Modal
+        title="编辑管理员"
+        visible={this.props.visible}
+        footer={null}
+        onCancel={this.cancel}
+      >
         <Form
           ref={this.formRef}
           {...layout}
@@ -56,7 +61,9 @@ class EditAdmin extends Component<IProps> {
         >
           <Form.Item
             name="name"
-            shouldUpdate={(prevValues, curValues) => prevValues.additional !== curValues.additional}
+            shouldUpdate={(prevValues, curValues) =>
+              prevValues.additional !== curValues.additional
+            }
             rules={[
               {
                 type: 'string',
@@ -70,7 +77,9 @@ class EditAdmin extends Component<IProps> {
           </Form.Item>
           <Form.Item
             name="mobile"
-            shouldUpdate={(prevValues, curValues) => prevValues.additional !== curValues.additional}
+            shouldUpdate={(prevValues, curValues) =>
+              prevValues.additional !== curValues.additional
+            }
             rules={[
               {
                 type: 'string',
@@ -84,7 +93,9 @@ class EditAdmin extends Component<IProps> {
           </Form.Item>
           <Form.Item
             name="password"
-            shouldUpdate={(prevValues, curValues) => prevValues.additional !== curValues.additional}
+            shouldUpdate={(prevValues, curValues) =>
+              prevValues.additional !== curValues.additional
+            }
             rules={[
               {
                 type: 'string',

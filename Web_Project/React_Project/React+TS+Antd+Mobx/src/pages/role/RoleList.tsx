@@ -92,11 +92,18 @@ class RoleList extends Component<any, IState> {
   render() {
     return (
       <>
-        <EditRole visible={this.state.visibleEditRoleModal} role={this.state.role} cancel={this.hideEditRoleModal} />
+        <EditRole
+          visible={this.state.visibleEditRoleModal}
+          role={this.state.role}
+          cancel={this.hideEditRoleModal}
+        />
         <Button type="primary" onClick={this.showAddRoleModal}>
           添加角色
         </Button>
-        <AddRole visible={this.state.visibleAddRoleModal} callback={this.hideAddRoleModal} />
+        <AddRole
+          visible={this.state.visibleAddRoleModal}
+          callback={this.hideAddRoleModal}
+        />
         <Table
           dataSource={this.state.roleList}
           rowKey={'id'}

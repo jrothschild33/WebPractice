@@ -1,7 +1,7 @@
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { Button, Space, Table } from 'antd'
 import type { ColumnsType, TableProps } from 'antd/lib/table'
-import React, { FC, useCallback, useEffect, useState } from 'react'
-import { getAdminList } from '../../api/admin'
+import { getAdminList } from '@api/admin'
 import { AddAdmin } from './AddAdmin'
 import { EditAdmin } from './EditAdmin'
 import { DeleteAdmin } from './DeleteAdmin'
@@ -97,7 +97,7 @@ const AdminList: FC = () => {
   const handleHideEditAdminModal = useCallback(
     (refresh?: boolean) => {
       if (refresh) {
-        getAdminList()
+        getMyAdminList()
       }
       setShowEditAdminModal(false)
     },

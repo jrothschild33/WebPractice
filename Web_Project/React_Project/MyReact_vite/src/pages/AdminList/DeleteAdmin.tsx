@@ -1,6 +1,6 @@
 import { Button, message, Popconfirm } from 'antd'
 import React, { FC, useCallback } from 'react'
-import { deleteAdmin } from '../../api/admin'
+import { deleteAdmin } from '@api/admin'
 
 interface Props {
   id: number
@@ -29,7 +29,7 @@ export const DeleteAdmin: FC<Props> = ({ id, handleDeleteAdmin }) => {
 
   return (
     <Popconfirm
-      title="你确定要删除用户吗？删除后不可以恢复！"
+      title="你确定要删除管理员吗？删除后不可以恢复！"
       onConfirm={serverDeleteAdmin}
       onCancel={handleCancel}
       okText="删除"

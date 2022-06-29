@@ -42,7 +42,12 @@ class AddAdmin extends Component<IProps> {
 
   render() {
     return (
-      <Modal title="添加管理员" visible={this.props.visible} onCancel={this.cancel} footer={null}>
+      <Modal
+        title="添加管理员"
+        visible={this.props.visible}
+        onCancel={this.cancel}
+        footer={null}
+      >
         <Form ref={this.formRef} {...layout} onFinish={this.addAdmin}>
           <Form.Item
             name="name"

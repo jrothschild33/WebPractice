@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useRef } from 'react'
 import { IAdmin } from './index'
-import { saveAdmin } from '../../api/admin'
+import { saveAdmin } from '@api/admin'
 import { FormInstance, Form, Input, message, Modal, Space, Button } from 'antd'
 
 interface Props {

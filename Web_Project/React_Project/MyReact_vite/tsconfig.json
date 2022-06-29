@@ -20,9 +20,10 @@
       // 定义别名
       "@/*": ["./src/*"],
       "@assets/*": ["./src/assets/*"],
+      "@api/*": ["./src/api/*"],
       "@pages/*": ["./src/pages/*"],
-      "@utils": ["./src/utils/*"],
-      "@router": ["./src/router/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@router": ["./src/router/index"]
     }
   },
   "include": ["src"],

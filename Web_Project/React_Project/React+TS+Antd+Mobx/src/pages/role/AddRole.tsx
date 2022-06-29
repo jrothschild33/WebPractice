@@ -21,6 +21,7 @@ const tailLayout = {
 // path: "/admin/role"
 // rule: "/admin/role/list"
 // title: "角色管理"
+
 interface IPermission {
   id: number
   key: number
@@ -54,6 +55,7 @@ class AddRole extends Component<IProps, IState> {
   cancel = () => {
     this.props.callback()
   }
+
   getAllPermission = () => {
     getAllPermission().then((response) => {
       const { data } = response.data
@@ -62,12 +64,19 @@ class AddRole extends Component<IProps, IState> {
       })
     })
   }
-  generatePermissionList = (permissionList: IPermission[], parentId: number = 0) => {
+
+  generatePermissionList = (
+    permissionList: IPermission[],
+    parentId: number = 0
+  ) => {
     let pList: IPermission[] = []
     permissionList.forEach((permission) => {
       if (permission.parentId === parentId) {
         permission.key = permission.id
-        permission.children = this.generatePermissionList(permissionList, permission.id)
+        permission.children = this.generatePermissionList(
+          permissionList,
+          permission.id
+        )
         pList.push(permission)
       }
     })
@@ -79,8 +88,11 @@ class AddRole extends Component<IProps, IState> {
   }
 
   onCheck = (checkedKeys: any) => {
-    this.formRef.current?.setFieldsValue({ permissionList: checkedKeys.checked })
+    this.formRef.current?.setFieldsValue({
+      permissionList: checkedKeys.checked,
+    })
   }
+
   addRole = (form: any) => {
     addRole(form).then((response) => {
       const { code, msg } = response.data
@@ -96,7 +108,12 @@ class AddRole extends Component<IProps, IState> {
 
   render() {
     return (
-      <Modal title="添加角色" visible={this.props.visible} onCancel={this.cancel} footer={null}>
+      <Modal
+        title="添加角色"
+        visible={this.props.visible}
+        onCancel={this.cancel}
+        footer={null}
+      >
         <Form
           ref={this.formRef}
           {...layout}
@@ -147,7 +164,14 @@ class AddRole extends Component<IProps, IState> {
               },
             ]}
           >
-            <Tree defaultExpandAll checkStrictly showLine checkable treeData={this.state.nodeList} onCheck={this.onCheck} />
+            <Tree
+              defaultExpandAll
+              checkStrictly
+              showLine
+              checkable
+              treeData={this.state.nodeList}
+              onCheck={this.onCheck}
+            />
           </Form.Item>
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">

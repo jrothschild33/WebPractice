@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useRef } from 'react'
 import { IAdmin } from './index'
-import { addAdmin } from '../../api/admin'
+import { addAdmin } from '@api/admin'
 import { FormInstance, Modal, Form, message, Input, Button, Space } from 'antd'
 
 interface IProps {

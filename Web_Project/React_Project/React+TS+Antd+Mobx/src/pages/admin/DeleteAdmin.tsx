@@ -25,7 +25,11 @@ class DeleteAdmin extends Component<IProps> {
 
   render() {
     return (
-      <Popconfirm title="删除管理员" onConfirm={this.deleteAdmin} onCancel={this.cancel}>
+      <Popconfirm
+        title="删除管理员"
+        onConfirm={this.deleteAdmin}
+        onCancel={this.cancel}
+      >
         <Button type="primary" danger>
           删除
         </Button>

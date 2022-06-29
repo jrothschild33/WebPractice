@@ -45,15 +45,23 @@ class EditRole extends Component<IProps, IState> {
   }
 
   onCheck = (checkedKeys: any) => {
-    this.formRef.current?.setFieldsValue({ permissionList: checkedKeys.checked })
+    this.formRef.current?.setFieldsValue({
+      permissionList: checkedKeys.checked,
+    })
   }
 
-  generatePermissionList = (permissionList: IPermission[], parentId: number = 0) => {
+  generatePermissionList = (
+    permissionList: IPermission[],
+    parentId: number = 0
+  ) => {
     let pList: IPermission[] = []
     permissionList.forEach((permission) => {
       if (permission.parentId === parentId) {
         permission.key = permission.id
-        permission.children = this.generatePermissionList(permissionList, permission.id)
+        permission.children = this.generatePermissionList(
+          permissionList,
+          permission.id
+        )
         pList.push(permission)
       }
     })
@@ -77,7 +85,11 @@ class EditRole extends Component<IProps, IState> {
     })
   }
 
-  componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
+  componentDidUpdate(
+    prevProps: Readonly<IProps>,
+    prevState: Readonly<IState>,
+    snapshot?: any
+  ) {
     if (!prevProps.visible) {
       if (this.props.role && prevState.nodeList.length === 0) {
         this.getRoleDetail()
@@ -92,6 +104,7 @@ class EditRole extends Component<IProps, IState> {
     })
     this.props.cancel()
   }
+
   updateRole = (role: any) => {
     updateRole(this.props.role?.id as number, role).then((response) => {
       const { code, msg } = response.data
@@ -107,11 +120,18 @@ class EditRole extends Component<IProps, IState> {
   render() {
     this.formRef.current?.setFieldsValue({ ...this.props.role })
     return (
-      <Modal title="编辑角色" visible={this.props.visible} footer={null} onCancel={this.cancel}>
+      <Modal
+        title="编辑角色"
+        visible={this.props.visible}
+        footer={null}
+        onCancel={this.cancel}
+      >
         <Form ref={this.formRef} {...layout} onFinish={this.updateRole}>
           <Form.Item
             name={'roleName'}
-            shouldUpdate={(prevValues, curValues) => prevValues.additional !== curValues.additional}
+            shouldUpdate={(prevValues, curValues) =>
+              prevValues.additional !== curValues.additional
+            }
             rules={[
               {
                 type: 'string',
@@ -136,7 +156,9 @@ class EditRole extends Component<IProps, IState> {
             <Form.Item
               label={'权限'}
               name="permissionList"
-              shouldUpdate={(prevValues, curValues) => prevValues.additional !== curValues.additional}
+              shouldUpdate={(prevValues, curValues) =>
+                prevValues.additional !== curValues.additional
+              }
               rules={[
                 {
                   type: 'array',
@@ -154,7 +176,15 @@ class EditRole extends Component<IProps, IState> {
                 },
               ]}
             >
-              <Tree defaultExpandAll checkStrictly showLine checkable treeData={this.state.nodeList} defaultCheckedKeys={this.state.defaultCheckedKeys} onCheck={this.onCheck} />
+              <Tree
+                defaultExpandAll
+                checkStrictly
+                showLine
+                checkable
+                treeData={this.state.nodeList}
+                defaultCheckedKeys={this.state.defaultCheckedKeys}
+                onCheck={this.onCheck}
+              />
             </Form.Item>
           ) : null}
 

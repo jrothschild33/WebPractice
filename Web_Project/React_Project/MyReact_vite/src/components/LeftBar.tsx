@@ -1,7 +1,7 @@
 // 布局：侧边导航栏
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { Link, withRouter, matchPath, RouteComponentProps, useHistory } from 'react-router-dom'
-import { IRouter, router } from '@/router'
+import { IRouter, router } from '@router'
 import { Button, Layout, Menu } from 'antd'
 import type { MenuProps } from 'antd'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'

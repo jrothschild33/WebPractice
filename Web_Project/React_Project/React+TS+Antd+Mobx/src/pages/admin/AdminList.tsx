@@ -101,7 +101,10 @@ class AdminList extends Component<any, IState> {
         <Button type="primary" onClick={this.showAddAdminModal}>
           添加管理员
         </Button>
-        <AddAdmin visible={this.state.showAddAdminModal} callback={this.hideAddAdminModal} />
+        <AddAdmin
+          visible={this.state.showAddAdminModal}
+          callback={this.hideAddAdminModal}
+        />
         <EditAdmin
           admin={this.state.admin}
           visible={this.state.showEditAdminModal}

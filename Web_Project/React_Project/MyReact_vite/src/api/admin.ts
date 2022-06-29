@@ -1,6 +1,6 @@
 // 作用：使用axios发送请求，获取管理员admin相关信息
-
-import request from '../utils/request'
+import request from '@utils/request'
+import { IAdmin } from '@/pages/AdminList'
 
 export const getAdminList = (page: number = 1) => {
   return request({
@@ -24,7 +24,7 @@ export const addAdmin = (admin: any) => {
   })
 }
 
-export const saveAdmin = (adminId: number, admin: any) => {
+export const saveAdmin = (adminId: number, admin: IAdmin) => {
   return request({
     url: '/admin/admin/update/' + adminId,
     method: 'PUT',

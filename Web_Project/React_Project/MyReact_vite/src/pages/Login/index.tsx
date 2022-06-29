@@ -1,8 +1,8 @@
 import { useCallback, useRef } from 'react'
 import { Form, FormInstance, Input, Button, Space, message } from 'antd'
 import './index.css'
-import { login } from '../../api/login'
-import { set } from '../../utils/storage'
+import { login } from '@api/login'
+import { set } from '@utils/storage'
 
 export default function Login() {
   const [form] = Form.useForm() // antd定义的hooks

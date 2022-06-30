@@ -1,0 +1,24 @@
+#components-layout-demo-fixed .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+.admin {
+  color: white;
+  float: right;
+  width: auto;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.admin .admin-name {
+  margin-left: 4px;
+  margin-right: 4px;
+}

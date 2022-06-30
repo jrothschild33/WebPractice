@@ -2,6 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react'
 import { getRoleList } from '@api/role'
 import AddRole from './AddRole'
 import DeleteRole from './DeleteRole'
+import Auth from '@components/Auth'
 import EditRole from './EditRole'
 import { Button, Space } from 'antd'
 import Table, { ColumnsType } from 'antd/lib/table'
@@ -142,7 +143,10 @@ const RoleList: FC = () => {
           >
             编辑
           </Button>
-          <DeleteRole id={role.id} handleDeleteRole={handleDeleteRole} />
+          {/* 如果该管理员权限中有path="deleteRole"，说明该管理员可以删除用户角色 */}
+          <Auth path="deleteRole">
+            <DeleteRole id={role.id} handleDeleteRole={handleDeleteRole} />
+          </Auth>
         </Space>
       ),
     },

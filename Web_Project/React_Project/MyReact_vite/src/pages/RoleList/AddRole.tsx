@@ -1,13 +1,13 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { IRole } from './index'
-import { addRole } from '@/api/role'
+import { addRole } from '@api/role'
 import { getAllPermission } from '@api/permission'
 import { Button, Form, FormInstance, Input, message, Modal, Space, Tree } from 'antd'
 import type { DataNode, TreeProps } from 'antd/lib/tree'
 
 export interface IPermission {
   id: number
-  key: number
+  key: string
   isMenu: number
   parentId: number
   path: string
@@ -27,7 +27,7 @@ export const generatePermissionList = (permissionList: IPermission[], parendId: 
     // 如果parendId为0，证明属于最外层权限（从0开始，逐层递进查找）
     if (p.parentId === parendId) {
       // 添加key属性，与id相同
-      p.key = p.id
+      p.key = p.id.toString()
       // 添加children属性，使用递归，令parentId变为id值，继续查找（id与parentId对应，证明其为父子关系）
       p.children = generatePermissionList(permissionList, p.id)
       pList.push(p)

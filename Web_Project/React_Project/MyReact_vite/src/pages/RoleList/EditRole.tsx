@@ -13,9 +13,7 @@ interface Props {
 const EditRole: FC<Props> = ({ role, visible, cancel }) => {
   // 状态 state ------------------------------------------------------------
   const [nodeList, setNodeList] = useState<IPermission[]>([])
-  const [defaultCheckedKeys, setDefaultCheckedKeys] = useState<string[]>([])
-  const [visibleEditRoleModal, setVisibleEditRoleModal] = useState<boolean>(visible)
-  console.log(visible)
+  const [checkedKeys, setCheckedKeys] = useState<string[]>([])
 
   // 索引 ref ------------------------------------------------------------
   const formRef = useRef<FormInstance>(null)
@@ -33,7 +31,7 @@ const EditRole: FC<Props> = ({ role, visible, cancel }) => {
   // 提交表格：向服务器请求数据，刷新表格，并关闭模态框
   const handelUpdateRole = useCallback((role: any) => {
     updateRole(role?.id as number, role).then((res) => {
-      console.log(role, res)
+      console.log('update', role, res)
       const { code, msg } = res.data
       if (code === 0) {
         message.success(msg)
@@ -50,33 +48,38 @@ const EditRole: FC<Props> = ({ role, visible, cancel }) => {
     formRef.current?.setFieldsValue({ ...role })
     handelGetRoleDetail()
   }, [role, formRef.current, visible])
-  // }, [role, nodeList, visible])
 
   // 树形控件 Tree ------------------------------------------------------------
   // 树形控件：获取角色权限详情
   const handelGetRoleDetail = useCallback(() => {
-    getRoleDetail(role?.id as number).then((res) => {
-      const { permissionList, permissionAll } = res.data.data
-      // 服务器返回全部用户权限列表
-      let pAll = generatePermissionList(permissionAll)
-      // 服务器返回当前用户拥有的权限（只需要记录id，然后传入name为permissionList的Form.Item）
-      let permissions = permissionList.map((p: IPermission) => {
-        return p.id
+    getRoleDetail(role?.id as number)
+      .then((res) => {
+        const { permissionList, permissionAll } = res.data.data
+        // 服务器返回全部用户权限列表
+        let pAll = generatePermissionList(permissionAll)
+        // 服务器返回当前用户拥有的权限（只需要记录id，然后传入name为permissionList的Form.Item）
+        let permissions = permissionList.map((p: IPermission) => {
+          // 大坑：Antd的checkedKeys需要为字符串类型
+          return p.id.toString()
+        })
+        formRef.current?.setFieldsValue({
+          permissionList: permissions,
+        })
+        // 将全部用户权限列表传给nodeList
+        setNodeList(pAll)
+        // 将用户拥有的权限id（本质上就是tree控件里的checkedKeys）传给dheckedKeys
+        setCheckedKeys(permissions)
       })
-      formRef.current?.setFieldsValue({
-        permissionList: permissions,
-      })
-      // 将全部用户权限列表传给nodeList
-      setNodeList(pAll)
-      // 将用户拥有的权限id（本质上就是tree控件里的checkedKeys）传给defaultCheckedKeys
-      setDefaultCheckedKeys(permissions)
-    })
-  }, [nodeList, defaultCheckedKeys])
+      .catch(() => {})
+  }, [role, formRef.current, nodeList, checkedKeys])
 
   // 树形控件：选中后的处理函数
-  const onCheck: TreeProps['onCheck'] = (checkedKeys: any) => {
+  const onCheck = (checkedKeys: any) => {
+    setCheckedKeys(checkedKeys)
+    // 大坑：Antd的checkedKeys需要为字符串类型，而回传给服务器时，需要再次转为数字型
+    const permissionList = checkedKeys.checked.map((x: string) => parseInt(x))
     formRef.current?.setFieldsValue({
-      permissionList: checkedKeys.checked,
+      permissionList: permissionList,
     })
   }
 
@@ -84,9 +87,9 @@ const EditRole: FC<Props> = ({ role, visible, cancel }) => {
   // 关闭模态框：不刷新数据
   const handleCancel = useCallback(() => {
     setNodeList([])
-    setDefaultCheckedKeys([])
+    setCheckedKeys([])
     cancel()
-  }, [nodeList, defaultCheckedKeys])
+  }, [nodeList, checkedKeys])
 
   // 渲染页面 ------------------------------------------------------------
   return (
@@ -147,7 +150,8 @@ const EditRole: FC<Props> = ({ role, visible, cancel }) => {
               showLine
               checkable
               treeData={nodeList}
-              defaultCheckedKeys={defaultCheckedKeys}
+              // 大坑：不能用defaultCheckedKyes
+              checkedKeys={checkedKeys}
               onCheck={onCheck}
             />
           </Form.Item>

@@ -2,6 +2,7 @@ import axios from 'axios'
 import { message, Modal } from 'antd' // message：消息提示框；Modal：对话框
 import NProgress from 'nprogress' // 进度条
 import { clear, get } from './storage'
+import { useStore } from '@store'
 const env = import.meta.env
 
 // 这个文件的配置需要和服务器后端商量
@@ -38,7 +39,8 @@ service.interceptors.response.use(
         return Promise.reject('请登录')
       } else if (code === 4000) {
         clear()
-        // window.location.href = '/login'
+        message.warning('请重新登录！')
+        window.location.href = '/login'
         return Promise.reject('认证失败')
       }
       return response
